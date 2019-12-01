@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/jenas/Documents/VSCodeProjects/OpenGL/build",
+  "command": "/usr/bin/g++-7    -g   -o CMakeFiles/OpenGLUTube.dir/src/main.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/main.cpp",
+  "file": "/home/jenas/Documents/VSCodeProjects/OpenGL/src/main.cpp"
+}
+]
