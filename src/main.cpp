@@ -19,12 +19,40 @@ static void GLCheckError()
 static unsigned int CompileShader(unsigned int type, const std::string& source)
 {
     unsigned int id = glCreateShader(GL_VERTEX_SHADER);;
+    const char* src = source.c_str();
+    glShaderSource(type, 1, &src, NULL);
+    glCompileShader(id);
+
+    int result;
+    glGetShaderiv(type, GL_COMPILE_STATUS, &result);
+    if(result == GL_FALSE)
+    {
+        int length;
+        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+        char message[length]; 
+        glGetShaderInfoLog(id, length, &length, message);
+        std::cout << "Failed to compile" << (type == GL_VERTEX_SHADER ? "Vertex shader": "Fragment shader") << std::endl;
+        std::cout << message << std::endl;
+
+        glDeleteShader(id);
+    }
+
+    return id;
 }
 
 static int CreateShader(const std::string vertexShader, const std::string fragmentShader)
 {
     unsigned int program = glCreateProgram();
     unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
+    unsigned int fs = CompileShader(GL_VERTEX_SHADER, fragmentShader);
+
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+    glLinkProgram(program);
+    glValidateProgram(program);
+
+    glDeleteShader(vs);
+    glDeleteShader(fs);
 }
 
 int main(int, char**) {
@@ -92,6 +120,8 @@ int main(int, char**) {
             
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+
+    //unsigned int shader = CreateShader();
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0)
