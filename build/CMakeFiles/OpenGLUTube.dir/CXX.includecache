@@ -13,4 +13,10 @@ GL/glew.h
 -
 GLFW/glfw3.h
 -
+fstream
+-
+string
+-
+sstream
+-
 
