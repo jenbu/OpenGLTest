@@ -4,13 +4,12 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "Renderer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 using namespace std;
 
-#define ASSERT(x) if(!(x)) __builtin_trap();
-#define GLCall(x) GLClearError();\
-    x;\
-    ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
 struct ShaderProgramSource
 {
@@ -62,21 +61,6 @@ ShaderProgramSource readShader(const std::string& path)
     }
 
     return { ss[0].str(), ss[1].str() };
-}
-
-static void GLClearError()
-{
-    while(glGetError() != GL_NO_ERROR);
-}
-
-static bool GLLogCall(const char* function, const char* file, int line)
-{
-    while(GLenum error = glGetError())
-    {
-        cout << "[OpenGL Error]: (" << error << ")" << function << " " << file << ":" << line << endl;
-        return false;
-    }
-    return true;
 }
 
 static unsigned int CompileShader(unsigned int type, const std::string& source)
@@ -172,10 +156,7 @@ int main(int, char**) {
         4, 1, 2
     };
 
-    GLuint vertexbuffer;
-    GLCall(glGenBuffers(1, &vertexbuffer));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer));
-    GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW));
+    VertexBuffer vbo(g_vertex_buffer_data, sizeof(g_vertex_buffer_data));
 
     //layout of the actual buffer
     GLCall(glEnableVertexAttribArray(0));
@@ -189,14 +170,10 @@ int main(int, char**) {
             0            // array buffer offset
             ));
             
-    GLuint ibo;
-    GLCall(glGenBuffers(1, &ibo));
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-    GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW));
+    IndexBuffer ibo(indices, sizeof(indices)/sizeof(unsigned int));
 
-
-
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer));
+    //GLCall(glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer));
+    vbo.Bind();
 
     ShaderProgramSource shaderSources = readShader("res/basic.shader");
 
@@ -223,13 +200,9 @@ int main(int, char**) {
         //glEnableVertexAttribArray(0);
 
         GLCall(glUniform4f(location, red, 0.0f, 0.0f, 1.0f));
+        ibo.Bind();
 
-        // Draw the triangle !
-        //GLClearError();
         GLCall(glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, nullptr)); //second arg is the number of INDICESE
-        //GLCheckError();
-
-
 
         glfwSwapBuffers(window);
         glfwPollEvents();

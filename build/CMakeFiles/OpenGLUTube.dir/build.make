@@ -57,9 +57,81 @@ include CMakeFiles/OpenGLUTube.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/OpenGLUTube.dir/flags.make
 
+CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o: CMakeFiles/OpenGLUTube.dir/flags.make
+CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o: ../src/IndexBuffer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jenas/Documents/VSCodeProjects/OpenGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o"
+	/usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/IndexBuffer.cpp
+
+CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.i"
+	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jenas/Documents/VSCodeProjects/OpenGL/src/IndexBuffer.cpp > CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.i
+
+CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.s"
+	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jenas/Documents/VSCodeProjects/OpenGL/src/IndexBuffer.cpp -o CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.s
+
+CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o.requires:
+
+.PHONY : CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o.requires
+
+CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o.provides: CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o.requires
+	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o.provides.build
+.PHONY : CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o.provides
+
+CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o.provides.build: CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o
+
+
+CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o: CMakeFiles/OpenGLUTube.dir/flags.make
+CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o: ../src/Renderer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jenas/Documents/VSCodeProjects/OpenGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o"
+	/usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/Renderer.cpp
+
+CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.i"
+	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jenas/Documents/VSCodeProjects/OpenGL/src/Renderer.cpp > CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.i
+
+CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.s"
+	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jenas/Documents/VSCodeProjects/OpenGL/src/Renderer.cpp -o CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.s
+
+CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o.requires:
+
+.PHONY : CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o.requires
+
+CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o.provides: CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o.requires
+	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o.provides.build
+.PHONY : CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o.provides
+
+CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o.provides.build: CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o
+
+
+CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o: CMakeFiles/OpenGLUTube.dir/flags.make
+CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o: ../src/VertexBuffer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jenas/Documents/VSCodeProjects/OpenGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o"
+	/usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.cpp
+
+CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.i"
+	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.cpp > CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.i
+
+CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.s"
+	/usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.cpp -o CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.s
+
+CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o.requires:
+
+.PHONY : CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o.requires
+
+CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o.provides: CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o.requires
+	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o.provides.build
+.PHONY : CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o.provides
+
+CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o.provides.build: CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o
+
+
 CMakeFiles/OpenGLUTube.dir/src/main.cpp.o: CMakeFiles/OpenGLUTube.dir/flags.make
 CMakeFiles/OpenGLUTube.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jenas/Documents/VSCodeProjects/OpenGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/OpenGLUTube.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jenas/Documents/VSCodeProjects/OpenGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/OpenGLUTube.dir/src/main.cpp.o"
 	/usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenGLUTube.dir/src/main.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/main.cpp
 
 CMakeFiles/OpenGLUTube.dir/src/main.cpp.i: cmake_force
@@ -83,18 +155,24 @@ CMakeFiles/OpenGLUTube.dir/src/main.cpp.o.provides.build: CMakeFiles/OpenGLUTube
 
 # Object files for target OpenGLUTube
 OpenGLUTube_OBJECTS = \
+"CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o" \
+"CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o" \
+"CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o" \
 "CMakeFiles/OpenGLUTube.dir/src/main.cpp.o"
 
 # External object files for target OpenGLUTube
 OpenGLUTube_EXTERNAL_OBJECTS =
 
+OpenGLUTube: CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o
+OpenGLUTube: CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o
+OpenGLUTube: CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o
 OpenGLUTube: CMakeFiles/OpenGLUTube.dir/src/main.cpp.o
 OpenGLUTube: CMakeFiles/OpenGLUTube.dir/build.make
 OpenGLUTube: /usr/lib/x86_64-linux-gnu/libGLEW.so
 OpenGLUTube: /usr/lib/x86_64-linux-gnu/libGL.so
 OpenGLUTube: /usr/lib/x86_64-linux-gnu/libGLU.so
 OpenGLUTube: CMakeFiles/OpenGLUTube.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jenas/Documents/VSCodeProjects/OpenGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable OpenGLUTube"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jenas/Documents/VSCodeProjects/OpenGL/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable OpenGLUTube"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/OpenGLUTube.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -102,6 +180,9 @@ CMakeFiles/OpenGLUTube.dir/build: OpenGLUTube
 
 .PHONY : CMakeFiles/OpenGLUTube.dir/build
 
+CMakeFiles/OpenGLUTube.dir/requires: CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o.requires
+CMakeFiles/OpenGLUTube.dir/requires: CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o.requires
+CMakeFiles/OpenGLUTube.dir/requires: CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o.requires
 CMakeFiles/OpenGLUTube.dir/requires: CMakeFiles/OpenGLUTube.dir/src/main.cpp.o.requires
 
 .PHONY : CMakeFiles/OpenGLUTube.dir/requires

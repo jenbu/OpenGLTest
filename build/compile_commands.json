@@ -1,6 +1,21 @@
 [
 {
   "directory": "/home/jenas/Documents/VSCodeProjects/OpenGL/build",
+  "command": "/usr/bin/g++-7    -g   -o CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/IndexBuffer.cpp",
+  "file": "/home/jenas/Documents/VSCodeProjects/OpenGL/src/IndexBuffer.cpp"
+},
+{
+  "directory": "/home/jenas/Documents/VSCodeProjects/OpenGL/build",
+  "command": "/usr/bin/g++-7    -g   -o CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/Renderer.cpp",
+  "file": "/home/jenas/Documents/VSCodeProjects/OpenGL/src/Renderer.cpp"
+},
+{
+  "directory": "/home/jenas/Documents/VSCodeProjects/OpenGL/build",
+  "command": "/usr/bin/g++-7    -g   -o CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.cpp",
+  "file": "/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.cpp"
+},
+{
+  "directory": "/home/jenas/Documents/VSCodeProjects/OpenGL/build",
   "command": "/usr/bin/g++-7    -g   -o CMakeFiles/OpenGLUTube.dir/src/main.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/main.cpp",
   "file": "/home/jenas/Documents/VSCodeProjects/OpenGL/src/main.cpp"
 }

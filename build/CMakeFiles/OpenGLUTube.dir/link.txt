@@ -1,1 +1,1 @@
-/usr/bin/g++-7  -g  -rdynamic CMakeFiles/OpenGLUTube.dir/src/main.cpp.o  -o OpenGLUTube -lGLEW -lglfw -lGL -lGLU 
+/usr/bin/g++-7  -g  -rdynamic CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o CMakeFiles/OpenGLUTube.dir/src/main.cpp.o  -o OpenGLUTube -lGLEW -lglfw -lGL -lGLU 
