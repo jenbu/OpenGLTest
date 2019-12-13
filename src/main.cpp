@@ -7,6 +7,7 @@
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 using namespace std;
 
@@ -138,9 +139,9 @@ int main(int, char**) {
         return -1;
     }
 
-    GLuint VertexArrayID;
-    GLCall(glGenVertexArrays(1, &VertexArrayID));
-    GLCall(glBindVertexArray(VertexArrayID));
+    //GLuint VertexArrayID;
+    //GLCall(glGenVertexArrays(1, &VertexArrayID));
+    //GLCall(glBindVertexArray(VertexArrayID));
 
     static const GLfloat g_vertex_buffer_data[] = {
     -0.5f, -0.5f,
@@ -156,8 +157,14 @@ int main(int, char**) {
         4, 1, 2
     };
 
-    VertexBuffer vbo(g_vertex_buffer_data, sizeof(g_vertex_buffer_data));
+    VertexArray va;
+    VertexBuffer vbo(g_vertex_buffer_data, 5*2*sizeof(float));
 
+    VertexBufferLayout layout;
+    layout.Push<float>(2);
+    va.AddBuffer(vbo, layout);
+
+    /*
     //layout of the actual buffer
     GLCall(glEnableVertexAttribArray(0));
 
@@ -169,16 +176,14 @@ int main(int, char**) {
             2*sizeof(float),    // stride
             0            // array buffer offset
             ));
-            
+    */
     IndexBuffer ibo(indices, sizeof(indices)/sizeof(unsigned int));
+
 
     //GLCall(glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer));
     vbo.Bind();
 
     ShaderProgramSource shaderSources = readShader("res/basic.shader");
-
-    //cout << "Vertex Shader:\n" << shaderSources.vertexSource << endl;
-    //cout << "Fragment Shader:\n" << shaderSources.fragmentSource << endl;
 
     unsigned int program = CreateShader(shaderSources.vertexSource, shaderSources.fragmentSource);
     cout << "program: " << program << endl;
@@ -200,6 +205,7 @@ int main(int, char**) {
         //glEnableVertexAttribArray(0);
 
         GLCall(glUniform4f(location, red, 0.0f, 0.0f, 1.0f));
+        va.Bind();
         ibo.Bind();
 
         GLCall(glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, nullptr)); //second arg is the number of INDICESE

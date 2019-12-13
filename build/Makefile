@@ -574,6 +574,33 @@ src/Renderer.cpp.s:
 	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.s
 .PHONY : src/Renderer.cpp.s
 
+src/VertexArray.o: src/VertexArray.cpp.o
+
+.PHONY : src/VertexArray.o
+
+# target to build an object file
+src/VertexArray.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/VertexArray.cpp.o
+.PHONY : src/VertexArray.cpp.o
+
+src/VertexArray.i: src/VertexArray.cpp.i
+
+.PHONY : src/VertexArray.i
+
+# target to preprocess a source file
+src/VertexArray.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/VertexArray.cpp.i
+.PHONY : src/VertexArray.cpp.i
+
+src/VertexArray.s: src/VertexArray.cpp.s
+
+.PHONY : src/VertexArray.s
+
+# target to generate assembly for a file
+src/VertexArray.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/VertexArray.cpp.s
+.PHONY : src/VertexArray.cpp.s
+
 src/VertexBuffer.o: src/VertexBuffer.cpp.o
 
 .PHONY : src/VertexBuffer.o
@@ -600,6 +627,33 @@ src/VertexBuffer.s: src/VertexBuffer.cpp.s
 src/VertexBuffer.cpp.s:
 	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.s
 .PHONY : src/VertexBuffer.cpp.s
+
+src/VertexBufferLayout.o: src/VertexBufferLayout.cpp.o
+
+.PHONY : src/VertexBufferLayout.o
+
+# target to build an object file
+src/VertexBufferLayout.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/VertexBufferLayout.cpp.o
+.PHONY : src/VertexBufferLayout.cpp.o
+
+src/VertexBufferLayout.i: src/VertexBufferLayout.cpp.i
+
+.PHONY : src/VertexBufferLayout.i
+
+# target to preprocess a source file
+src/VertexBufferLayout.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/VertexBufferLayout.cpp.i
+.PHONY : src/VertexBufferLayout.cpp.i
+
+src/VertexBufferLayout.s: src/VertexBufferLayout.cpp.s
+
+.PHONY : src/VertexBufferLayout.s
+
+# target to generate assembly for a file
+src/VertexBufferLayout.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenGLUTube.dir/build.make CMakeFiles/OpenGLUTube.dir/src/VertexBufferLayout.cpp.s
+.PHONY : src/VertexBufferLayout.cpp.s
 
 src/main.o: src/main.cpp.o
 
@@ -674,9 +728,15 @@ help:
 	@echo "... src/Renderer.o"
 	@echo "... src/Renderer.i"
 	@echo "... src/Renderer.s"
+	@echo "... src/VertexArray.o"
+	@echo "... src/VertexArray.i"
+	@echo "... src/VertexArray.s"
 	@echo "... src/VertexBuffer.o"
 	@echo "... src/VertexBuffer.i"
 	@echo "... src/VertexBuffer.s"
+	@echo "... src/VertexBufferLayout.o"
+	@echo "... src/VertexBufferLayout.i"
+	@echo "... src/VertexBufferLayout.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

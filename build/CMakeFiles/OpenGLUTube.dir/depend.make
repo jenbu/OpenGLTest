@@ -8,12 +8,24 @@ CMakeFiles/OpenGLUTube.dir/src/IndexBuffer.cpp.o: ../src/Renderer.h
 CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o: ../src/Renderer.cpp
 CMakeFiles/OpenGLUTube.dir/src/Renderer.cpp.o: ../src/Renderer.h
 
+CMakeFiles/OpenGLUTube.dir/src/VertexArray.cpp.o: ../src/Renderer.h
+CMakeFiles/OpenGLUTube.dir/src/VertexArray.cpp.o: ../src/VertexArray.cpp
+CMakeFiles/OpenGLUTube.dir/src/VertexArray.cpp.o: ../src/VertexArray.h
+CMakeFiles/OpenGLUTube.dir/src/VertexArray.cpp.o: ../src/VertexBuffer.h
+CMakeFiles/OpenGLUTube.dir/src/VertexArray.cpp.o: ../src/VertexBufferLayout.h
+
 CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o: ../src/Renderer.h
 CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o: ../src/VertexBuffer.cpp
 CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o: ../src/VertexBuffer.h
 
+CMakeFiles/OpenGLUTube.dir/src/VertexBufferLayout.cpp.o: ../src/Renderer.h
+CMakeFiles/OpenGLUTube.dir/src/VertexBufferLayout.cpp.o: ../src/VertexBufferLayout.cpp
+CMakeFiles/OpenGLUTube.dir/src/VertexBufferLayout.cpp.o: ../src/VertexBufferLayout.h
+
 CMakeFiles/OpenGLUTube.dir/src/main.cpp.o: ../src/IndexBuffer.h
 CMakeFiles/OpenGLUTube.dir/src/main.cpp.o: ../src/Renderer.h
+CMakeFiles/OpenGLUTube.dir/src/main.cpp.o: ../src/VertexArray.h
 CMakeFiles/OpenGLUTube.dir/src/main.cpp.o: ../src/VertexBuffer.h
+CMakeFiles/OpenGLUTube.dir/src/main.cpp.o: ../src/VertexBufferLayout.h
 CMakeFiles/OpenGLUTube.dir/src/main.cpp.o: ../src/main.cpp
 

@@ -11,8 +11,18 @@
 },
 {
   "directory": "/home/jenas/Documents/VSCodeProjects/OpenGL/build",
+  "command": "/usr/bin/g++-7    -g   -o CMakeFiles/OpenGLUTube.dir/src/VertexArray.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexArray.cpp",
+  "file": "/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexArray.cpp"
+},
+{
+  "directory": "/home/jenas/Documents/VSCodeProjects/OpenGL/build",
   "command": "/usr/bin/g++-7    -g   -o CMakeFiles/OpenGLUTube.dir/src/VertexBuffer.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.cpp",
   "file": "/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.cpp"
+},
+{
+  "directory": "/home/jenas/Documents/VSCodeProjects/OpenGL/build",
+  "command": "/usr/bin/g++-7    -g   -o CMakeFiles/OpenGLUTube.dir/src/VertexBufferLayout.cpp.o -c /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBufferLayout.cpp",
+  "file": "/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBufferLayout.cpp"
 },
 {
   "directory": "/home/jenas/Documents/VSCodeProjects/OpenGL/build",

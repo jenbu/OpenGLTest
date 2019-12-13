@@ -24,6 +24,20 @@ iostream
 GL/glew.h
 -
 
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexArray.cpp
+VertexArray.h
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexArray.h
+Renderer.h
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/Renderer.h
+iostream
+-
+
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexArray.h
+VertexBuffer.h
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.h
+VertexBufferLayout.h
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBufferLayout.h
+
 /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.cpp
 VertexBuffer.h
 /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.h
@@ -31,6 +45,18 @@ VertexBuffer.h
 /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.h
 Renderer.h
 /home/jenas/Documents/VSCodeProjects/OpenGL/src/Renderer.h
+
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBufferLayout.cpp
+VertexBufferLayout.h
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBufferLayout.h
+
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBufferLayout.h
+vector
+-
+Renderer.h
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/Renderer.h
+iostream
+-
 
 /home/jenas/Documents/VSCodeProjects/OpenGL/src/main.cpp
 iostream
@@ -51,4 +77,6 @@ VertexBuffer.h
 /home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexBuffer.h
 IndexBuffer.h
 /home/jenas/Documents/VSCodeProjects/OpenGL/src/IndexBuffer.h
+VertexArray.h
+/home/jenas/Documents/VSCodeProjects/OpenGL/src/VertexArray.h
 
