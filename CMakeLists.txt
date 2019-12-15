@@ -12,7 +12,8 @@ file(GLOB_RECURSE SOURCE_FILES
 # Add header files
 file(GLOB_RECURSE HEADER_FILES 
 	${CMAKE_SOURCE_DIR}/src/*.h #CMAKE_SOURCE_DIR is the location where cmakelist.txt is located
-	${CMAKE_SOURCE_DIR}/src/*.hpp)
+	${CMAKE_SOURCE_DIR}/src/*.hpp
+	${CMAKE_SOURCE_DIR}/src/vendor/stb_image/*.h)
 
 
 
@@ -32,6 +33,7 @@ if (GLEW_FOUND)
     include_directories(${GLEW_INCLUDE_DIRS})
     link_libraries(${GLEW_LIBRARIES})
 endif()
+
 
 
 

@@ -1,5 +1,6 @@
-#pragma once
-#include "Renderer.h"
+#ifndef INDEXBUFFER_H
+#define INDEXBUFFER_H
+#include "Utility.h"
 
 class IndexBuffer
 {
@@ -16,3 +17,5 @@ public:
 
     inline unsigned int GetCount() const { return m_Count; }
 };
+
+#endif
