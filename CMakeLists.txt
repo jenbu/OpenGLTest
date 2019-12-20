@@ -12,10 +12,9 @@ file(GLOB_RECURSE SOURCE_FILES
 # Add header files
 file(GLOB_RECURSE HEADER_FILES 
 	${CMAKE_SOURCE_DIR}/src/*.h #CMAKE_SOURCE_DIR is the location where cmakelist.txt is located
-	${CMAKE_SOURCE_DIR}/src/*.hpp
-	${CMAKE_SOURCE_DIR}/src/vendor/stb_image/*.h)
+	${CMAKE_SOURCE_DIR}/src/*.hpp)
 
-
+list(REMOVE_ITEM SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/vendor/imgui/main.cpp)
 
 find_package(OpenGL REQUIRED)
 #if(OpenGL_FOUND)
@@ -34,7 +33,11 @@ if (GLEW_FOUND)
     link_libraries(${GLEW_LIBRARIES})
 endif()
 
-
+include_directories(
+	src/vendor
+	src/vendor/stb_image
+	src/vendor/imgui
+)
 
 
 add_executable(OpenGLUTube ${SOURCE_FILES} ${HEADER_FILES})
