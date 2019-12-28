@@ -10,7 +10,7 @@ Shader::Shader(const std::string& filepath)
 
 Shader::~Shader()
 {
-    GLCall(glDeleteShader(m_RendererID));
+    //GLCall(glDeleteShader(m_RendererID));
 }
 
 unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
