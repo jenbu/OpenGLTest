@@ -21,13 +21,16 @@ private:
     std::string m_Name;
 
 public:
-    BaseObject(std::string name, float posX, float posY);
+    BaseObject(float posX, float posY);
     ~BaseObject();
 
-    glm::vec3* GetTranslation() { return &m_Translation; };
     inline void SetTranslation(glm::vec3 translation) { m_Translation = translation; };
+    inline void SetName(std::string name) {m_Name = name; };
+    
+    inline glm::vec3* GetTranslation() { return &m_Translation; };
     inline float* GetColors() { return m_Color; };
     inline std::string GetName() { return m_Name; };
+    inline float* GetRotationPtr() { return &m_Rotation; };
     
 
 

@@ -3,13 +3,6 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-#include "Renderer.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexArray.h"
-#include "Shader.h"
-#include "Texture.h"
-
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "imgui/imgui.h"
@@ -18,8 +11,10 @@
 #include "TestClearColor.h"
 #include "TestTexture2D.h"
 #include "TestRectangle2D.h"
+#include "Utility.h"
 
 using namespace std;
+
 
 
 int main(int, char**) {
@@ -71,6 +66,7 @@ int main(int, char**) {
     testMenu->RegisterTest<test::TestTexture2D>("Texture2D");
     testMenu->RegisterTest<test::TestRectangle2D>("RectangleColor2D");
 
+
     
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0)
     {
@@ -95,7 +91,7 @@ int main(int, char**) {
 
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
-
+        glfwGetCursorPos(window, &mouseXPos, &mouseYPos);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

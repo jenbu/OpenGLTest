@@ -15,9 +15,12 @@
 #include <vector>
 #include <memory>
 
-
+static double mouseXPos = 0.0;
+static double mouseYPos = 0.0;
 namespace test
-{
+{   
+
+
     class TestRectangle2D : public Test
     {
     public:
@@ -34,6 +37,8 @@ namespace test
         glm::mat4 m_Proj, m_View;
         float m_RotationA, m_RotationB;
         std::vector<RectangleObject> m_Rectangles;
+        std::vector<RectangleObject>::iterator m_RectIter;
+        std::string m_CurrentRectName;
 
         std::unique_ptr<Shader> m_Shader;
         std::unique_ptr<VertexArray> m_VAO;

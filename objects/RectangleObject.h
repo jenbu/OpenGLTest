@@ -13,7 +13,7 @@ private:
     static int m_RectCount;
 
 public:
-    RectangleObject(std::string name, float x, float y);
+    RectangleObject(float x, float y);
     ~RectangleObject();
 
     inline int GetRectCount() { return m_RectCount; };
