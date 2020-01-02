@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "Renderer.h"
 #include "Utility.h"
+#include "RectangleObject.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -29,9 +30,10 @@ namespace test
 
     private: 
         float m_Colors[4];
-        glm::vec3 m_Translation;
+        glm::vec3 m_TranslationA, m_TranslationB;
         glm::mat4 m_Proj, m_View;
-        float m_Rotation;
+        float m_RotationA, m_RotationB;
+        std::vector<RectangleObject> m_Rectangles;
 
         std::unique_ptr<Shader> m_Shader;
         std::unique_ptr<VertexArray> m_VAO;
