@@ -11,10 +11,12 @@
 #include "TestClearColor.h"
 #include "TestTexture2D.h"
 #include "TestRectangle2D.h"
+#include "TestLines.h"
 #include "Utility.h"
 
 using namespace std;
 
+std::vector<double> mousePos = { 0.0, 0.0 };
 
 
 int main(int, char**) {
@@ -65,6 +67,7 @@ int main(int, char**) {
     testMenu->RegisterTest<test::TestClearColor>("Clear Color");
     testMenu->RegisterTest<test::TestTexture2D>("Texture2D");
     testMenu->RegisterTest<test::TestRectangle2D>("RectangleColor2D");
+    testMenu->RegisterTest<test::TestLines>("Lines");
 
 
     
@@ -91,7 +94,7 @@ int main(int, char**) {
 
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
-        glfwGetCursorPos(window, &mouseXPos, &mouseYPos);
+        glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

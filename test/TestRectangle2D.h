@@ -11,12 +11,14 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "imgui/imgui.h"
+#include <GLFW/glfw3.h>
 
 #include <vector>
 #include <memory>
+#include "math.h"
 
-static double mouseXPos = 0.0;
-static double mouseYPos = 0.0;
+extern std::vector<double> mousePos;
+
 namespace test
 {   
 
@@ -31,14 +33,18 @@ namespace test
         void OnRender() override;
         void OnImGuiRender() override;
 
+        bool detectCursorRectCollision(std::vector<double> mousePos, glm::vec3 pos, float angle);
+        inline glm::mat3 Calc2DRotationMat(float angle) { return glm::mat3(cos(angle), -sin(angle), 0, sin(angle), cos(angle), 0, 0, 0, 1); };
+
     private: 
         float m_Colors[4];
-        glm::vec3 m_TranslationA, m_TranslationB;
         glm::mat4 m_Proj, m_View;
-        float m_RotationA, m_RotationB;
         std::vector<RectangleObject> m_Rectangles;
         std::vector<RectangleObject>::iterator m_RectIter;
         std::string m_CurrentRectName;
+        bool toggleWhite;
+
+
 
         std::unique_ptr<Shader> m_Shader;
         std::unique_ptr<VertexArray> m_VAO;

@@ -37,6 +37,7 @@ if (GLEW_FOUND)
     link_libraries(${GLEW_LIBRARIES})
 endif()
 
+
 include_directories(
 	src/vendor
 	src/vendor/stb_image

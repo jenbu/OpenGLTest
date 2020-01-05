@@ -46,7 +46,6 @@ public:
 template<>
 inline void VertexBufferLayout::Push <float> (unsigned int count)
 {
-    std::cout << "Push float" << std::endl;
     m_elements.push_back({GL_FLOAT, count, GL_FALSE});
     m_Stride += VertexBufferElement::GetSizeOfType(GL_FLOAT) * count;
 }
