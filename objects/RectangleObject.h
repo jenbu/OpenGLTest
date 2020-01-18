@@ -8,15 +8,17 @@
 class RectangleObject : public BaseObject
 {
 private:
-    int m_Width;
-    int m_Height;
-    static int m_RectCount;
+    static unsigned int m_RectCount;
+    unsigned int m_Width, m_Height;
+
+    void addRectData(float width, float height);
 
 public:
-    RectangleObject(float x, float y);
+    RectangleObject(float x, float y, float rot, unsigned int width, unsigned int height, float mass);
     ~RectangleObject();
 
     inline int GetRectCount() { return m_RectCount; };
+    void DrawObject() override;
 
 };
 

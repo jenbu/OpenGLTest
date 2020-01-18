@@ -1,3 +1,4 @@
+#pragma once
 #include "Test.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"

@@ -27,3 +27,10 @@ bool GLLogCall(const char* function, const char* file, int line)
     }
     return true;
 }
+
+
+glm::mat3 Transformation2D(float rot, float x, float y)
+{
+    glm::mat3 rotation = glm::mat3(cos(rot), -sin(rot), 0, sin(rot), cos(rot), 0, 0, 0, 1);
+    return rotation;
+}

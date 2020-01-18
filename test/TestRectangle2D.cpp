@@ -1,6 +1,7 @@
 #include "TestRectangle2D.h"
 
-int RectangleObject::m_RectCount = 0;
+std::vector<BaseObject*> BaseObject::m_Objects;
+
 std::vector<float> WHITE = { 1.0f, 1.0f, 1.0f, 1.0f };
 std::vector<float> currentColor;
 
@@ -24,19 +25,22 @@ namespace test
 
         unsigned int indices[]{
             0, 2, 3,
-            3, 1, 0
+            3, 1, 0,
+            1, 2, 3
         };
 
+        BaseObject* base = new BaseObject(100,100, 0, 100);
         
-        
-        RectangleObject rectA(300, 300), rectB(400, 400);
-        rectA.SetRotation(M_PI_4);
+        RectangleObject rectA(100.0f, 100.0f, 0.0f, 100, 100, 100), rectB(400.0f, 400.0f, 0.0f, 100, 100, 100);
+        //rectA.SetRotation(M_PI_4);
         m_Rectangles.push_back(rectA);
         m_Rectangles.push_back(rectB);
         m_CurrentRectName = rectA.GetName();
         m_RectIter = m_Rectangles.begin();
 
-
+        base->AppendObject<RectangleObject>(&rectA);
+        std::vector<BaseObject*> objects = base->GetObjects();
+        std::cout << objects[0]->GetName() << std::endl;
 
         currentColor = m_RectIter->GetColors();
 
@@ -44,6 +48,7 @@ namespace test
 
         m_VertexBuffer = std::make_unique<VertexBuffer>(position, sizeof(position));
         VertexBufferLayout layout;
+        layout.Push<float>(2);
         layout.Push<float>(2);
         
         m_VAO->AddBuffer(*m_VertexBuffer, layout);
@@ -109,14 +114,14 @@ namespace test
 
             m_CurrentRectName = m_RectIter->GetName();
         }
-
+        /*
         if(ImGui::Button("Add Square"))
         {
-            m_Rectangles.push_back(RectangleObject(500, 500));
+            m_Rectangles.push_back(RectangleObject(500, 500, 0.0f, 100, 100));
             m_RectIter = m_Rectangles.begin();
-        }
+        }*/
 
-
+        /*
         for(auto& rect: m_Rectangles)
         {
             glm::vec3* translation = rect.GetTranslation();
@@ -151,7 +156,7 @@ namespace test
         if(ImGui::ColorEdit4("Rectangle Color", &m_RectIter->GetColors()[0]))
 
         ImGui::SliderFloat3(m_RectIter->GetName().c_str(), &m_RectIter->GetTranslation()->x, 0.0f, 960.0f);
-        ImGui::SliderFloat("Rotation",  m_RectIter->GetRotationPtr(), 0.0f, 3.14f);
+        ImGui::SliderFloat("Rotation",  m_RectIter->GetRotationPtr(), 0.0f, 3.14f);*/
         
             
 

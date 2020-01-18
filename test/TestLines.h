@@ -7,6 +7,9 @@
 #include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "IndexBuffer.h"
+#include "Renderer.h"
+#include "imgui/imgui.h"
+#include "glm/gtc/matrix_transform.hpp"
 
 #include <memory>
 
@@ -26,8 +29,14 @@ namespace test
     private:
         std::unique_ptr<VertexBuffer> m_VertexBuffer;
         VertexArray m_VAO;
-        IndexBuffer m_IndexBuffer;
-        Shader m_Shader;
+        std::unique_ptr<IndexBuffer> m_IndexBuffer;
+        std::unique_ptr<Shader> m_Shader;
+        VertexBufferLayout m_Layout;
+
+        int m_PointCount;
+        float m_Rotation;
+        float m_AdjustPoint;
+        glm::mat4 m_Proj;
 
     };
 

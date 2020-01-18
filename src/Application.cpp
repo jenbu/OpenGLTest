@@ -12,6 +12,7 @@
 #include "TestTexture2D.h"
 #include "TestRectangle2D.h"
 #include "TestLines.h"
+#include "TestObjectGeneration.h"
 #include "Utility.h"
 
 using namespace std;
@@ -68,12 +69,17 @@ int main(int, char**) {
     testMenu->RegisterTest<test::TestTexture2D>("Texture2D");
     testMenu->RegisterTest<test::TestRectangle2D>("RectangleColor2D");
     testMenu->RegisterTest<test::TestLines>("Lines");
+    testMenu->RegisterTest<test::TestObjectGeneration>("ObjectGeneration");
 
 
+    int counterFPS = 0;
+    double lastTime;
+    int displayFPSCounter = 0;
     
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0)
     {
         renderer.Clear();
+        lastTime = glfwGetTime();
 
         ImGui_ImplGlfwGL3_NewFrame();
 
@@ -88,6 +94,7 @@ int main(int, char**) {
                 currentTest = testMenu;
             }
             currentTest->OnImGuiRender();
+            ImGui::Text(std::to_string(counterFPS).c_str());
             ImGui::End();
         }
 
@@ -97,6 +104,16 @@ int main(int, char**) {
         glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
         glfwSwapBuffers(window);
         glfwPollEvents();
+        
+        if(displayFPSCounter >= 40)
+        {
+            counterFPS = (int)1.0/((double)(glfwGetTime()-lastTime));
+            std::cout << counterFPS << std::endl;
+            displayFPSCounter = 0;
+
+        }
+        ++displayFPSCounter;
+        
     }
     
     delete currentTest;

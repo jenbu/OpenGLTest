@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <GL/glew.h>
+#include "glm/glm.hpp"
 
 #define ASSERT(x) if(!(x)) __builtin_trap();
 #define GLCall(x) GLClearError();\
@@ -11,6 +12,8 @@
 
 void GLClearError();
 bool GLLogCall(const char* function, const char* file, int line);
+
+glm::mat3 Transformation2D(float rot, float x, float y);
 
 
 #endif
