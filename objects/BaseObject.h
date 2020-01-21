@@ -7,18 +7,19 @@
 #include <string>
 #include <vector>
 
-struct ObjectTransformation
+struct ObjectPosVelAcc
 {
-    glm::vec3 vec;
+    glm::vec3 PosVec;
+    glm::vec3 VelVec;
+    glm::vec3 AccVec;
     float rot = 0;
 
 };
 
 struct ObjectData
 {
-    std::vector<float> position;
-    std::vector<unsigned int> indices;
-    std::vector<ObjectTransformation> trans;
+    std::vector<float> VertexPosition;
+    std::vector<unsigned int> VertexIndices;
     std::vector<unsigned int> ObjectIndexOffset;
 };
 
@@ -31,11 +32,16 @@ public:
 
     inline void SetName(std::string name) {m_Name = name; };
     inline void SetColors(std::vector<float> colors) { m_Color = colors; };
+    void SetObjectPosVel(glm::vec3 acc, float deltaTime);
     
     inline std::vector<float> GetColors() { return m_Color; };
     inline std::string GetName() { return m_Name; }
-    inline std::vector<BaseObject*> GetObjects() { return m_Objects; } 
-    ObjectData GetObjectData() { return { m_VertexCoords, m_Indices, m_ObjectTrans, m_IndexOffsets }; }
+    //inline std::vector<BaseObject*> GetObjects() { return m_Objects; } 
+    ObjectData GetObjectData() { return { m_VertexCoords, m_Indices, m_IndexOffsets }; }
+    ObjectPosVelAcc GetObjectPosVelAcc() { std::cout << m_PosVelAcc.PosVec.z << std::endl; return m_PosVelAcc; } 
+    inline float GetMass() { return m_Mass; }
+
+    virtual unsigned int GetNumIndices() {}
 
     template<typename T>
     void AppendObject(T* object)
@@ -51,15 +57,18 @@ private:
     std::vector<float> m_Color;
 
     std::string m_Name;
+    ObjectPosVelAcc m_PosVelAcc;
 
     //Physical properties
     float m_Mass;
+    glm::vec3 m_Acceleration;
+    glm::vec3 m_Velocity;
+    
 
 protected:
     static std::vector<float> m_VertexCoords;
     static std::vector<unsigned int> m_Indices;
     static std::vector<unsigned int> m_IndexOffsets;
-    static std::vector<ObjectTransformation> m_ObjectTrans;
     static unsigned int m_ObjectCount;
 
 

@@ -39,8 +39,8 @@ namespace test
         m_RectIter = m_Rectangles.begin();
 
         base->AppendObject<RectangleObject>(&rectA);
-        std::vector<BaseObject*> objects = base->GetObjects();
-        std::cout << objects[0]->GetName() << std::endl;
+        //std::vector<BaseObject*> objects = base->GetObjects();
+        //std::cout << objects[0]->GetName() << std::endl;
 
         currentColor = m_RectIter->GetColors();
 
@@ -105,7 +105,7 @@ namespace test
         Renderer renderer;
 
         
-        ImGui::Text("Mouse PosX: %f, PosY: %f", mousePos[0], mousePos[1]);
+        //ImGui::Text("Mouse PosX: %f, PosY: %f", mousePos[0], mousePos[1]);
 
         if(ImGui::SmallButton(m_CurrentRectName.c_str()))
         {

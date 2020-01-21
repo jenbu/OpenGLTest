@@ -9,12 +9,14 @@ file(GLOB_RECURSE SOURCE_FILES
 	${CMAKE_SOURCE_DIR}/src/*.c
 	${CMAKE_SOURCE_DIR}/src/*.cpp
 	${CMAKE_SOURCE_DIR}/test/*.cpp
-	${CMAKE_SOURCE_DIR}/objects/*.cpp)
+	${CMAKE_SOURCE_DIR}/objects/*.cpp
+	${CMAKE_SOURCE_DIR}/src/OpenGL/*.cpp)
 	
 # Add header files
 file(GLOB_RECURSE HEADER_FILES 
 	${CMAKE_SOURCE_DIR}/src/*.h #CMAKE_SOURCE_DIR is the location where cmakelist.txt is located
 	${CMAKE_SOURCE_DIR}/src/*.hpp
+	${CMAKE_SOURCE_DIR}/src/OpenGL/*.h
 	${CMAKE_SOURCE_DIR}/test/*.h
 	${CMAKE_SOURCE_DIR}/objects/*.h)
 
@@ -42,6 +44,7 @@ include_directories(
 	src/vendor
 	src/vendor/stb_image
 	src/vendor/imgui
+	src/OpenGL
 	src
 	test
 	objects/
