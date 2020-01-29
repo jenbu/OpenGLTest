@@ -94,7 +94,7 @@ int main(int, char**) {
                 currentTest = testMenu;
             }
             currentTest->OnImGuiRender();
-            //ImGui::Text(std::to_string(counterFPS).c_str());
+            ImGui::Text(std::to_string(counterFPS).c_str());
             ImGui::End();
         }
 
@@ -108,7 +108,6 @@ int main(int, char**) {
         if(displayFPSCounter >= 40)
         {
             counterFPS = (int)1.0/((double)(glfwGetTime()-lastTime));
-            //std::cout << counterFPS << std::endl;
             displayFPSCounter = 0;
 
         }

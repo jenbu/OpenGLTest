@@ -19,10 +19,11 @@ struct VertexData
 class ObjectHandler
 {
     public:
+
         static ObjectHandler* GetInstance();
         inline VertexData GetVertexData() { return { m_VertexCoords, m_Indices, m_IndexOffsets }; }
         inline std::vector<BaseObject*> GetObjectsData() { return m_Objects; }
-
+        void PrintObjectsName();
 
         template<typename T>
         void AddObject(glm::vec3 pos, float width, float height)
@@ -33,6 +34,7 @@ class ObjectHandler
     private:
         static ObjectHandler* instance;
         ObjectHandler();
+        ~ObjectHandler();
 
         std::vector<BaseObject*> m_Objects;
         unsigned int m_ObjectCount;

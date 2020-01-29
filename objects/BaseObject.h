@@ -32,13 +32,12 @@ public:
 
     inline void SetName(std::string name) {m_Name = name; };
     inline void SetColors(std::vector<float> colors) { m_Color = colors; };
-    void SetObjectPosVel(glm::vec3 acc, float deltaTime);
     
     inline std::vector<float> GetColors() { return m_Color; };
     inline std::string GetName() { return m_Name; }
     //inline std::vector<BaseObject*> GetObjects() { return m_Objects; } 
-    ObjectData GetObjectData() { return { m_VertexCoords, m_Indices, m_IndexOffsets }; }
-    ObjectPosVelAcc GetObjectPosVelAcc() { std::cout << m_PosVelAcc.PosVec.z << std::endl; return m_PosVelAcc; } 
+    ObjectPosVelAcc GetObjectPosVelAcc() { return m_PosVelAcc; } 
+    void SetObjectPosVelAcc(ObjectPosVelAcc data) { m_PosVelAcc = data; };
     inline float GetMass() { return m_Mass; }
 
     virtual unsigned int GetNumIndices() {}
@@ -66,9 +65,9 @@ private:
     
 
 protected:
-    static std::vector<float> m_VertexCoords;
-    static std::vector<unsigned int> m_Indices;
-    static std::vector<unsigned int> m_IndexOffsets;
+    //static std::vector<float> m_VertexCoords;
+    //static std::vector<unsigned int> m_Indices;
+    //static std::vector<unsigned int> m_IndexOffsets;
     static unsigned int m_ObjectCount;
 
 

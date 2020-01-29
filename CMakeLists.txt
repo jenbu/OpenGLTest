@@ -6,17 +6,22 @@ enable_testing()
 
 # Add source files
 file(GLOB_RECURSE SOURCE_FILES 
-	${CMAKE_SOURCE_DIR}/src/*.c
+	#${CMAKE_SOURCE_DIR}/src/*.c
 	${CMAKE_SOURCE_DIR}/src/*.cpp
+	#${CMAKE_SOURCE_DIR}/src/vendor/*.cpp
 	${CMAKE_SOURCE_DIR}/test/*.cpp
-	${CMAKE_SOURCE_DIR}/objects/*.cpp
-	${CMAKE_SOURCE_DIR}/src/OpenGL/*.cpp)
+	${CMAKE_SOURCE_DIR}/objects/*.cpp)
+	#${CMAKE_SOURCE_DIR}/src/OpenGL/*.cpp)
+	#${CMAKE_SOURCE_DIR}/src/Physics/*.cpp)
+
 	
 # Add header files
 file(GLOB_RECURSE HEADER_FILES 
 	${CMAKE_SOURCE_DIR}/src/*.h #CMAKE_SOURCE_DIR is the location where cmakelist.txt is located
-	${CMAKE_SOURCE_DIR}/src/*.hpp
-	${CMAKE_SOURCE_DIR}/src/OpenGL/*.h
+	#${CMAKE_SOURCE_DIR}/src/*.hpp
+	#${CMAKE_SOURCE_DIR}/src/vendor/*.h 
+	#${CMAKE_SOURCE_DIR}/src/OpenGL/*.h
+	#${CMAKE_SOURCE_DIR}/src/Physics/*.h
 	${CMAKE_SOURCE_DIR}/test/*.h
 	${CMAKE_SOURCE_DIR}/objects/*.h)
 
@@ -44,10 +49,11 @@ include_directories(
 	src/vendor
 	src/vendor/stb_image
 	src/vendor/imgui
-	src/OpenGL
+	src/OpenGL/
+	src/Physics/
 	src
 	test
-	objects/
+	objects
 )
 
 

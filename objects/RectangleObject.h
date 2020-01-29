@@ -20,7 +20,6 @@ private:
     unsigned int m_Width, m_Height;
     unsigned int m_NumIndexes; //Number of indeces for rectangle
 
-    void addRectData(float width, float height);
 };
 
 #endif

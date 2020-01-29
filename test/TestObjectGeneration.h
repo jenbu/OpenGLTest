@@ -10,6 +10,8 @@
 #include "Renderer.h"
 #include "RectangleObject.h"
 #include "ObjectHandler.h"
+#include "Physics/NewtonianPhysics.h"
+
 
 #include "imgui/imgui.h"
 #include "glm/glm.hpp"
@@ -42,6 +44,7 @@ namespace test
         std::vector<BaseObject*> m_Objects;
         ObjectHandler* m_ObjectHandlerInstance;
         VertexData m_VertexData;
+        NewtonianPhysics* m_physics;
 
         bool m_ToggleGravity;
         
