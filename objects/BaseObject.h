@@ -16,13 +16,11 @@ struct ObjectPosVelAcc
 
 };
 
-struct ObjectData
+enum ObjectType
 {
-    std::vector<float> VertexPosition;
-    std::vector<unsigned int> VertexIndices;
-    std::vector<unsigned int> ObjectIndexOffset;
+    Base = 0,
+    Rect
 };
-
 
 class BaseObject
 {
@@ -32,13 +30,20 @@ public:
 
     inline void SetName(std::string name) {m_Name = name; };
     inline void SetColors(std::vector<float> colors) { m_Color = colors; };
+    void SetObjectPosVelAcc(glm::vec3 pos, glm::vec3 vel, glm::vec3 acc) 
+    { m_PosVec = pos; m_VelVec = vel, m_AccVec = acc; }
     
     inline std::vector<float> GetColors() { return m_Color; };
     inline std::string GetName() { return m_Name; }
-    //inline std::vector<BaseObject*> GetObjects() { return m_Objects; } 
-    ObjectPosVelAcc GetObjectPosVelAcc() { return m_PosVelAcc; } 
-    void SetObjectPosVelAcc(ObjectPosVelAcc data) { m_PosVelAcc = data; };
+    virtual ObjectType GetType() {};
+    virtual void GetGeometry() {};
     inline float GetMass() { return m_Mass; }
+     
+    //ObjectPosVelAcc GetObjectPosVelAcc() { return m_PosVelAcc; }
+    inline glm::vec3 GetPosition() { return m_PosVec; }
+    inline glm::vec3 GetVelocity() { return m_VelVec; }
+    inline glm::vec3 GetAcceleration() { return m_AccVec; }
+     
 
     virtual unsigned int GetNumIndices() {}
 
@@ -48,7 +53,6 @@ public:
         m_Objects.push_back(object);
     }
 
-    virtual void DrawObject() {};
     static std::vector<BaseObject*> m_Objects;
 private:   
     
@@ -56,12 +60,19 @@ private:
     std::vector<float> m_Color;
 
     std::string m_Name;
+    ObjectType m_Type;
+
+    //Positional properties
     ObjectPosVelAcc m_PosVelAcc;
+
+    glm::vec3 m_AccVec;
+    glm::vec3 m_VelVec;
+    glm::vec3 m_PosVec;
 
     //Physical properties
     float m_Mass;
-    glm::vec3 m_Acceleration;
-    glm::vec3 m_Velocity;
+
+
     
 
 protected:

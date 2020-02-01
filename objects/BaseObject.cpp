@@ -7,13 +7,17 @@ BaseObject::BaseObject(int posX = 0, int posY = 0, float rot = 0.0f, float mass 
     
 {
     ++m_ObjectCount;
-    std::cout << "BaseObject constructor: x and y: " << posX << ", " << posY << std::endl;
+
+    m_PosVec = glm::vec3(posX, posY, 0);
+    m_VelVec = glm::vec3(-31.0f, 0, 0);
+    m_AccVec = glm::vec3(0, 0, 0);
+
     m_PosVelAcc.PosVec = glm::vec3(posX, posY, 0);
     m_PosVelAcc.VelVec = glm::vec3(0, 0, 0);
     m_PosVelAcc.AccVec = glm::vec3(0, 0, 0);
     m_PosVelAcc.rot = 1231;
 
-    std::cout << "BaseObject constructor: m_PosVelAcc x:" << m_PosVelAcc.PosVec.x << std::endl;
+
     m_Color = {1.0f, 0.0f, 0.5f, 1.0f};
 }
 

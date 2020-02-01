@@ -1,39 +1,39 @@
 #include "TestObjectGeneration.h"
 
+const int RESOLUTION_WIDTH = 1200;
+const int RESOLUTION_HEIGHT = 720;
+
+
 namespace test
 {
     TestObjectGeneration::TestObjectGeneration()
-    :   m_Proj(glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -1.0f, 1.0f)), m_ToggleGravity(false)
+    :   m_Proj(glm::ortho(0.0f, (float)RESOLUTION_WIDTH, 0.0f, (float)RESOLUTION_HEIGHT, -1.0f, 1.0f)), m_ToggleGravity(false),
+        m_Physics(NewtonianPhysics::GetInstance())
     {
         m_ObjectHandlerInstance = ObjectHandler::GetInstance();
-        m_physics = NewtonianPhysics::GetInstance();
+        m_Physics->SetBounds(RESOLUTION_WIDTH, 0, RESOLUTION_HEIGHT, 0); 
+        m_Physics->setDeltaT(0.08);
 
-        m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(100, 200, 0), 50, 50);
-        //m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(500, 50, 0), 50, 200);
+        m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(400, 600, 0), 50, 50);
+        m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(500, 300, 0), 100, 100);
         //m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(700, 100, 0), 200, 200);
         m_Objects = m_ObjectHandlerInstance->GetObjectsData();
+        //m_Objects[0]->SetObjectPosVelAcc({m_Objects[0]->GetObjectPosVelAcc().PosVec, glm::vec3(2.0f, 0.0f, 0.0f), m_Objects[0]->GetObjectPosVelAcc().AccVec});
         m_VertexData = m_ObjectHandlerInstance->GetVertexData();
 
+        m_Physics->Calculate(m_Objects);
+        
         m_ObjectHandlerInstance->PrintObjectsName();
 
         m_VAO = std::make_unique<VertexArray>();
-
-
         m_VertexBuffer = std::make_unique<VertexBuffer>(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
         VertexBufferLayout layout;
         layout.Push<float>(2);
-
         m_VAO->AddBuffer(*m_VertexBuffer, layout);
-
         m_IndexBuffer = std::make_unique<IndexBuffer>(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
-
         m_Shader = std::make_unique<Shader>("res/basic_color.shader");
         m_Shader->Bind();
 
-        std::cout << "Vertex Pos size: " << m_VertexData.VertexPosition.size() << " Indices size: " <<
-                m_VertexData.VertexIndices.size() << "Indeces offset size: " << m_VertexData.ObjectIndexOffset.size() << std::endl;
-
-        m_physics->Calculate(m_Objects);
         
     }
 
@@ -67,11 +67,11 @@ namespace test
             m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
             m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size()); 
         }
-        m_physics->Calculate(m_Objects);
+        m_Physics->Calculate(m_Objects);
         
         for(int i = 0; i < m_VertexData.ObjectIndexOffset.size(); i++)
         {
-            glm::mat4 mvp = glm::mat4(1.0f)* m_Proj* glm::translate(glm::mat4(1.0f), m_Objects[i]->GetObjectPosVelAcc().PosVec);
+            glm::mat4 mvp = glm::mat4(1.0f)* m_Proj* glm::translate(glm::mat4(1.0f), m_Objects[i]->GetPosition());
             m_Shader->Bind();
             m_Shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
             m_Shader->SetUniformMat4f("u_MVP", mvp);
@@ -81,7 +81,9 @@ namespace test
 
         //m_Objects[0]->GetObjectPosVelAcc().PosVec.x
         //ImGui::Text()
-        //ImGui::SliderFloat3("Translation A", &m_Objects[0]->GetObjectPosVelAcc().PosVec.x, 0.0f, 1280.0f);
-
+        /*glm::vec3 posvec = m_Objects[0]->GetPosition();
+        ImGui::SliderFloat3("Translation A", &posvec.x, 0.0f, 1280.0f);
+        m_Objects[0]->SetObjectPosVelAcc(posvec, glm::vec3(0,0,0), glm::vec3(0,0,0));
+        */
     }
 }

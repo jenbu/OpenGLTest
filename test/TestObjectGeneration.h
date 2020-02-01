@@ -36,15 +36,13 @@ namespace test
 
     private:
         double m_LastTime;
-        ObjectData m_ObjectsData;
-        std::vector<ObjectPosVelAcc> m_ObjectsPosVelAcc;
 
         glm::mat4 m_Proj;
         
         std::vector<BaseObject*> m_Objects;
         ObjectHandler* m_ObjectHandlerInstance;
         VertexData m_VertexData;
-        NewtonianPhysics* m_physics;
+        NewtonianPhysics* m_Physics;
 
         bool m_ToggleGravity;
         

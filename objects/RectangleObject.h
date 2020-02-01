@@ -11,9 +11,13 @@ public:
     RectangleObject(float x, float y, float rot, unsigned int width, unsigned int height, float mass);
     ~RectangleObject();
 
-    inline int GetRectCount() { return m_RectCount; };
-    void DrawObject() override;
+    inline int GetRectCount() { return m_RectCount; };  
+    ObjectType GetType() override { return Rect; }
     unsigned int GetNumIndices() override { return m_NumIndexes; }
+
+    void GetGeometry() override { std::cout << "hei" << std::endl; }
+    inline unsigned int GetWidth() { return m_Width; }
+    inline unsigned int GetHeight() { return m_Height; }
 
 private:
     static unsigned int m_RectCount;

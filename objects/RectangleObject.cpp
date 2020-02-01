@@ -18,8 +18,3 @@ RectangleObject::~RectangleObject()
 {
 
 }
-
-void RectangleObject::DrawObject()
-{
-
-}
