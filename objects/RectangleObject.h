@@ -8,7 +8,7 @@
 class RectangleObject : public BaseObject
 {
 public:
-    RectangleObject(float x, float y, float rot, unsigned int width, unsigned int height, float mass);
+    RectangleObject(glm::vec3 pos, glm::vec3 vel, float rot, unsigned int width, unsigned int height, float mass);
     ~RectangleObject();
 
     inline int GetRectCount() { return m_RectCount; };  

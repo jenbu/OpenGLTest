@@ -6,7 +6,7 @@ const float g = 9.81;
 NewtonianPhysics::NewtonianPhysics()
 : m_CurrentVel{ 0.0f, 0.0f}, m_DeltaT(0.0), m_ToggleCollision(false)
 {
-
+    m_CollisionDetector = CollisionDetection::GetInstance();
 }
 
 NewtonianPhysics::~NewtonianPhysics()
@@ -29,7 +29,7 @@ void NewtonianPhysics::UpdateVelPos(glm::vec3 acc)
     glm::vec3 vel = m_CurrentObject->GetVelocity();
     glm::vec3 pos = m_CurrentObject->GetPosition();
 
-    if(BoundCollision(m_CurrentObject) /*&& m_ToggleCollision == false*/)
+    if(m_CollisionDetector->BoundaryCollision(m_CurrentObject) /*&& m_ToggleCollision == false*/)
     {
         //velvec is updated in CalculateBoundCollision()
         vel = m_CurrentObject->GetVelocity();
@@ -57,58 +57,19 @@ void NewtonianPhysics::Calculate(std::vector<BaseObject*> objects)
         m_CurrentObject = objects[i];
         acc = m_CurrentObject->GetAcceleration();
         vel = m_CurrentObject->GetVelocity();
-
+        m_CollisionDetector->InterCollision(objects, m_CurrentObject);
+        //InterCollision(objects, m_CurrentObject);
         //Calculate acceleration
         if(vel.y > 0)
             air_res = - pow(vel.y, 2)/2;
         else
             air_res = pow(vel.y, 2)/2;
             
-        acc.y = -g*2 + air_res/m_CurrentObject->GetMass();
+        acc.y = -g*2;// + air_res/m_CurrentObject->GetMass();
 
         //Update
-        UpdateVelPos(acc);
+        //UpdateVelPos(acc);
 
     }
 }
 
-bool NewtonianPhysics::BoundCollision(BaseObject* object)
-{
-    glm::vec3 pos = object->GetPosition();
-    glm::vec3 vel = object->GetVelocity();
-    glm::vec3 acc = object->GetAcceleration();
-
-    switch (object->GetType())
-    {
-    case Rect:
-        {
-            //std::cout << "CalculateBoundCollisionType is rect" << std::endl;
-            //RectangleObject* rect = (RectangleObject*)object;
-            RectangleObject* rect = dynamic_cast<RectangleObject*>(object);
-            if((pos.x + rect->GetWidth()/2) > m_Bounds.OuterX || (pos.x - rect->GetWidth()/2) < m_Bounds.InnerX)
-            {
-                
-
-                std::cout << "hitting x boundary" << std::endl;
-                vel.x = -vel.x;
-                object->SetObjectPosVelAcc(pos, vel, acc);
-                return true;
-            }
-            else if((pos.y + rect->GetHeight()/2) > m_Bounds.OuterY || (pos.y - rect->GetHeight()/2) < m_Bounds.InnerY)
-            {
-                std::cout << "hitting y boundary" << std::endl;
-                vel.y = -vel.y;
-                object->SetObjectPosVelAcc(pos, vel, acc);
-                return true;
-            }
-            else
-            {
-                return false;
-            }    
-        }
-    default:
-        break;
-    }
-
-    return false;
-}

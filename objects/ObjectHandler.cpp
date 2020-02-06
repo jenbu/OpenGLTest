@@ -30,11 +30,11 @@ ObjectHandler* ObjectHandler::GetInstance()
 }*/
 
 template<>
-void ObjectHandler::AddObject<RectangleObject>(glm::vec3 pos, float width, float height)
+void ObjectHandler::AddObject<RectangleObject>(glm::vec3 pos, glm::vec3 vel, float width, float height)
 {
     ++m_ObjectCount;
     std::cout << "AddObject: m_ObjectCount: " << m_ObjectCount << "Pos: ("<< pos.x << "," << pos.y << "," << pos.z << ")" << std::endl;
-    RectangleObject* tempRect = new RectangleObject(pos.x, pos.y, pos.z, width, height, 100);
+    RectangleObject* tempRect = new RectangleObject(pos, vel, 0, width, height, 100);
     m_Objects.push_back(tempRect);
     
     //std::cout << "AddObject: pos x: " << tempRect->GetObjectPosVelAcc().PosVec.x << std::endl;

@@ -25,7 +25,7 @@ enum ObjectType
 class BaseObject
 {
 public:
-    BaseObject(int posX, int posY, float rot, float mass);
+    BaseObject(glm::vec3 pos, glm::vec3 vel, float rot, float mass);
     ~BaseObject();
 
     inline void SetName(std::string name) {m_Name = name; };

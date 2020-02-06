@@ -2,8 +2,8 @@
 
 unsigned int RectangleObject::m_RectCount = 0;
 
-RectangleObject::RectangleObject(float x = 0, float y = 0, float rot = 0, unsigned int width = 100, unsigned int height = 100, float mass = 100)
-: m_Width(width), m_Height(height), BaseObject(x, y, rot, mass), m_NumIndexes(6)
+RectangleObject::RectangleObject(glm::vec3 pos, glm::vec3 vel, float rot = 0, unsigned int width = 100, unsigned int height = 100, float mass = 100)
+: m_Width(width), m_Height(height), BaseObject(pos, vel, rot, mass), m_NumIndexes(6)
 {
     ++m_RectCount;
     std::string rectName("Rectangle ");

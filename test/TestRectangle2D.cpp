@@ -29,11 +29,11 @@ namespace test
             1, 2, 3
         };
 
-        BaseObject* base = new BaseObject(100,100, 0, 100);
+        //BaseObject* base = new BaseObject(100,100, 0, 100);
         
-        RectangleObject rectA(100.0f, 100.0f, 0.0f, 100, 100, 100), rectB(400.0f, 400.0f, 0.0f, 100, 100, 100);
+        //RectangleObject rectA(100.0f, 100.0f, 0.0f, 100, 100, 100), rectB(400.0f, 400.0f, 0.0f, 100, 100, 100);
         //rectA.SetRotation(M_PI_4);
-        m_Rectangles.push_back(rectA);
+        /*m_Rectangles.push_back(rectA);
         m_Rectangles.push_back(rectB);
         m_CurrentRectName = rectA.GetName();
         m_RectIter = m_Rectangles.begin();
@@ -62,7 +62,7 @@ namespace test
         m_VAO->UnBind();
         m_IndexBuffer->UnBind();
         m_VertexBuffer->UnBind();
-        m_Shader->UnBind();
+        m_Shader->UnBind();*/
     }
 
     TestRectangle2D::~TestRectangle2D()
@@ -101,7 +101,7 @@ namespace test
 
     void TestRectangle2D::OnImGuiRender()
     {   
-        
+        /*
         Renderer renderer;
 
         
@@ -113,7 +113,7 @@ namespace test
                 m_RectIter = m_Rectangles.begin();
 
             m_CurrentRectName = m_RectIter->GetName();
-        }
+        }*/
         /*
         if(ImGui::Button("Add Square"))
         {

@@ -14,13 +14,14 @@ namespace test
         m_Physics->SetBounds(RESOLUTION_WIDTH, 0, RESOLUTION_HEIGHT, 0); 
         m_Physics->setDeltaT(0.08);
 
-        m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(400, 600, 0), 50, 50);
-        m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(500, 300, 0), 100, 100);
+        m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(400, 600, 0), glm::vec3(10, 0, 0), 150, 150);
+        m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(500, 300, 0), glm::vec3(30, 0, 0), 100, 100);
         //m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(700, 100, 0), 200, 200);
+        
         m_Objects = m_ObjectHandlerInstance->GetObjectsData();
-        //m_Objects[0]->SetObjectPosVelAcc({m_Objects[0]->GetObjectPosVelAcc().PosVec, glm::vec3(2.0f, 0.0f, 0.0f), m_Objects[0]->GetObjectPosVelAcc().AccVec});
         m_VertexData = m_ObjectHandlerInstance->GetVertexData();
 
+        std::cout << "objects size: " << m_Objects.size() << std::endl;
         m_Physics->Calculate(m_Objects);
         
         m_ObjectHandlerInstance->PrintObjectsName();
@@ -60,12 +61,12 @@ namespace test
 
         if(ImGui::Button("Add Object") && !m_ToggleGravity)
         {
-            m_ToggleGravity != m_ToggleGravity;
+            /*m_ToggleGravity != m_ToggleGravity;
             m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(700, 300, 0), 40, 70);
             m_Objects = m_ObjectHandlerInstance->GetObjectsData();
             m_VertexData = m_ObjectHandlerInstance->GetVertexData();
             m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
-            m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size()); 
+            m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());*/ 
         }
         m_Physics->Calculate(m_Objects);
         
@@ -81,9 +82,12 @@ namespace test
 
         //m_Objects[0]->GetObjectPosVelAcc().PosVec.x
         //ImGui::Text()
-        /*glm::vec3 posvec = m_Objects[0]->GetPosition();
+        glm::vec3 posvec = m_Objects[0]->GetPosition();
         ImGui::SliderFloat3("Translation A", &posvec.x, 0.0f, 1280.0f);
         m_Objects[0]->SetObjectPosVelAcc(posvec, glm::vec3(0,0,0), glm::vec3(0,0,0));
-        */
+        glm::vec3 posvec2 = m_Objects[1]->GetPosition();
+        ImGui::SliderFloat3("Translation B", &posvec2.x, 0.0f, 1280.0f);
+        m_Objects[1]->SetObjectPosVelAcc(posvec2, glm::vec3(0,0,0), glm::vec3(0,0,0));
+        
     }
 }

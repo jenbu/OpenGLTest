@@ -26,7 +26,7 @@ class ObjectHandler
         void PrintObjectsName();
 
         template<typename T>
-        void AddObject(glm::vec3 pos, float width, float height)
+        void AddObject(glm::vec3 pos, glm::vec3 vel, float width, float height)
         {
             
         }

@@ -3,6 +3,7 @@
 #include <vector>
 #include "BaseObject.h"
 #include "RectangleObject.h"
+#include "CollisionDetection.h"
 
 struct WorldBounds
 {
@@ -30,7 +31,8 @@ private:
     NewtonianPhysics();
     ~NewtonianPhysics();
 
-    bool BoundCollision(BaseObject* object);
+    CollisionDetection* m_CollisionDetector;
+
     void UpdateVelPos(glm::vec3 acc);
 
     bool m_ToggleCollision;
