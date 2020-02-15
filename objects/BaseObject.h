@@ -38,6 +38,7 @@ public:
     virtual ObjectType GetType() {};
     virtual void GetGeometry() {};
     inline float GetMass() { return m_Mass; }
+    inline unsigned int GetSpringConst() { return m_Spring; }
      
     //ObjectPosVelAcc GetObjectPosVelAcc() { return m_PosVelAcc; }
     inline glm::vec3 GetPosition() { return m_PosVec; }
@@ -61,6 +62,7 @@ private:
 
     std::string m_Name;
     ObjectType m_Type;
+    unsigned int m_Spring;
 
     //Positional properties
     ObjectPosVelAcc m_PosVelAcc;

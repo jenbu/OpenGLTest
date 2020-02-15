@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
+#include <time.h>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -14,6 +15,7 @@
 #include "TestLines.h"
 #include "TestObjectGeneration.h"
 #include "Utility.h"
+#include "Constants.h"
 
 using namespace std;
 
@@ -41,6 +43,7 @@ int main(int, char**) {
     window = glfwCreateWindow(1280, 720, "Test", NULL, NULL);
     if(window == NULL)
     {
+
         fprintf(stderr, "Failed to open GLFW window.");
         glfwTerminate();
         return -1;
@@ -76,36 +79,51 @@ int main(int, char**) {
     int counterFPS = 0;
     double lastTime;
     int displayFPSCounter = 0;
+    clock_t time = clock();
+    double const TicksPerFrame = CLOCKS_PER_SEC/FPS;
     
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0)
     {
-        renderer.Clear();
+        //Manual lock FPS due to vsync not working on every computer with glfwSwapInterval()
         lastTime = glfwGetTime();
 
-        ImGui_ImplGlfwGL3_NewFrame();
-
-        if(currentTest)
+        if(clock()-time > TicksPerFrame)
         {
-            currentTest->OnUpdate(0.0f);
-            currentTest->OnRender();
-            ImGui::Begin("Test");
-            if(currentTest != testMenu && ImGui::Button("<-"))
+            renderer.Clear();
+
+            ImGui_ImplGlfwGL3_NewFrame();
+
+            if(currentTest)
             {
-                delete currentTest;
-                currentTest = testMenu;
+                currentTest->OnUpdate(0.0f);
+                currentTest->OnRender();
+                ImGui::Begin("Test");
+                if(currentTest != testMenu && ImGui::Button("<-"))
+                {
+                    delete currentTest;
+                    currentTest = testMenu;
+                }
+                currentTest->OnImGuiRender();
+                ImGui::Text(std::to_string(counterFPS).c_str());
+                ImGui::End();
             }
-            currentTest->OnImGuiRender();
-            ImGui::Text(std::to_string(counterFPS).c_str());
-            ImGui::End();
+
+
+            ImGui::Render();
+            ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+            glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+            
+            counterFPS = CLOCKS_PER_SEC/(clock()-time);
+            time = clock();
         }
-
-
-        ImGui::Render();
-        ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
-        glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        else
+        {
+            
+        }
         
+        /*
         if(displayFPSCounter >= 40)
         {
             counterFPS = (int)1.0/((double)(glfwGetTime()-lastTime));
@@ -113,6 +131,7 @@ int main(int, char**) {
 
         }
         ++displayFPSCounter;
+        */
         
     }
     

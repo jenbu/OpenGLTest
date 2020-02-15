@@ -11,6 +11,7 @@
 #include "RectangleObject.h"
 #include "ObjectHandler.h"
 #include "Physics/NewtonianPhysics.h"
+#include "Constants.h"
 
 
 #include "imgui/imgui.h"
@@ -33,6 +34,8 @@ namespace test
         void OnUpdate(float deltaTime) override;
         void OnRender() override;
         void OnImGuiRender() override;
+        void DebugMenu();
+        void NewObjectMenu();
 
     private:
         double m_LastTime;
@@ -43,8 +46,12 @@ namespace test
         ObjectHandler* m_ObjectHandlerInstance;
         VertexData m_VertexData;
         NewtonianPhysics* m_Physics;
+        double m_TimeStep;
+        bool m_NewObjMenu;
 
-        bool m_ToggleGravity;
+        int m_NewRectPos[3];
+        int m_NewRectSize[2];
+        
         
         Renderer m_Renderer;
         std::unique_ptr<Shader> m_Shader;

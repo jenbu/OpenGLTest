@@ -4,7 +4,7 @@ CollisionDetection* CollisionDetection::m_Instance = 0;
 
 CollisionDetection::CollisionDetection()
 {
-
+    SetBounds(0, 0, 0, 0);
 }
 
 CollisionDetection::~CollisionDetection()
@@ -22,16 +22,18 @@ CollisionDetection* CollisionDetection::GetInstance()
     return m_Instance;
 }
 
-bool CollisionDetection::InterCollision(std::vector<BaseObject*>  objects, BaseObject* currentobj)
+//Return the object it is currently colliding with
+CollisionInfo CollisionDetection::InterCollision(std::vector<BaseObject*>  objects, BaseObject* currentobj)
 {
+    CollisionInfo collisionStruct; 
+    unsigned int smallestWidth = 0;
+
     for(std::vector<BaseObject*>::iterator it = objects.begin(); it != objects.end(); it++)
     {
+        //Same object
         if(*it == currentobj)
-        {
-            //std::cout << "Same obj" << std::endl;
             continue;
-        }
-        
+
         glm::vec3 currentPos = currentobj->GetPosition();
         glm::vec3 iterPos = (*it)->GetPosition();
 
@@ -40,21 +42,53 @@ bool CollisionDetection::InterCollision(std::vector<BaseObject*>  objects, BaseO
         {
             RectangleObject* currRect = dynamic_cast<RectangleObject*>(currentobj);
             RectangleObject* iterRect = dynamic_cast<RectangleObject*>((*it));
-            if(((currentPos.x+currRect->GetWidth()/2) > (iterPos.x - iterRect->GetWidth()/2) && (currentPos.x-currRect->GetWidth()/2) < (iterPos.x - iterRect->GetWidth()/2))
-            && ((currentPos.y+currRect->GetHeight()/2) > (iterPos.y - iterRect->GetHeight()/2) && (currentPos.y-currRect->GetHeight()/2) < (iterPos.y - iterRect->GetHeight()/2)) )
+            if( ((currentPos.x-currRect->GetWidth()/2)  < (iterPos.x + iterRect->GetWidth()/2)  && (currentPos.x + currRect->GetWidth()/2) > (iterPos.x - iterRect->GetWidth()/2))
+            &&  ((currentPos.y-currRect->GetHeight()/2) < (iterPos.y + iterRect->GetHeight()/2) && (currentPos.y + currRect->GetHeight()/2) > (iterPos.y - iterRect->GetHeight()/2)) )
             {
-                std::cout << "x y collision with other object" << std::endl;
-                return true;
+                //std::cout << "x y collision with other object" << std::endl;
+                //collidingObject = (*it);
+                collisionStruct.currentObjectSide = RectGeneral;
+                collisionStruct.collisionObject = (*it);
+                
+                //Extra checks to see which side of the current Rectangle is hit
+                if(currRect->GetWidth()/2 < iterRect->GetWidth()/2)
+                    smallestWidth = currRect->GetWidth();
+                else
+                    smallestWidth = iterRect->GetWidth();
+
+                if((currentPos.x + currRect->GetWidth()/2) - (iterPos.x - iterRect->GetWidth()/2) < (smallestWidth/2)/2
+                && (currentPos.x + currRect->GetWidth()/2) - (iterPos.x - iterRect->GetWidth()/2) > 0) //Collision on the current obj right side
+                {
+                    collisionStruct.currentObjectSide = RectRight;
+                    std::cout << "Collision on curr objects right side" << std::endl;
+                }
+                else if((iterPos.x + iterRect->GetWidth()/2) - (currentPos.x - currRect->GetWidth()/2) < (smallestWidth/2)/2
+                     && (iterPos.x + iterRect->GetWidth()/2) - (currentPos.x - currRect->GetWidth()/2) > 0) //Collision on the current obj left side
+                {
+                    collisionStruct.currentObjectSide = RectLeft;
+                    std::cout << "Collision on curr objects left side" << std::endl;
+                }
+                else if(-(iterPos.y - iterRect->GetHeight()/2) + (currentPos.y + currRect->GetHeight()/2) < (smallestWidth/2)/2
+                     && -(iterPos.y - iterRect->GetHeight()/2) + (currentPos.y + currRect->GetHeight()/2) > 0) // Collision on the current obj top side
+                {
+                    collisionStruct.currentObjectSide = RectTop;
+                    std::cout << "Collision on top" << std::endl;
+                }
+                else if((iterPos.y + iterRect->GetHeight()/2) - (currentPos.y - currRect->GetHeight()/2) < (smallestWidth/2)/2 
+                     && (iterPos.y + iterRect->GetHeight()/2) - (currentPos.y - currRect->GetHeight()/2) > 0) // Collision on the current obj top side
+                {
+                    collisionStruct.currentObjectSide = RectBot;
+                    std::cout << "Collision on bottom" << std::endl;   
+                }
+                
             }
         }
-
-        //std::cout << "different obj" << std::endl;
     }
-    std::cout << "no collision" << std::endl;
-    return false;
+    //std::cout << "no collision" << std::endl;
+    return collisionStruct;
 }
 
-bool CollisionDetection::BoundaryCollision(BaseObject* object)
+TypeCollision CollisionDetection::BoundaryCollision(BaseObject* object)
 {
     glm::vec3 pos = object->GetPosition();
     glm::vec3 vel = object->GetVelocity();
@@ -64,33 +98,25 @@ bool CollisionDetection::BoundaryCollision(BaseObject* object)
     {
     case Rect:
         {
-            //std::cout << "CalculateBoundCollisionType is rect" << std::endl;
-            //RectangleObject* rect = (RectangleObject*)object;
             RectangleObject* rect = dynamic_cast<RectangleObject*>(object);
-            if((pos.x + rect->GetWidth()/2) > m_Bounds.OuterX || (pos.x - rect->GetWidth()/2) < m_Bounds.InnerX)
+            if((pos.x + rect->GetWidth()/2) > m_Bounds.maxX || (pos.x - rect->GetWidth()/2) < m_Bounds.minX)
             {
-                
-
                 std::cout << "hitting x boundary" << std::endl;
-                vel.x = -vel.x;
-                object->SetObjectPosVelAcc(pos, vel, acc);
-                return true;
+                return TypeCollision::xBoundry;
             }
-            else if((pos.y + rect->GetHeight()/2) > m_Bounds.OuterY || (pos.y - rect->GetHeight()/2) < m_Bounds.InnerY)
+            else if((pos.y + rect->GetHeight()/2) > m_Bounds.maxY || (pos.y - rect->GetHeight()/2) < m_Bounds.minY)
             {
                 std::cout << "hitting y boundary" << std::endl;
-                vel.y = -vel.y;
-                object->SetObjectPosVelAcc(pos, vel, acc);
-                return true;
+                return TypeCollision::yBoundry;
             }
             else
             {
-                return false;
+                return TypeCollision::NoCollision;
             }    
         }
     default:
         break;
     }
 
-    return false;
+    return TypeCollision::NoCollision;
 }

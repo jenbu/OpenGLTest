@@ -51,6 +51,8 @@ include_directories(
 	src/vendor/imgui
 	src/OpenGL/
 	src/Physics/
+	src/Misc/
+	src/Menu/
 	src
 	test
 	objects

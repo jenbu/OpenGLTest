@@ -1,18 +1,17 @@
 #include "TestObjectGeneration.h"
 
-const int RESOLUTION_WIDTH = 1200;
-const int RESOLUTION_HEIGHT = 720;
-
 
 namespace test
 {
     TestObjectGeneration::TestObjectGeneration()
-    :   m_Proj(glm::ortho(0.0f, (float)RESOLUTION_WIDTH, 0.0f, (float)RESOLUTION_HEIGHT, -1.0f, 1.0f)), m_ToggleGravity(false),
-        m_Physics(NewtonianPhysics::GetInstance())
+    :   m_Proj(glm::ortho(0.0f, (float)ResolutionWidth, 0.0f, (float)ResolutionHeight, -1.0f, 1.0f)),
+        m_Physics(NewtonianPhysics::GetInstance()), m_NewObjMenu(false), m_NewRectPos({ 0, 0, 0 }), m_NewRectSize({ 0, 0 })
     {
         m_ObjectHandlerInstance = ObjectHandler::GetInstance();
-        m_Physics->SetBounds(RESOLUTION_WIDTH, 0, RESOLUTION_HEIGHT, 0); 
-        m_Physics->setDeltaT(0.08);
+
+        m_TimeStep = 0.03;
+        m_Physics->setDeltaT(m_TimeStep);
+        m_Physics->enablePhysics(true);
 
         m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(400, 600, 0), glm::vec3(10, 0, 0), 150, 150);
         m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(500, 300, 0), glm::vec3(30, 0, 0), 100, 100);
@@ -57,17 +56,8 @@ namespace test
 
     void TestObjectGeneration::OnImGuiRender()
     {
+        DebugMenu();
 
-
-        if(ImGui::Button("Add Object") && !m_ToggleGravity)
-        {
-            /*m_ToggleGravity != m_ToggleGravity;
-            m_ObjectHandlerInstance->AddObject<RectangleObject>(glm::vec3(700, 300, 0), 40, 70);
-            m_Objects = m_ObjectHandlerInstance->GetObjectsData();
-            m_VertexData = m_ObjectHandlerInstance->GetVertexData();
-            m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
-            m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());*/ 
-        }
         m_Physics->Calculate(m_Objects);
         
         for(int i = 0; i < m_VertexData.ObjectIndexOffset.size(); i++)
@@ -80,14 +70,67 @@ namespace test
 
         }
 
-        //m_Objects[0]->GetObjectPosVelAcc().PosVec.x
-        //ImGui::Text()
-        glm::vec3 posvec = m_Objects[0]->GetPosition();
-        ImGui::SliderFloat3("Translation A", &posvec.x, 0.0f, 1280.0f);
-        m_Objects[0]->SetObjectPosVelAcc(posvec, glm::vec3(0,0,0), glm::vec3(0,0,0));
-        glm::vec3 posvec2 = m_Objects[1]->GetPosition();
-        ImGui::SliderFloat3("Translation B", &posvec2.x, 0.0f, 1280.0f);
-        m_Objects[1]->SetObjectPosVelAcc(posvec2, glm::vec3(0,0,0), glm::vec3(0,0,0));
         
+    }
+
+    void TestObjectGeneration::DebugMenu()
+    {
+        if(m_NewObjMenu)
+            NewObjectMenu();
+        else if(ImGui::Button("New Object"))
+            m_NewObjMenu = true;
+
+
+
+        if(ImGui::Button("Enable/Disable Physics"))
+        {
+            if(m_Physics->GetPhysicsEnabled())
+                m_Physics->enablePhysics(false);
+            else
+                m_Physics->enablePhysics(true);
+        }
+
+        if(ImGui::InputDouble("TimeStep", &m_TimeStep))
+        {
+            std::cout << "timestep" << std::endl;
+        }
+
+        if(ImGui::Button("Activate Timestep"))
+            m_Physics->setDeltaT(m_TimeStep);
+
+
+        if(!m_Physics->GetPhysicsEnabled())
+        {
+            glm::vec3 posvec = m_Objects[0]->GetPosition();
+            ImGui::SliderFloat3("Translation A", &posvec.x, 0.0f, 1280.0f);
+            m_Objects[0]->SetObjectPosVelAcc(posvec, glm::vec3(0,0,0), glm::vec3(0,0,0));
+            glm::vec3 posvec2 = m_Objects[1]->GetPosition();
+            ImGui::SliderFloat3("Translation B", &posvec2.x, 0.0f, 1280.0f);
+            m_Objects[1]->SetObjectPosVelAcc(posvec2, glm::vec3(0,0,0), glm::vec3(0,0,0));
+        }
+            
+    }
+
+    void TestObjectGeneration::NewObjectMenu()
+    {
+        if(ImGui::Button("Exit"))
+            m_NewObjMenu = false;
+
+
+        ImGui::InputInt3("Position", m_NewRectPos);
+        ImGui::InputInt2("Size", m_NewRectSize);
+
+        if(ImGui::Button("Add Object"))
+        {
+            glm::vec3 posVec3(m_NewRectPos[0], m_NewRectPos[1], m_NewRectPos[2]);
+            m_ObjectHandlerInstance->AddObject<RectangleObject>(posVec3, glm::vec3(0,0,0), m_NewRectSize[0], m_NewRectSize[1]);
+            m_Objects = m_ObjectHandlerInstance->GetObjectsData();
+            m_VertexData = m_ObjectHandlerInstance->GetVertexData();
+            m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
+            m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
+
+            m_NewRectPos[0] = 0; m_NewRectPos[1] = 0; m_NewRectPos[2] = 0;
+            m_NewRectSize[0] = 0; m_NewRectSize[1] = 0;
+        }
     }
 }
