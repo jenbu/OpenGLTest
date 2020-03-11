@@ -71,7 +71,7 @@ glm::vec2 NewtonianPhysics::CollisionForce(BaseObject* currObj, CollisionInfo co
     //Assume rectangle
     RectangleObject* currRect = dynamic_cast<RectangleObject*>(currObj);
     RectangleObject* collRect = dynamic_cast<RectangleObject*>(collObj);
-    std::cout << "CollisionType: " << collInfo.currentObjectSide << std::endl;
+    //std::cout << "CollisionType: " << collInfo.currentObjectSide << std::endl;
     switch (collInfo.currentObjectSide)
     {
     case RectLeft:
@@ -179,7 +179,7 @@ void NewtonianPhysics::Calculate(std::vector<BaseObject*> objects)
         if(boundaryCollitionType = m_CollisionDetector->BoundaryCollision(m_CurrentObject))
         {
             F_Boundaryk = BoundaryForces(boundaryCollitionType);
-            std::cout << "boundary force: " << F_Boundaryk << std::endl;
+            //std::cout << "boundary force: " << F_Boundaryk << std::endl;
         }
         else
         {

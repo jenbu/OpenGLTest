@@ -34,6 +34,7 @@ find_package(OpenGL REQUIRED)
 #endif()
 
 
+find_package (Threads)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
@@ -60,7 +61,7 @@ include_directories(
 
 
 add_executable(OpenGLUTube ${SOURCE_FILES} ${HEADER_FILES})
-target_link_libraries(OpenGLUTube ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(OpenGLUTube ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} -ldl ${CMAKE_THREAD_LIBS_INIT})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

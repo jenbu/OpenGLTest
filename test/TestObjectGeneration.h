@@ -12,6 +12,8 @@
 #include "ObjectHandler.h"
 #include "Physics/NewtonianPhysics.h"
 #include "Constants.h"
+#include "ImGuiMenu.h"
+#include "ImGuiSubMenu.h"
 
 
 #include "imgui/imgui.h"
@@ -41,16 +43,22 @@ namespace test
         double m_LastTime;
 
         glm::mat4 m_Proj;
+        glm::ivec3 m_NewObjCoords;
+        glm::ivec2 m_NewRectProps;
         
         std::vector<BaseObject*> m_Objects;
         ObjectHandler* m_ObjectHandlerInstance;
         VertexData m_VertexData;
         NewtonianPhysics* m_Physics;
         double m_TimeStep;
-        bool m_NewObjMenu;
+        bool m_NewObjMenu, m_TogglePhysics, m_TimeStepApply, m_NewObject;
+        bool m_tempbool;
 
         int m_NewRectPos[3];
         int m_NewRectSize[2];
+
+        ImGuiMenu* m_Menu;
+        ImGuiSubMenu* m_Submenu;
         
         
         Renderer m_Renderer;

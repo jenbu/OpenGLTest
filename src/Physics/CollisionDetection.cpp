@@ -101,12 +101,12 @@ TypeCollision CollisionDetection::BoundaryCollision(BaseObject* object)
             RectangleObject* rect = dynamic_cast<RectangleObject*>(object);
             if((pos.x + rect->GetWidth()/2) > m_Bounds.maxX || (pos.x - rect->GetWidth()/2) < m_Bounds.minX)
             {
-                std::cout << "hitting x boundary" << std::endl;
+                //std::cout << "hitting x boundary" << std::endl;
                 return TypeCollision::xBoundry;
             }
             else if((pos.y + rect->GetHeight()/2) > m_Bounds.maxY || (pos.y - rect->GetHeight()/2) < m_Bounds.minY)
             {
-                std::cout << "hitting y boundary" << std::endl;
+                //std::cout << "hitting y boundary" << std::endl;
                 return TypeCollision::yBoundry;
             }
             else

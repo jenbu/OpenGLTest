@@ -1,19 +1,28 @@
 #pragma once
 
-enum MenuType
-{
-    MainMenu = 0,
-    AddObject
-};
+#include <vector>
+#include <string>
+#include <memory>
+
+#include "ImGuiMenuElement.h"
 
 class ImGuiSubMenu
 {
 public:
-    ImGuiSubMenu(MenuType type);
+    ImGuiSubMenu(std::string subname);
     ~ImGuiSubMenu();
 
+    inline unsigned int GetId() { return m_ID; }
+    inline std::string GetName() { return m_Name; }
 
-    bool m_Active;
+    bool SubMenuAddElement(SubElementBase* element, ImGuiSubMenu* menu = NULL);
+    ImGuiSubMenu* DrawSubMenu();
 
+    static unsigned int subMenuID;
+
+private:
+    unsigned int m_ID;
+    std::string m_Name;
+    std::vector<std::pair<SubElementBase*, ImGuiSubMenu*>> m_MenuElements;
 
 };

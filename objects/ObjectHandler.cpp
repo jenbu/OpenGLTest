@@ -1,6 +1,6 @@
 #include "ObjectHandler.h"
 
-ObjectHandler* ObjectHandler::instance = 0;
+//ObjectHandler* ObjectHandler::instance = 0;
 
 ObjectHandler::ObjectHandler()
 {
@@ -15,6 +15,7 @@ ObjectHandler::~ObjectHandler()
     }
 }
 
+/*
 ObjectHandler* ObjectHandler::GetInstance()
 {
     if(!instance)
@@ -22,12 +23,8 @@ ObjectHandler* ObjectHandler::GetInstance()
         instance = new ObjectHandler;
     }
     return instance;
-}
-
-/*void ObjectHandler::DrawObjects()
-{
-
 }*/
+
 
 template<>
 void ObjectHandler::AddObject<RectangleObject>(glm::vec3 pos, glm::vec3 vel, float width, float height)
@@ -37,7 +34,6 @@ void ObjectHandler::AddObject<RectangleObject>(glm::vec3 pos, glm::vec3 vel, flo
     RectangleObject* tempRect = new RectangleObject(pos, vel, 0, width, height, 100);
     m_Objects.push_back(tempRect);
     
-    //std::cout << "AddObject: pos x: " << tempRect->GetObjectPosVelAcc().PosVec.x << std::endl;
 
     std::vector<float> customPos{ -width/2,  height/2, 
                                    width/2,  height/2,
