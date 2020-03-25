@@ -12,7 +12,8 @@ enum MenuSubElement
     InputFloat3,
     InputInt3,
     InputInt2,
-    InputDouble
+    InputDouble,
+    DragFloat3
 };
 
 class SubElementBase
@@ -175,4 +176,29 @@ public:
 private:
     std::string m_Name;
     glm::ivec2 *m_IntVec2;
+};
+
+template<>
+class ImGuiMenuElement<MenuSubElement::DragFloat3> : public SubElementBase
+{
+public:
+    ImGuiMenuElement(std::string name, glm::vec3* val)
+    {
+        m_Vec3 = val;
+        m_Name = name;
+    }
+
+    bool Draw() override
+    {
+        return ImGui::DragFloat3(m_Name.c_str(), &m_Vec3->x);
+    }
+
+    std::string ElementName() override
+    {
+        return m_Name;
+    }
+
+private:
+    std::string m_Name;
+    glm::vec3 *m_Vec3;
 };

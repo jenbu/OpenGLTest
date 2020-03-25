@@ -33,6 +33,7 @@ void ObjectHandler::AddObject<RectangleObject>(glm::vec3 pos, glm::vec3 vel, flo
     std::cout << "AddObject: m_ObjectCount: " << m_ObjectCount << "Pos: ("<< pos.x << "," << pos.y << "," << pos.z << ")" << std::endl;
     RectangleObject* tempRect = new RectangleObject(pos, vel, 0, width, height, 100);
     m_Objects.push_back(tempRect);
+    m_ObjectsPos.push_back(tempRect->GetPosition());
     
 
     std::vector<float> customPos{ -width/2,  height/2, 

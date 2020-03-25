@@ -17,9 +17,10 @@ public:
     void Calculate(std::vector<BaseObject*> objects);
 
     inline void setDeltaT(double delta){ m_DeltaT = delta; };
+    inline void setCursorData(glm::dvec2* curs) { std::cout << "setCursorData()\n"; m_CursorPos = curs; }
     inline float GetDeltaT() { return m_DeltaT; };
-    inline void enablePhysics(bool enable) { m_PhysicsEnabled = enable; }
     inline bool GetPhysicsEnabled() { return m_PhysicsEnabled; }
+    inline void enablePhysics(bool enable) { m_PhysicsEnabled = enable; }
 
 private:
     static NewtonianPhysics* m_Instance;
@@ -28,9 +29,18 @@ private:
 
 
     void UpdateVelPos(glm::vec3 acc);
+    void UpdateVelPosTest();
     void CalculateMomentum(BaseObject* obj1, BaseObject* obj2);
+    
+    
     float BoundaryForces(TypeCollision coll);
-    glm::vec2 CollisionForce(BaseObject* currObj, CollisionInfo collInfo);
+
+    //Calculate tranlation, rotational force on the object
+    //params:   currObj, the primary object calculating forces on
+    //          collInfo, struct containing information about the object acting forces upon the primary obj
+    glm::vec3 CollisionForce(BaseObject* currObj, CollisionInfo collInfo);
+
+    float CursorForces(BaseObject* currObj);
 
     bool m_PhysicsEnabled;
     bool m_ToggleCollision;
@@ -44,5 +54,6 @@ private:
     ObjectPosVelAcc m_CurrentObjPosVelAcc;
     BaseObject* m_CurrentObject;
     std::vector<float> m_CurrentVel;
+    glm::dvec2* m_CursorPos;
 
 };

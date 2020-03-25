@@ -47,10 +47,14 @@ bool ImGuiMenu::MenuDraw()
     {
         for(int i = 0; i < m_SubMenus.size(); i++)
         {
-            if(ImGui::Button(m_SubMenus[i]->GetName().c_str()))
+            if(!m_SubMenus[i]->isSubSubMenu())
             {
-                m_CurrentSubMenu = m_SubMenus[i];
+                if(ImGui::Button(m_SubMenus[i]->GetName().c_str()))
+                    m_CurrentSubMenu = m_SubMenus[i];
+
             }
+            
+            
         }
 
     }

@@ -25,6 +25,7 @@ class ObjectHandler
         //static ObjectHandler* GetInstance();
         inline VertexData GetVertexData() { return { m_VertexCoords, m_Indices, m_IndexOffsets }; }
         inline std::vector<BaseObject*> GetObjectsData() { return m_Objects; }
+        inline std::vector<glm::vec3> GetObjectsPos() { return m_ObjectsPos; }
         void PrintObjectsName();
 
         template<typename T>
@@ -37,6 +38,7 @@ class ObjectHandler
         static ObjectHandler* instance;
 
         std::vector<BaseObject*> m_Objects;
+        std::vector<glm::vec3> m_ObjectsPos;
         unsigned int m_ObjectCount;
 
         std::vector<float> m_VertexCoords;

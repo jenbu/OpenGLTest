@@ -8,6 +8,8 @@ NewtonianPhysics::NewtonianPhysics()
 {
     m_CollisionDetector = CollisionDetection::GetInstance();
     m_CollisionDetector->SetBounds(0, ResolutionWidth, 0 ,ResolutionHeight);
+    m_CursorPos = NULL;//glm::dvec2(0.0, 0.0);
+
 }
 
 NewtonianPhysics::~NewtonianPhysics()
@@ -24,7 +26,7 @@ NewtonianPhysics* NewtonianPhysics::GetInstance()
     return m_Instance;
 }
 
-//Checks boundary collision and updates velocity and position
+//updates velocity and position
 void NewtonianPhysics::UpdateVelPos(glm::vec3 acc)
 {
     glm::vec3 vel = m_CurrentObject->GetVelocity();
@@ -39,6 +41,21 @@ void NewtonianPhysics::UpdateVelPos(glm::vec3 acc)
 
     m_CurrentObject->SetObjectPosVelAcc(pos, vel, acc);
 }
+
+/*void NewtonianPhysics::UpdateVelPosTest()
+{
+    glm::vec3 vel = m_CurrentObject->GetVelocity();
+    glm::vec3 pos = m_CurrentObject->GetPosition();
+
+
+    vel.x += acc.x*m_DeltaT;
+    vel.y += acc.y*m_DeltaT; 
+
+    pos.x += vel.x*m_DeltaT;
+    pos.y += vel.y*m_DeltaT;
+
+    m_CurrentObject->SetObjectPosVelAcc(pos, vel, acc);
+}*/
 
 //Really want to do this way?
 void NewtonianPhysics::CalculateMomentum(BaseObject* obj1, BaseObject* obj2)
@@ -56,14 +73,15 @@ void GetSpringDampForces()
 
 }
 
-glm::vec2 NewtonianPhysics::CollisionForce(BaseObject* currObj, CollisionInfo collInfo)
+
+glm::vec3 NewtonianPhysics::CollisionForce(BaseObject* currObj, CollisionInfo collInfo)
 {
     BaseObject* collObj = collInfo.collisionObject;
     glm::vec3 velCurr, posCurr, posColl, velColl;
     velCurr = currObj->GetVelocity(); velColl = collObj->GetVelocity();
     posCurr = currObj->GetPosition(); posColl = collObj->GetPosition();
 
-    glm::vec2 F_k(0.0f, 0.0f);
+    glm::vec3 F_k(0.0f, 0.0f, 0.0f);
     
     //Calculate equivalent spring force
     float F_ke = (currObj->GetSpringConst() * collObj->GetSpringConst())/(currObj->GetSpringConst() + collObj->GetSpringConst());
@@ -76,6 +94,9 @@ glm::vec2 NewtonianPhysics::CollisionForce(BaseObject* currObj, CollisionInfo co
     {
     case RectLeft:
         F_k.x = ((posColl.x + collRect->GetWidth()/2) - (posCurr.x - currRect->GetWidth()/2))*F_ke;
+        //if((posColl.y - posCurr.y) > 0)
+
+
         break;
     case RectRight:
         F_k.x = -((posCurr.x + currRect->GetWidth()/2) - (posColl.x - collRect->GetWidth()/2))*F_ke;
@@ -90,32 +111,6 @@ glm::vec2 NewtonianPhysics::CollisionForce(BaseObject* currObj, CollisionInfo co
 
         break;
     }
-    /*
-    //Forces in x direction
-    if(posCurr.x < posColl.x) //Hitting from left side
-    {
-        if(currObj->GetType() == ObjectType::Rect && collObj->GetType() == ObjectType::Rect)
-        {
-            F_k.x = ((posCurr.x + currRect->GetWidth()/2) - (posColl.x - collRect->GetWidth()/2))*F_ke;
-        }
-    }
-    else if(posCurr.x > posColl.x) //hitting from right
-    {
-        F_k.x = 100.0f;
-    }
-    std::cout << "CollisionForce" << std::endl;
-
-    //Forces in y direction
-    if(posCurr.y < posColl.y) //Hitting from beneath
-    {
-        
-        F_k.y = -((posCurr.y + currRect->GetHeight()/2) - (posColl.y - collRect->GetHeight()/2))*F_ke;
-    }
-    else if(posCurr.y > posColl.y) //hitting from above
-    {
-        F_k.y = -((posCurr.y - currRect->GetHeight()/2) - (posColl.y + collRect->GetHeight()/2))*F_ke;
-    }
-    */
 
     return F_k;
 }
@@ -150,20 +145,41 @@ float NewtonianPhysics::BoundaryForces(TypeCollision coll)
     return F_kb;
 }
 
+float NewtonianPhysics::CursorForces(BaseObject* currObj)
+{
+    //Flip cursor coord
+    double cursY = m_CursorPos->y;
+    double cursX = m_CursorPos->x;
+
+    switch(currObj->GetType())
+    {
+        case ObjectType::Rect:
+        {
+            RectangleObject* rectObj = dynamic_cast<RectangleObject*>(currObj);
+
+            break;
+        }
+    }
+
+    return 5000.0f;
+
+
+}
+
 void NewtonianPhysics::Calculate(std::vector<BaseObject*> objects)
 {
 
     glm::vec3 acc, vel;
 
-    float air_res, F_Boundaryk;
-    glm::vec2 F_Collision;
+    float air_res, F_Boundaryk, F_curs = 0;
+    glm::vec3 F_Collision;
 
     TypeCollision boundaryCollitionType;
     CollisionInfo collidingObject;
 
     for(int i = 0; i < objects.size(); i++)
     {
-        F_Collision = glm::vec2(0,0);
+        F_Collision = glm::vec3(0, 0, 0);
         m_CurrentObject = objects[i];
         acc = m_CurrentObject->GetAcceleration();
         vel = m_CurrentObject->GetVelocity();
@@ -186,6 +202,15 @@ void NewtonianPhysics::Calculate(std::vector<BaseObject*> objects)
             F_Boundaryk = 0.0f;
         }
         
+        if(m_CollisionDetector->CursorObjectCollision(m_CurrentObject, *m_CursorPos))
+        {
+            F_curs = CursorForces(m_CurrentObject);
+            std::cout << "Cursor collision with obj" << std::endl;
+        }
+        else
+            F_curs = 0.0f;
+        
+
         if(m_PhysicsEnabled)
         {
 
@@ -196,11 +221,10 @@ void NewtonianPhysics::Calculate(std::vector<BaseObject*> objects)
                 air_res = pow(vel.y, 2)/2;
                 
             acc.x = F_Collision.x/m_CurrentObject->GetMass();
-            acc.y = -g*2 + F_Boundaryk/m_CurrentObject->GetMass() + F_Collision.y/m_CurrentObject->GetMass();// + air_res/m_CurrentObject->GetMass();
+            acc.y = -g*2 + (F_Boundaryk + F_Collision.y + F_curs)/m_CurrentObject->GetMass() ;// + air_res/m_CurrentObject->GetMass();
 
             //Update
             UpdateVelPos(acc);
-
         }
     }
 

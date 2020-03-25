@@ -1,4 +1,6 @@
 #pragma once
+
+#include "Constants.h"
 #include "BaseObject.h"
 #include "RectangleObject.h"
 #include <vector>
@@ -37,6 +39,7 @@ public:
     
     CollisionInfo InterCollision(std::vector<BaseObject*>  objects, BaseObject* currentobj);
     TypeCollision BoundaryCollision(BaseObject* object);
+    bool CursorObjectCollision(BaseObject* object, glm::dvec2 cursor);
 
 
 private:

@@ -81,6 +81,7 @@ int main(int, char**) {
     int displayFPSCounter = 0;
     clock_t time = clock();
     double const TicksPerFrame = CLOCKS_PER_SEC/FPS;
+    double xCurs, yCurs;
     
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0)
     {
@@ -92,9 +93,11 @@ int main(int, char**) {
             renderer.Clear();
 
             ImGui_ImplGlfwGL3_NewFrame();
+            glfwGetCursorPos(window, &xCurs, &yCurs);
 
             if(currentTest)
             {
+                currentTest->CursorUpdate(xCurs, yCurs);
                 currentTest->OnUpdate(0.0f);
                 currentTest->OnRender();
                 ImGui::Begin("Test");
@@ -104,6 +107,7 @@ int main(int, char**) {
                     currentTest = testMenu;
                 }
                 currentTest->OnImGuiRender();
+
                 ImGui::Text(std::to_string(counterFPS).c_str());
                 ImGui::End();
             }
@@ -114,6 +118,7 @@ int main(int, char**) {
             glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
             glfwSwapBuffers(window);
             glfwPollEvents();
+            //glfwSetCursorPosCallback()
             
             counterFPS = CLOCKS_PER_SEC/(clock()-time);
             time = clock();

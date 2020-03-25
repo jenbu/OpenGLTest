@@ -15,6 +15,7 @@ namespace test {
         virtual void OnUpdate(float deltaTime) {}
         virtual void OnRender() {}
         virtual void OnImGuiRender() {}
+        virtual void CursorUpdate(double x, double y) {}
     };
 
     class TestMenu : public Test
@@ -23,6 +24,7 @@ namespace test {
         TestMenu(Test*& currentTestPointer);
 
         void OnImGuiRender() override;
+        void CursorUpdate(double x, double y) override {};
 
         template<typename T>
         void RegisterTest(const std::string& name)

@@ -120,3 +120,34 @@ TypeCollision CollisionDetection::BoundaryCollision(BaseObject* object)
 
     return TypeCollision::NoCollision;
 }
+
+bool CollisionDetection::CursorObjectCollision(BaseObject* object, glm::dvec2 cursor)
+{
+    bool isColliding = false;
+
+    //Flip cursor y coords
+    double cursY = (double)ResolutionHeight - cursor.y;
+    double cursX = cursor.x; 
+
+    glm::vec3 objPos = object->GetPosition();
+    //std::cout << "objPos  x: " << objPos.x << std::endl << "        y: " << objPos.y << std::endl; 
+    switch(object->GetType())
+    {
+        case ObjectType::Rect:
+        {
+            RectangleObject* rectObj = dynamic_cast<RectangleObject*>(object);
+            //std::cout << "Rect" << std::endl;
+            if( (cursX < (objPos.x+rectObj->GetWidth()/2)  && cursX > (objPos.x-rectObj->GetWidth()/2))
+            &&  (cursY < (objPos.y+rectObj->GetHeight()/2) && cursY > (objPos.y-rectObj->GetHeight()/2)) )
+            {
+                //std::cout << "cursor collision with obj" << std::endl;
+                isColliding = true;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+
+    return isColliding;
+}

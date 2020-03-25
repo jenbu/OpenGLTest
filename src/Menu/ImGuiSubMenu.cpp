@@ -2,8 +2,8 @@
 
 unsigned int ImGuiSubMenu::subMenuID = 1;
 
-ImGuiSubMenu::ImGuiSubMenu(std::string subname)
-: m_Name(subname)
+ImGuiSubMenu::ImGuiSubMenu(std::string subname, bool isSubSubMenu)
+: m_Name(subname), m_isSubSubMenu(isSubSubMenu)
 {
     m_ID = subMenuID;
     subMenuID++;
