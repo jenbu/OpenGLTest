@@ -3,7 +3,8 @@
 unsigned int BaseObject::m_ObjectCount = 0;
 
 BaseObject::BaseObject(glm::vec3 pos, glm::vec3 vel, float rot = 0.0f, float mass = 100)
- : m_Name("Base"), m_Mass(mass), m_PosVelAcc({glm::vec3(0,0,0), glm::vec3(0,0,0), glm::vec3(0,0,0), 0}), m_Spring(100000)
+ : m_Name("Base"), m_Mass(mass), m_PosVelAcc({glm::vec3(0,0,0), 
+   glm::vec3(0,0,0), glm::vec3(0,0,0), 0}), m_Spring(100000), m_ObjPhysEnabled(true)
     
 {
     ++m_ObjectCount;

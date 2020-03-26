@@ -8,7 +8,6 @@ NewtonianPhysics::NewtonianPhysics()
 {
     m_CollisionDetector = CollisionDetection::GetInstance();
     m_CollisionDetector->SetBounds(0, ResolutionWidth, 0 ,ResolutionHeight);
-    m_CursorPos = NULL;//glm::dvec2(0.0, 0.0);
 
 }
 
@@ -148,8 +147,8 @@ float NewtonianPhysics::BoundaryForces(TypeCollision coll)
 float NewtonianPhysics::CursorForces(BaseObject* currObj)
 {
     //Flip cursor coord
-    double cursY = m_CursorPos->y;
-    double cursX = m_CursorPos->x;
+    double cursY = MouseEventHandler::GetInstance()->GetCursorPos().y;
+    double cursX = MouseEventHandler::GetInstance()->GetCursorPos().x;
 
     switch(currObj->GetType())
     {
@@ -184,14 +183,14 @@ void NewtonianPhysics::Calculate(std::vector<BaseObject*> objects)
         acc = m_CurrentObject->GetAcceleration();
         vel = m_CurrentObject->GetVelocity();
 
-        //Collition between objects
+        //Collition between objects and forces
         collidingObject = m_CollisionDetector->InterCollision(objects, m_CurrentObject);
         if(collidingObject.collisionObject != NULL)
         {
             F_Collision = CollisionForce(m_CurrentObject, collidingObject);
         }
 
-        //Boundary Collision
+        //Boundary Collision and forces
         if(boundaryCollitionType = m_CollisionDetector->BoundaryCollision(m_CurrentObject))
         {
             F_Boundaryk = BoundaryForces(boundaryCollitionType);
@@ -202,29 +201,33 @@ void NewtonianPhysics::Calculate(std::vector<BaseObject*> objects)
             F_Boundaryk = 0.0f;
         }
         
-        if(m_CollisionDetector->CursorObjectCollision(m_CurrentObject, *m_CursorPos))
-        {
-            F_curs = CursorForces(m_CurrentObject);
-            std::cout << "Cursor collision with obj" << std::endl;
-        }
-        else
+        //Cursor collision
+        //if(m_CollisionDetector->CursorObjectCollision(m_CurrentObject, MouseEventHandler::GetInstance()->GetCursorPos()))
+        //{
+        //    F_curs = CursorForces(m_CurrentObject);
+        //    std::cout << "Cursor collision with obj" << std::endl;
+        //}
+        //else
             F_curs = 0.0f;
         
 
+        //Calculate acceleration and update
         if(m_PhysicsEnabled)
         {
+            if(m_CurrentObject->IsPhysEnabled())
+            {
+                //Calculate acceleration
+                if(vel.y > 0)
+                    air_res = - pow(vel.y, 2)/2;
+                else
+                    air_res = pow(vel.y, 2)/2;
+                    
+                acc.x = F_Collision.x/m_CurrentObject->GetMass();
+                acc.y = -g*2 + (F_Boundaryk + F_Collision.y + F_curs)/m_CurrentObject->GetMass() ;// + air_res/m_CurrentObject->GetMass();
 
-            //Calculate acceleration
-            if(vel.y > 0)
-                air_res = - pow(vel.y, 2)/2;
-            else
-                air_res = pow(vel.y, 2)/2;
-                
-            acc.x = F_Collision.x/m_CurrentObject->GetMass();
-            acc.y = -g*2 + (F_Boundaryk + F_Collision.y + F_curs)/m_CurrentObject->GetMass() ;// + air_res/m_CurrentObject->GetMass();
-
-            //Update
-            UpdateVelPos(acc);
+                //Update
+                UpdateVelPos(acc);
+            }
         }
     }
 

@@ -6,6 +6,7 @@
 #include "BaseObject.h"
 #include "RectangleObject.h"
 #include "CollisionDetection.h"
+#include "MouseEventHandler.h"
 
 
 
@@ -17,7 +18,6 @@ public:
     void Calculate(std::vector<BaseObject*> objects);
 
     inline void setDeltaT(double delta){ m_DeltaT = delta; };
-    inline void setCursorData(glm::dvec2* curs) { std::cout << "setCursorData()\n"; m_CursorPos = curs; }
     inline float GetDeltaT() { return m_DeltaT; };
     inline bool GetPhysicsEnabled() { return m_PhysicsEnabled; }
     inline void enablePhysics(bool enable) { m_PhysicsEnabled = enable; }
@@ -54,6 +54,6 @@ private:
     ObjectPosVelAcc m_CurrentObjPosVelAcc;
     BaseObject* m_CurrentObject;
     std::vector<float> m_CurrentVel;
-    glm::dvec2* m_CursorPos;
+
 
 };

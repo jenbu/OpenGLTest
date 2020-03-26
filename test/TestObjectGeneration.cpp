@@ -8,22 +8,27 @@ namespace test
     :   m_Proj(glm::ortho(0.0f, (float)ResolutionWidth, 0.0f, (float)ResolutionHeight, -1.0f, 1.0f)),
         m_Physics(NewtonianPhysics::GetInstance()), m_NewObjMenu(false), m_NewRectPos({ 0, 0, 0 }), m_NewRectSize({ 0, 0 }),
         m_TogglePhysics(false), m_TimeStepApply(false), m_NewObject(false),
-        m_NewObjCoords(glm::ivec3(0,0,0)), m_NewRectProps(glm::ivec2(0,0)), m_CursPos(glm::dvec2(0.0, 0.0))
+        m_NewObjCoords(glm::ivec3(0,0,0)), m_NewRectProps(glm::ivec2(0,0)), m_lBtnClicked(0)
     {
         m_ObjectHandler = new ObjectHandler();
+        //m_ObjectHandler->SetCursorBtnEvent(&m_lBtnClicked);
+        m_mouseEvent = MouseEventHandler::GetInstance();
+        m_Manipulator = new MouseManipulator;
+
 
         m_TimeStep = 0.03;
         m_Physics->setDeltaT(m_TimeStep);
         m_Physics->enablePhysics(true);
-        m_Physics->setCursorData(&m_CursPos);
+
 
         m_ObjectHandler->AddObject<RectangleObject>(glm::vec3(400, 600, 0), glm::vec3(10, 0, 0), 150, 150);
         m_ObjectHandler->AddObject<RectangleObject>(glm::vec3(500, 300, 0), glm::vec3(30, 0, 0), 100, 100);
-        //m_ObjectHandler->AddObject<RectangleObject>(glm::vec3(700, 100, 0), 200, 200);
+
         
         m_Objects = m_ObjectHandler->GetObjectsData();
         m_ObjsPos = m_ObjectHandler->GetObjectsPos();
         m_VertexData = m_ObjectHandler->GetVertexData();
+        m_Objects[0]->ToggleObjPhysics();
 
         std::cout << "objects size: " << m_Objects.size() << std::endl;
         m_Physics->Calculate(m_Objects);
@@ -64,6 +69,11 @@ namespace test
 
         m_Physics->Calculate(m_Objects);
         MenuEvents();
+        int state = m_mouseEvent->GetBtnState(); 
+        if(state != -1)
+            std::cout << "button pressed" << state << std::endl; 
+
+        m_Manipulator->Manipulate(m_Objects);
 
         
         for(int i = 0; i < m_VertexData.ObjectIndexOffset.size(); i++)

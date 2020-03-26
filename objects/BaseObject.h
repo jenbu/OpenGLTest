@@ -44,6 +44,9 @@ public:
     inline glm::vec3 GetPosition() { return m_PosVec; }
     inline glm::vec3 GetVelocity() { return m_VelVec; }
     inline glm::vec3 GetAcceleration() { return m_AccVec; }
+
+    inline void ToggleObjPhysics() { m_ObjPhysEnabled = !m_ObjPhysEnabled; }
+    inline bool IsPhysEnabled() { return m_ObjPhysEnabled; }
      
 
     virtual unsigned int GetNumIndices() {}
@@ -73,6 +76,7 @@ private:
 
     //Physical properties
     float m_Mass;
+    bool m_ObjPhysEnabled;
 
 
     

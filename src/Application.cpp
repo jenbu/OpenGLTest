@@ -16,10 +16,16 @@
 #include "TestObjectGeneration.h"
 #include "Utility.h"
 #include "Constants.h"
+#include "MouseEventHandler.h"
 
 using namespace std;
 
 std::vector<double> mousePos = { 0.0, 0.0 };
+
+void mouseButtonCb(GLFWwindow* window, int button, int action, int mods)
+{
+    std::cout << "MouseButtonCallback" << std::endl;
+}
 
 
 
@@ -82,11 +88,14 @@ int main(int, char**) {
     clock_t time = clock();
     double const TicksPerFrame = CLOCKS_PER_SEC/FPS;
     double xCurs, yCurs;
+    MouseEventHandler* MouseInstance = MouseEventHandler::GetInstance();
+    glfwSetMouseButtonCallback(window, MouseEventHandler::MouseButtonCallback);
     
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0)
     {
         //Manual lock FPS due to vsync not working on every computer with glfwSwapInterval()
         lastTime = glfwGetTime();
+        
 
         if(clock()-time > TicksPerFrame)
         {
@@ -94,10 +103,11 @@ int main(int, char**) {
 
             ImGui_ImplGlfwGL3_NewFrame();
             glfwGetCursorPos(window, &xCurs, &yCurs);
+            MouseInstance->SetCursorPos(xCurs, yCurs);
 
             if(currentTest)
             {
-                currentTest->CursorUpdate(xCurs, yCurs);
+                currentTest->CursorEventUpdate(xCurs, yCurs, (bool) glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT));
                 currentTest->OnUpdate(0.0f);
                 currentTest->OnRender();
                 ImGui::Begin("Test");

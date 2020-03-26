@@ -54,6 +54,7 @@ include_directories(
 	src/Physics/
 	src/Misc/
 	src/Menu/
+	src/Input/
 	src
 	test
 	objects

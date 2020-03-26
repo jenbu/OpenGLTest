@@ -14,6 +14,8 @@
 #include "Constants.h"
 #include "ImGuiMenu.h"
 #include "ImGuiSubMenu.h"
+#include "MouseEventHandler.h"
+#include "MouseManipulator.h"
 
 
 
@@ -37,7 +39,7 @@ namespace test
         void OnUpdate(float deltaTime) override;
         void OnRender() override;
         void OnImGuiRender() override;
-        void CursorUpdate(double x, double y) override { m_CursPos.x = x; m_CursPos.y = y; }
+        void CursorEventUpdate(double x, double y, bool lclk) override { m_CursPos.x = x; m_CursPos.y = y; m_lBtnClicked = lclk; }
 
 
     private:
@@ -47,6 +49,9 @@ namespace test
 
         double m_LastTime;
         glm::dvec2 m_CursPos;
+        bool m_lBtnClicked;
+        MouseEventHandler* m_mouseEvent;
+        MouseManipulator* m_Manipulator;
 
         glm::mat4 m_Proj;
         glm::ivec3 m_NewObjCoords;
