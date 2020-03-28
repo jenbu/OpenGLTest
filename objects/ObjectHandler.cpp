@@ -21,15 +21,21 @@ void ObjectHandler::AddObject<RectangleObject>(glm::vec3 pos, glm::vec3 vel, flo
 {
     ++m_ObjectCount;
     std::cout << "AddObject: m_ObjectCount: " << m_ObjectCount << "Pos: ("<< pos.x << "," << pos.y << "," << pos.z << ")" << std::endl;
-    RectangleObject* tempRect = new RectangleObject(pos, vel, 0, width, height, 100);
-    m_Objects.push_back(tempRect);
-    m_ObjectsPos.push_back(tempRect->GetPosition());
-    
-
     std::vector<float> customPos{ -width/2,  height/2, 
                                    width/2,  height/2,
                                   -width/2, -height/2,
                                    width/2, -height/2};
+    std::vector<EBMath::Vertex2D> vertices{ {-width/2,  height/2}, 
+                                            { width/2,  height/2},
+                                            {-width/2, -height/2},
+                                            { width/2, -height/2} };
+
+
+    RectangleObject* tempRect = new RectangleObject(pos, vel, vertices, 0, width, height, 100);
+    m_Objects.push_back(tempRect);
+    m_ObjectsPos.push_back(tempRect->GetPosition());
+    
+
     m_VertexCoords.insert(m_VertexCoords.end(), customPos.begin(), customPos.end());
 
     std::vector<unsigned int> addIndicesVec{(0+(m_ObjectCount-1)*4), (2+(m_ObjectCount-1)*4), (3+(m_ObjectCount-1)*4),

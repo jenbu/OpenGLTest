@@ -20,6 +20,12 @@ namespace EBMath
     float AbsoluteVelocity(glm::vec3 vel);
 
     Direction VectorDirection(glm::vec2 vec);
+
+    struct Vertex2D
+    {
+        float x;
+        float y;
+    };
 }
 
 

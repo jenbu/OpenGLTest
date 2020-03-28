@@ -55,6 +55,7 @@ include_directories(
 	src/Misc/
 	src/Menu/
 	src/Input/
+	src/CollisionDetection/
 	src
 	test
 	objects

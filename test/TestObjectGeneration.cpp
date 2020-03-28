@@ -29,6 +29,8 @@ namespace test
         m_ObjsPos = m_ObjectHandler->GetObjectsPos();
         m_VertexData = m_ObjectHandler->GetVertexData();
         m_Objects[0]->ToggleObjPhysics();
+        SATCollisionDetection* SATDetTest = new SATCollisionDetection;
+        SATDetTest->CollisionDetection(m_Objects);
 
         std::cout << "objects size: " << m_Objects.size() << std::endl;
         m_Physics->Calculate(m_Objects);
@@ -66,13 +68,14 @@ namespace test
 
     void TestObjectGeneration::OnImGuiRender()
     {
-
+        glm::ivec2 cursorPos =  MouseEventHandler::GetInstance()->GetCursorPos();
+        ImGui::Text("Cursor x, y: %d %d", cursorPos.x, cursorPos.y);
+        
         m_Physics->Calculate(m_Objects);
         MenuEvents();
-        int state = m_mouseEvent->GetBtnState(); 
-        if(state != -1)
-            std::cout << "button pressed" << state << std::endl; 
+        //int state = m_mouseEvent->GetBtnState(); 
 
+        
         m_Manipulator->Manipulate(m_Objects);
 
         

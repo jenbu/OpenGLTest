@@ -126,7 +126,7 @@ bool CollisionDetection::CursorObjectCollision(BaseObject* object, glm::dvec2 cu
     bool isColliding = false;
 
     //Flip cursor y coords
-    double cursY = (double)ResolutionHeight - cursor.y;
+    double cursY = cursor.y;
     double cursX = cursor.x; 
 
     glm::vec3 objPos = object->GetPosition();

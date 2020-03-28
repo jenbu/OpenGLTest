@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include <GLFW/glfw3.h>
+#include "Constants.h"
 
 
 enum ButtonEvent
@@ -21,7 +22,7 @@ class MouseEventHandler
 
 public:
     static MouseEventHandler* GetInstance();
-    void SetCursorPos(int x, int y) { m_CursorPos = glm::ivec2(x, y); }
+    void SetCursorPos(int x, int y) { m_CursorPos = glm::ivec2(x, ResolutionHeight-y); }
     glm::ivec2 GetCursorPos() { return m_CursorPos; }
     ButtonEvent GetBtnState();
     void Heisann() { std::cout << "Heisann" << std::endl; }
@@ -32,9 +33,10 @@ private:
     MouseEventHandler();
 
     static MouseEventHandler* m_instance;
-
     static int m_CurrentPressedBtn;
-    static bool m_BtnToggle;
+
+    bool m_MouseBtnToggle;
+
     glm::ivec2 m_CursorPos;
 
 

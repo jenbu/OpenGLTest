@@ -2,10 +2,14 @@
 #ifndef BASEOBJECT_H
 #define BASEOBJECT_H
 
-#include "glm/glm.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include "glm/glm.hpp"
+#include "EBMath.h"
+
+
 
 struct ObjectPosVelAcc
 {
@@ -25,7 +29,7 @@ enum ObjectType
 class BaseObject
 {
 public:
-    BaseObject(glm::vec3 pos, glm::vec3 vel, float rot, float mass);
+    BaseObject(glm::vec3 pos, glm::vec3 vel, std::vector<EBMath::Vertex2D> vertices, float rot, float mass);
     ~BaseObject();
 
     inline void SetName(std::string name) {m_Name = name; };
@@ -60,16 +64,20 @@ public:
     static std::vector<BaseObject*> m_Objects;
 private:   
     
-    glm::mat4 m_Proj, m_View, m_model;
-    std::vector<float> m_Color;
-
     std::string m_Name;
     ObjectType m_Type;
     unsigned int m_Spring;
+    
+    //Geometric propertier
+    std::vector<EBMath::Vertex2D> m_VertexData;
+
+    //OpenGL and transformation
+    glm::mat4 m_Proj, m_View, m_model;
+    std::vector<float> m_Color;
+
 
     //Positional properties
     ObjectPosVelAcc m_PosVelAcc;
-
     glm::vec3 m_AccVec;
     glm::vec3 m_VelVec;
     glm::vec3 m_PosVec;

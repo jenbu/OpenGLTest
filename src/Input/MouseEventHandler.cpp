@@ -2,10 +2,10 @@
 
 MouseEventHandler* MouseEventHandler::m_instance = 0;
 int MouseEventHandler::m_CurrentPressedBtn = ButtonEvent::NoBtn;
-bool MouseEventHandler::m_BtnToggle = false;
+
 
 MouseEventHandler::MouseEventHandler()
-
+: m_MouseBtnToggle(false)
 {
 
 }
@@ -19,22 +19,16 @@ MouseEventHandler* MouseEventHandler::GetInstance()
 }
 
 ButtonEvent MouseEventHandler::GetBtnState()
-{
-    //Only return button state at btn press
-    if(m_BtnToggle)
-    {
-        m_BtnToggle = false;
-        return (ButtonEvent)m_CurrentPressedBtn;
-    }
-    return ButtonEvent::NoBtn;
+{ 
+    return (ButtonEvent)m_CurrentPressedBtn;
 }
 
 void MouseEventHandler::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-    std::cout << "MouseButtonCallback, button: " << button <<  std::endl;
+    //std::cout << "MouseButtonCallback, button: " << button <<  std::endl;
     if(action == GLFW_PRESS)
     {
-        m_BtnToggle = true;
+        //m_MouseBtnToggle = true;
         m_CurrentPressedBtn = button;
     }
     else //btn released

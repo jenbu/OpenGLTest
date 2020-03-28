@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Constants.h"
-#include "EBMath.h"
 #include <vector>
 #include "BaseObject.h"
 #include "RectangleObject.h"
