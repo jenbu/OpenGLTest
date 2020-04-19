@@ -14,9 +14,10 @@
 #include "TestRectangle2D.h"
 #include "TestLines.h"
 #include "TestObjectGeneration.h"
+#include "TestSnake.h"
 #include "Utility.h"
 #include "Constants.h"
-#include "MouseEventHandler.h"
+#include "InputEventHandler.h"
 
 using namespace std;
 
@@ -75,11 +76,12 @@ int main(int, char**) {
     currentTest = testMenu;
     test::TestClearColor test;
 
-    testMenu->RegisterTest<test::TestClearColor>("Clear Color");
+    testMenu->RegisterTest<test::TestClearColor>("Circle");
     testMenu->RegisterTest<test::TestTexture2D>("Texture2D");
     testMenu->RegisterTest<test::TestRectangle2D>("RectangleColor2D");
     testMenu->RegisterTest<test::TestLines>("Lines");
     testMenu->RegisterTest<test::TestObjectGeneration>("ObjectGeneration");
+    testMenu->RegisterTest<test::TestSnake>("Snake");
 
 
     int counterFPS = 0;
@@ -88,8 +90,9 @@ int main(int, char**) {
     clock_t time = clock();
     double const TicksPerFrame = CLOCKS_PER_SEC/FPS;
     double xCurs, yCurs;
-    MouseEventHandler* MouseInstance = MouseEventHandler::GetInstance();
-    glfwSetMouseButtonCallback(window, MouseEventHandler::MouseButtonCallback);
+    InputEventHandler* MouseInstance = InputEventHandler::GetInstance();
+    glfwSetMouseButtonCallback(window, InputEventHandler::MouseButtonCallback);
+    glfwSetKeyCallback(window, InputEventHandler::KeyboardCallback);
     
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0)
     {

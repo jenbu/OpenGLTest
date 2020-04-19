@@ -13,29 +13,42 @@ enum ButtonEvent
     ScrlClkBtn = 2,
     BackBtn    = 3,
     ForwBtn    = 4,
-    NoBtn      = -1
+    NoMouseBtn = -1
+};
+
+enum KeyboardEvent
+{
+    ArrowDown = 264,
+    ArrowUp = 265,
+    ArrowLeft = 263,
+    ArrowRight = 262,
+    KeyE = 69,
+    NoKeyBtn = -1
 };
 
 
-class MouseEventHandler
+class InputEventHandler
 {
 
 public:
-    static MouseEventHandler* GetInstance();
+    static InputEventHandler* GetInstance();
     void SetCursorPos(int x, int y) { m_CursorPos = glm::ivec2(x, ResolutionHeight-y); }
     glm::ivec2 GetCursorPos() { return m_CursorPos; }
     ButtonEvent GetBtnState();
+    KeyboardEvent GetKeyState();
     void Heisann() { std::cout << "Heisann" << std::endl; }
 
     static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-
+    static void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 private:
-    MouseEventHandler();
+    InputEventHandler();
 
-    static MouseEventHandler* m_instance;
+    static InputEventHandler* m_instance;
     static int m_CurrentPressedBtn;
+    static KeyboardEvent m_CurrentKeyboardBtn, m_PreviousKeyboardBtn;
 
-    bool m_MouseBtnToggle;
+    bool m_MouseBtnToggle; 
+    bool m_Toggle;
 
     glm::ivec2 m_CursorPos;
 

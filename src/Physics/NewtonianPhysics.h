@@ -5,7 +5,7 @@
 #include "BaseObject.h"
 #include "RectangleObject.h"
 #include "CollisionDetection.h"
-#include "MouseEventHandler.h"
+#include "InputEventHandler.h"
 
 
 

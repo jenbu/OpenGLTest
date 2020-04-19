@@ -8,7 +8,7 @@
 class RectangleObject : public BaseObject
 {
 public:
-    RectangleObject(glm::vec3 pos, glm::vec3 vel, std::vector<EBMath::Vertex2D> vertices, 
+    RectangleObject(glm::vec3 pos, glm::vec3 vel, VertexIndexData vertexindexdata, 
                     float rot, unsigned int width, unsigned int height, float mass);
     ~RectangleObject();
 

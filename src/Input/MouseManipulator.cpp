@@ -4,7 +4,7 @@ MouseManipulator::MouseManipulator()
 : m_toggleSelection(2, false), m_SelectedObj(nullptr), m_SelectionToggle(false),
   m_EnableDrag(false), m_Dragging(false)
 {
-    m_MouseEvents = MouseEventHandler::GetInstance();
+    m_MouseEvents = InputEventHandler::GetInstance();
     m_Collision = CollisionDetection::GetInstance();
 
 }

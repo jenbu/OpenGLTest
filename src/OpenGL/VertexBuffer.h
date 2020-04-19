@@ -8,6 +8,7 @@ private:
     unsigned int m_RendererID;
 
 public:
+    // size is in bytes 
     VertexBuffer(const void* data, unsigned int size);
     ~VertexBuffer();
 

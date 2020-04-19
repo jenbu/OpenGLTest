@@ -6,33 +6,21 @@ enable_testing()
 
 # Add source files
 file(GLOB_RECURSE SOURCE_FILES 
-	#${CMAKE_SOURCE_DIR}/src/*.c
 	${CMAKE_SOURCE_DIR}/src/*.cpp
-	#${CMAKE_SOURCE_DIR}/src/vendor/*.cpp
 	${CMAKE_SOURCE_DIR}/test/*.cpp
 	${CMAKE_SOURCE_DIR}/objects/*.cpp)
-	#${CMAKE_SOURCE_DIR}/src/OpenGL/*.cpp)
-	#${CMAKE_SOURCE_DIR}/src/Physics/*.cpp)
+
 
 	
 # Add header files
 file(GLOB_RECURSE HEADER_FILES 
 	${CMAKE_SOURCE_DIR}/src/*.h #CMAKE_SOURCE_DIR is the location where cmakelist.txt is located
-	#${CMAKE_SOURCE_DIR}/src/*.hpp
-	#${CMAKE_SOURCE_DIR}/src/vendor/*.h 
-	#${CMAKE_SOURCE_DIR}/src/OpenGL/*.h
-	#${CMAKE_SOURCE_DIR}/src/Physics/*.h
 	${CMAKE_SOURCE_DIR}/test/*.h
 	${CMAKE_SOURCE_DIR}/objects/*.h)
 
 list(REMOVE_ITEM SOURCE_FILES ${CMAKE_SOURCE_DIR}/src/vendor/imgui/main.cpp)
 
 find_package(OpenGL REQUIRED)
-#if(OpenGL_FOUND)
-#	include_directories(${OPENGL_INCLUDE_DIRS})
-#	link_directories(${OPENGL_LIBRARIES})
-#endif()
-
 
 find_package (Threads)
 find_package(PkgConfig REQUIRED)

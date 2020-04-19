@@ -147,8 +147,8 @@ float NewtonianPhysics::BoundaryForces(TypeCollision coll)
 float NewtonianPhysics::CursorForces(BaseObject* currObj)
 {
     //Flip cursor coord
-    double cursY = MouseEventHandler::GetInstance()->GetCursorPos().y;
-    double cursX = MouseEventHandler::GetInstance()->GetCursorPos().x;
+    double cursY = InputEventHandler::GetInstance()->GetCursorPos().y;
+    double cursX = InputEventHandler::GetInstance()->GetCursorPos().x;
 
     switch(currObj->GetType())
     {
@@ -202,7 +202,7 @@ void NewtonianPhysics::Calculate(std::vector<BaseObject*> objects)
         }
         
         //Cursor collision
-        //if(m_CollisionDetector->CursorObjectCollision(m_CurrentObject, MouseEventHandler::GetInstance()->GetCursorPos()))
+        //if(m_CollisionDetector->CursorObjectCollision(m_CurrentObject, InputEventHandler::GetInstance()->GetCursorPos()))
         //{
         //    F_curs = CursorForces(m_CurrentObject);
         //    std::cout << "Cursor collision with obj" << std::endl;

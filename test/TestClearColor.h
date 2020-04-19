@@ -18,6 +18,15 @@ namespace test {
 
     private:
         float m_ClearColor[4];
+
+        std::vector<BaseObject*> m_Objects;
+        VertexData m_VertexData;
+
+        Renderer m_Renderer;
+        std::unique_ptr<Shader> m_Shader;
+        std::unique_ptr<VertexArray> m_VAO;
+        std::unique_ptr<IndexBuffer> m_IndexBuffer;
+        std::unique_ptr<VertexBuffer> m_VertexBuffer;
     };
 }
 

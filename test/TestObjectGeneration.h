@@ -14,7 +14,7 @@
 #include "Constants.h"
 #include "ImGuiMenu.h"
 #include "ImGuiSubMenu.h"
-#include "MouseEventHandler.h"
+#include "InputEventHandler.h"
 #include "MouseManipulator.h"
 #include "SATCollisionDetection.h"
 
@@ -51,7 +51,7 @@ namespace test
         double m_LastTime;
         glm::dvec2 m_CursPos;
         bool m_lBtnClicked;
-        MouseEventHandler* m_mouseEvent;
+        InputEventHandler* m_mouseEvent;
         MouseManipulator* m_Manipulator;
 
         glm::mat4 m_Proj;

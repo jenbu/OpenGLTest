@@ -2,6 +2,7 @@
 #define EBMATH_H
 
 #include <math.h>
+#include <vector>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -16,16 +17,19 @@ namespace EBMath
         LEFT
     };
 
-
-    float AbsoluteVelocity(glm::vec3 vel);
-
-    Direction VectorDirection(glm::vec2 vec);
-
     struct Vertex2D
     {
         float x;
         float y;
     };
+
+    float AbsoluteVelocity(glm::vec3 vel);
+
+    Direction VectorDirection(glm::vec2 vec);
+
+    std::vector<float> ConvertVertex2DVecToFloatVec(std::vector<EBMath::Vertex2D> vec);
+    std::vector<EBMath::Vertex2D> ConvertFloatVecToVertex2D(std::vector<float> vec);
+
 }
 
 

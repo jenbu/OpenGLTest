@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "BaseObject.h"
-#include "MouseEventHandler.h"
+#include "InputEventHandler.h"
 #include "CollisionDetection.h"
 
 class MouseManipulator
@@ -15,7 +15,7 @@ public:
     bool ObjectSelection(BaseObject* obj);
     void Drag();
 private:
-    MouseEventHandler* m_MouseEvents;
+    InputEventHandler* m_MouseEvents;
 
     BaseObject* m_SelectedObj;
 

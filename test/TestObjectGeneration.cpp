@@ -11,8 +11,6 @@ namespace test
         m_NewObjCoords(glm::ivec3(0,0,0)), m_NewRectProps(glm::ivec2(0,0)), m_lBtnClicked(0)
     {
         m_ObjectHandler = new ObjectHandler();
-        //m_ObjectHandler->SetCursorBtnEvent(&m_lBtnClicked);
-        m_mouseEvent = MouseEventHandler::GetInstance();
         m_Manipulator = new MouseManipulator;
 
 
@@ -21,21 +19,32 @@ namespace test
         m_Physics->enablePhysics(true);
 
 
-        m_ObjectHandler->AddObject<RectangleObject>(glm::vec3(400, 600, 0), glm::vec3(10, 0, 0), 150, 150);
-        m_ObjectHandler->AddObject<RectangleObject>(glm::vec3(500, 300, 0), glm::vec3(30, 0, 0), 100, 100);
+        m_ObjectHandler->AddObject<RectangleObject>(glm::vec3(400, 600, 0), glm::vec3(10, 0, 0), 150.0f, 150.0f);
+        m_ObjectHandler->AddObject<RectangleObject>(glm::vec3(500, 300, 0), glm::vec3(30, 0, 0), 100.0f, 100.0f);
+        m_ObjectHandler->AddObject<RectangleObject>(glm::vec3(100, 100, 0), glm::vec3(30, 0, 0), 50.0f, 50.0f);
 
-        
+
         m_Objects = m_ObjectHandler->GetObjectsData();
         m_ObjsPos = m_ObjectHandler->GetObjectsPos();
+        m_ObjsPos.push_back(m_Objects[0]->GetPosition());
+        m_ObjsPos.push_back(m_Objects[1]->GetPosition());
         m_VertexData = m_ObjectHandler->GetVertexData();
-        m_Objects[0]->ToggleObjPhysics();
-        SATCollisionDetection* SATDetTest = new SATCollisionDetection;
-        SATDetTest->CollisionDetection(m_Objects);
 
-        std::cout << "objects size: " << m_Objects.size() << std::endl;
-        m_Physics->Calculate(m_Objects);
-        
-        m_ObjectHandler->PrintObjectsName();
+        SATCollisionDetection* SATDetTest = new SATCollisionDetection;
+        //SATDetTest->CollisionDetection(m_Objects);
+        std::vector<EBMath::Vertex2D> testvec2dvertex = m_Objects[0]->GetVerticesPos();
+        std::vector<float> testvecfloat = EBMath::ConvertVertex2DVecToFloatVec(testvec2dvertex);
+        /*for(int i = 0; i < testvec2dvertex.size(); i++)
+        {
+            std::cout << testvec2dvertex[i].x << " " << testvec2dvertex[i].y << std::endl;
+        }
+        for(int i = 0; i < testvecfloat.size(); i++)
+        {
+            std::cout << testvecfloat[i] << std::endl;
+        }*/
+
+
+       
 
         m_VAO = std::make_unique<VertexArray>();
         m_VertexBuffer = std::make_unique<VertexBuffer>(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
@@ -68,12 +77,18 @@ namespace test
 
     void TestObjectGeneration::OnImGuiRender()
     {
-        glm::ivec2 cursorPos =  MouseEventHandler::GetInstance()->GetCursorPos();
+        glm::ivec2 cursorPos =  InputEventHandler::GetInstance()->GetCursorPos();
         ImGui::Text("Cursor x, y: %d %d", cursorPos.x, cursorPos.y);
         
+        if(m_Objects.size() <= 0)
+        {
+            std::cout << "No objects to draw, returning" << std::endl;
+            return;
+        }
+
         m_Physics->Calculate(m_Objects);
         MenuEvents();
-        //int state = m_mouseEvent->GetBtnState(); 
+
 
         
         m_Manipulator->Manipulate(m_Objects);
@@ -131,7 +146,7 @@ namespace test
         {
             if(m_NewRectProps.x > 1 && m_NewRectProps.y > 1)
             {
-                m_ObjectHandler->AddObject<RectangleObject>(m_NewObjCoords, glm::vec3(0,0,0), m_NewRectProps.x, m_NewRectProps.y);
+                m_ObjectHandler->AddObject<RectangleObject>(m_NewObjCoords, glm::vec3(0,0,0), (float)m_NewRectProps.x, (float)m_NewRectProps.y);
                 m_Objects = m_ObjectHandler->GetObjectsData();
                 m_VertexData = m_ObjectHandler->GetVertexData();
                 m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
@@ -148,8 +163,6 @@ namespace test
         if(m_TogglePhysics)
         {
             m_Physics->enablePhysics(!m_Physics->GetPhysicsEnabled());
-            //for(int i = 0; i < m_Objects.size(); i++)
-            //    m_Objects[i]->SetObjectPosVelAcc(m_ObjsPos[i], glm::vec3(0,0,0), glm::vec3(0,0,0));
         } 
         
         if(m_TimeStepApply)

@@ -2,6 +2,7 @@
 
 #include "BaseObject.h"
 #include "RectangleObject.h"
+#include "CircleObject.h"
 #include "EBMath.h"
 
 #include "glm/glm.hpp"
@@ -28,7 +29,7 @@ class ObjectHandler
         inline std::vector<BaseObject*> GetObjectsData() { return m_Objects; }
         inline std::vector<glm::vec3> GetObjectsPos() { return m_ObjectsPos; }
 
-        void PrintObjectsName();
+        void Clear();
 
         template<typename T>
         void AddObject(glm::vec3 pos, glm::vec3 vel, float width, float height)
@@ -36,7 +37,16 @@ class ObjectHandler
             
         }
 
+        template<typename T>
+        void AddObject(glm::vec3 pos, glm::vec3 vel, float radius, unsigned int resolution)
+        {
+            
+        }
+
     private:
+
+        void Update();
+
         static ObjectHandler* instance;
 
         std::vector<BaseObject*> m_Objects;
