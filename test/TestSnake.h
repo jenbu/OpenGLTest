@@ -2,6 +2,10 @@
 
 #include <vector>
 #include <memory>
+#include <time.h>
+
+#include "ft2build.h"
+#include FT_FREETYPE_H
 
 #include "Renderer.h"
 #include "Shader.h"
@@ -31,6 +35,14 @@ namespace test
         NoCollision = -1
     };
 
+    enum Direction
+    {
+        Up = 1,
+        Down = 2,
+        Left = 3,
+        Right = 4
+    };
+
 
     class TestSnake : public Test
     {
@@ -42,28 +54,39 @@ namespace test
         void OnRender() override;
         void OnImGuiRender() override;
 
-        void AddBodySquare();
-        void SetGridPos(int& x, int& y);
+        void SetSnakePos(int& x, int& y);
+        bool IsEating();
+        void EatingConsequence();
+
+        void GameTick();
         void KeyEvents();
         void ResetGame();
 
+        void AddBodySquare();
         CollisionType Collision(int x, int y);
+        void SetGridPos(BaseObject* obj, int x, int y);
     private:
-        unsigned int m_gridPixelSize;
-        const unsigned int m_GridNum; 
         std::vector<GridPos> m_SnakePos;
+        GridPos m_FoodPos;
+        Direction m_SnakeDirection;
 
         ObjectHandler* m_objectHandler;
         InputEventHandler* m_InputInstance;
-
         glm::mat4 m_Proj;
-        bool m_Toggle;
 
+        //Timer
+        clock_t m_lastTime;
+        clock_t m_TickPeriod;
+
+        unsigned int m_gridPixelSize;
+        const unsigned int m_GridNum; 
         int m_Gridx, m_Gridy;
         unsigned int m_xPixelOffset, m_yPixelOffset;
 
 
         std::vector<BaseObject*> m_Objects;
+        BaseObject* m_Food;
+        std::vector<RectangleObject*> m_ObjectsRects;
         VertexData m_VertexData;
 
         Renderer m_Renderer;

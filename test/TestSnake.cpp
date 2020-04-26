@@ -4,7 +4,7 @@ namespace test
 {
     TestSnake::TestSnake()
     : m_Proj(glm::ortho(0.0f, (float)ResolutionWidth, 0.0f, (float)ResolutionHeight, -1.0f, 1.0f)), 
-      m_GridNum(26), m_Gridx(m_GridNum/2), m_Gridy(m_GridNum/2), m_xPixelOffset(0), m_yPixelOffset(0)
+      m_GridNum(10), m_Gridx(m_GridNum/2), m_Gridy(m_GridNum/2), m_xPixelOffset(0), m_yPixelOffset(0)
         {
         
         int startX;  
@@ -22,8 +22,11 @@ namespace test
         m_InputInstance = InputEventHandler::GetInstance();
         
         m_objectHandler = new ObjectHandler();
-        m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize);
+        m_ObjectsRects.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
         m_SnakePos.push_back({m_Gridx, m_Gridy});
+        m_Food = m_objectHandler->AddObject<CircleObject>(glm::vec3(100, 100, 0), glm::vec3(0, 0, 0), (float)(m_gridPixelSize/3), (unsigned int) 43);
+        m_FoodPos = { 3, 4 };
+        SetGridPos(m_Food, m_FoodPos.x, m_FoodPos.y);
 
         m_Objects = m_objectHandler->GetObjectsData();
         m_VertexData = m_objectHandler->GetVertexData();
@@ -38,9 +41,8 @@ namespace test
         m_Shader = std::make_unique<Shader>("res/basic_color.shader"); 
         m_Shader->Bind();
 
-        m_Toggle = false;
-
-
+        m_lastTime = clock();
+        m_TickPeriod = CLOCKS_PER_SEC/4;
     }
 
     TestSnake::~TestSnake()
@@ -61,14 +63,21 @@ namespace test
     void TestSnake::OnImGuiRender()
     {
         KeyEvents();
+        if(clock() - m_lastTime >  m_TickPeriod)
+        {
+            GameTick();
+            std::cout << "tick" << std::endl; 
+            m_lastTime = clock();
+        }
 
-        for(int i = 0; i < m_VertexData.ObjectIndexOffset.size(); i++)
+
+        for(int i = 0; i < m_objectHandler->GetObjectCount(); i++)
         {
             glm::mat4 mvp = glm::mat4(1.0f)* m_Proj* glm::translate(glm::mat4(1.0f), m_Objects[i]->GetPosition());
             m_Shader->Bind();
             m_Shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
             m_Shader->SetUniformMat4f("u_MVP", mvp);
-            m_Renderer.DrawInRange(*m_VAO, *m_IndexBuffer, *m_Shader, m_VertexData.ObjectIndexOffset[i]);
+            m_Renderer.DrawInRange(*m_VAO, *m_IndexBuffer, *m_Shader, m_Objects[i]->GetIndicesOffset(), m_Objects[i]->GetIndicesSize());
 
         }
     }
@@ -90,7 +99,7 @@ namespace test
                                          (m_yPixelOffset+m_SnakePos[m_SnakePos.size()-1].y*m_gridPixelSize - m_gridPixelSize/2),
                                          0);
 
-        m_objectHandler->AddObject<RectangleObject>(newSqrPos, glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize);
+        m_ObjectsRects.push_back(m_objectHandler->AddObject<RectangleObject>(newSqrPos, glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
         m_Objects = m_objectHandler->GetObjectsData();
         m_VertexData = m_objectHandler->GetVertexData();
         m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
@@ -99,7 +108,7 @@ namespace test
         std::cout << "m_Objects size: " << m_Objects.size() << std::endl;
     }
 
-    void TestSnake::SetGridPos(int& x, int& y)
+    void TestSnake::SetSnakePos(int& x, int& y)
     {
         CollisionType boundaryCollision = CollisionType::NoCollision;
 
@@ -126,35 +135,35 @@ namespace test
                 y = 1;            
         }
         
-
-
         //Set pos rest of body 
         if(boundaryCollision == CollisionType::NoCollision)
-        {
+        {   
+
             for(int k = (m_SnakePos.size()-1); k >= 1; k--)
             {
                 m_SnakePos[k] = m_SnakePos[k-1];
-                std::cout << "m_SnakePos[" << k << "] (x, y): (" << m_SnakePos[k].x << ", " << m_SnakePos[k].y << ")" << std::endl; 
-
-                glm::vec3 posvec = glm::vec3((m_xPixelOffset + m_SnakePos[k].x*m_gridPixelSize),
-                                            ((m_yPixelOffset - m_gridPixelSize/2) + m_SnakePos[k].y*m_gridPixelSize),
-                                            0);
-                m_Objects[k]->SetObjectPosVelAcc(posvec,
-                                                glm::vec3(0,0,0),
-                                                glm::vec3(0,0,0));
+                SetGridPos(m_ObjectsRects[k], m_SnakePos[k].x, m_SnakePos[k].y);
             }
-            std::cout << "m_SnakePos[" << 0 << "] (x, y): (" << x << ", " << y << ")" << std::endl; 
 
         }
         //Set head pos
         m_SnakePos[0].x = x;
         m_SnakePos[0].y = y;
-        glm::vec3 posvec = glm::vec3((m_xPixelOffset + x*m_gridPixelSize),
-                                    ((m_yPixelOffset - m_gridPixelSize/2) + y*m_gridPixelSize),
-                                      0);
-        m_Objects[0]->SetObjectPosVelAcc(posvec,
-                                         glm::vec3(0,0,0),
-                                         glm::vec3(0,0,0));
+        SetGridPos(m_ObjectsRects[0], m_SnakePos[0].x, m_SnakePos[0].y);
+
+        if(IsEating())
+        {
+            EatingConsequence();
+        }
+
+    }
+
+    void TestSnake::SetGridPos(BaseObject* obj, int x, int y)
+    {
+            glm::vec3 posvec = glm::vec3((m_xPixelOffset + x*m_gridPixelSize),
+                                        ((m_yPixelOffset - m_gridPixelSize/2) + y*m_gridPixelSize),
+                                        0);    
+            obj->SetObjectPos(posvec);
     }
 
     CollisionType TestSnake::Collision(int x, int y)
@@ -173,32 +182,70 @@ namespace test
         return CollisionType::NoCollision;
     }
 
+    bool TestSnake::IsEating()
+    {
+        if(m_FoodPos.x == m_SnakePos[0].x && m_FoodPos.y == m_SnakePos[0].y)
+            return true;
+
+        return false;
+    }
+
+    void TestSnake::EatingConsequence()
+    {
+        AddBodySquare();
+        unsigned int randX, randY;
+        //Check to prevent food to spawn in snake
+        bool inSnake;
+        do
+        {
+            inSnake = false;
+            randX = rand() % m_GridNum + 1;   
+            randY = rand() % m_GridNum + 1;
+
+            for(int i = 0; i < m_SnakePos.size(); i++)
+            {
+                if(randX == m_SnakePos[i].x && randY == m_SnakePos[i].y)
+                    inSnake = true;
+            }
+        } while (inSnake);
+        
+
+
+        m_FoodPos.x = randX; m_FoodPos.y = randY;
+        SetGridPos(m_Food, randX, randY);   
+        std::cout << "Eating!" << std::endl;
+    }
+
     void TestSnake::KeyEvents()
     {
         switch(m_InputInstance->GetKeyState())
         {
             case KeyboardEvent::ArrowUp:
             {
-                ++m_Gridy;
-                SetGridPos(m_Gridx, m_Gridy);              
+                m_SnakeDirection = Direction::Up;
+                //++m_Gridy;
+                //SetSnakePos(m_Gridx, m_Gridy);              
                 break;
             }
             case KeyboardEvent::ArrowDown:
             {   
-                --m_Gridy;
-                SetGridPos(m_Gridx, m_Gridy);
+                m_SnakeDirection = Direction::Down;
+                //--m_Gridy;
+                //SetSnakePos(m_Gridx, m_Gridy);
                 break;
             }
             case KeyboardEvent::ArrowLeft:
             {
-                --m_Gridx;
-                SetGridPos(m_Gridx, m_Gridy);
+                m_SnakeDirection = Direction::Left;
+                //--m_Gridx;
+                //SetSnakePos(m_Gridx, m_Gridy);
                 break;
             }
             case KeyboardEvent::ArrowRight:
             {
-                ++m_Gridx;
-                SetGridPos(m_Gridx, m_Gridy);
+                m_SnakeDirection = Direction::Right;
+                //++m_Gridx;
+                //SetSnakePos(m_Gridx, m_Gridy);
                 break;
             }
             case KeyboardEvent::KeyE:
@@ -211,17 +258,58 @@ namespace test
         }
     }
 
+    void TestSnake::GameTick()
+    {
+        switch(m_SnakeDirection)
+        {
+            case Direction::Up:
+            {
+                ++m_Gridy;
+                SetSnakePos(m_Gridx, m_Gridy);              
+                break;
+            }
+            case Direction::Down:
+            {   
+                --m_Gridy;
+                SetSnakePos(m_Gridx, m_Gridy);
+                break;
+            }
+            case Direction::Left:
+            {
+                --m_Gridx;
+                SetSnakePos(m_Gridx, m_Gridy);
+                break;
+            }
+            case Direction::Right:
+            {
+                ++m_Gridx;
+                SetSnakePos(m_Gridx, m_Gridy);
+                break;
+            }
+            default:
+            {
+                std::cout << "Invalid direction, error!" << std::endl;
+                break;
+            }
+        }
+    }
+
     void TestSnake::ResetGame()
     {
+        std::cout << "***Game Over***" << std::endl;
         m_Gridx = m_GridNum/2;
         m_Gridy = m_GridNum/2;
         
         m_SnakePos.clear();
+        delete m_Food;
+        m_ObjectsRects.clear();
         m_SnakePos.push_back({m_Gridx, m_Gridy});
 
 
         m_objectHandler->Clear();
-        m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize);
+        m_ObjectsRects.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
+        m_Food = m_objectHandler->AddObject<CircleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)(m_gridPixelSize/3), (unsigned int) 43);
+
 
         m_Objects = m_objectHandler->GetObjectsData();
         m_VertexData = m_objectHandler->GetVertexData();
@@ -234,6 +322,15 @@ namespace test
         m_Objects[0]->SetObjectPosVelAcc(posvec,
                                          glm::vec3(0,0,0),
                                          glm::vec3(0,0,0));
+
+        m_FoodPos = { 3, 3 };
+        SetGridPos(m_Food, m_FoodPos.x, m_FoodPos.y);
+        /*glm::vec3 circleposvec = glm::vec3((m_xPixelOffset + m_Gridx*m_gridPixelSize),
+                                    ((m_yPixelOffset - m_gridPixelSize/2) + m_Gridy*m_gridPixelSize),
+                                      0);
+        m_Objects[1]->SetObjectPosVelAcc(posvec,
+                                         glm::vec3(0,0,0),
+                                         glm::vec3(0,0,0));*/
         
 
     }

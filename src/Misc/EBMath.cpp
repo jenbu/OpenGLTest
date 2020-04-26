@@ -11,11 +11,13 @@ namespace EBMath
     std::vector<float> ConvertVertex2DVecToFloatVec(std::vector<EBMath::Vertex2D> vec)
     {
         std::vector<float> tempVec;
+
         for(int i = 0; i < vec.size(); i++)
         {
             tempVec.push_back(vec[i].x);
             tempVec.push_back(vec[i].y);
         }
+
         return tempVec;
     }
 

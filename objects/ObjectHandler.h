@@ -15,7 +15,6 @@ struct VertexData
 {
     std::vector<float> VertexPosition;
     std::vector<unsigned int> VertexIndices;
-    std::vector<unsigned int> ObjectIndexOffset;
 };
 
 class ObjectHandler
@@ -24,21 +23,20 @@ class ObjectHandler
         ObjectHandler();
         ~ObjectHandler();
 
-        //static ObjectHandler* GetInstance();
-        inline VertexData GetVertexData() { return { m_VertexCoords, m_Indices, m_IndexOffsets }; }
+        inline VertexData GetVertexData() { return { m_VertexCoords, m_Indices }; }
         inline std::vector<BaseObject*> GetObjectsData() { return m_Objects; }
-        inline std::vector<glm::vec3> GetObjectsPos() { return m_ObjectsPos; }
+        inline unsigned int GetObjectCount() { return m_ObjectCount; }
 
         void Clear();
 
         template<typename T>
-        void AddObject(glm::vec3 pos, glm::vec3 vel, float width, float height)
+        RectangleObject* AddObject(glm::vec3 pos, glm::vec3 vel, float width, float height)
         {
             
         }
 
         template<typename T>
-        void AddObject(glm::vec3 pos, glm::vec3 vel, float radius, unsigned int resolution)
+        BaseObject* AddObject(glm::vec3 pos, glm::vec3 vel, float radius, unsigned int resolution)
         {
             
         }
@@ -50,12 +48,10 @@ class ObjectHandler
         static ObjectHandler* instance;
 
         std::vector<BaseObject*> m_Objects;
-        std::vector<glm::vec3> m_ObjectsPos;
         unsigned int m_ObjectCount;
-
+        unsigned int m_VertexCount;
 
         std::vector<float> m_VertexCoords;
-        std::vector<unsigned int> m_Indices;
-        std::vector<unsigned int> m_IndexOffsets;
+        std::vector<unsigned int> m_Indices;        
 
 };

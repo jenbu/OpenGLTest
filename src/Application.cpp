@@ -74,7 +74,6 @@ int main(int, char**) {
     test::Test* currentTest = nullptr;
     test::TestMenu* testMenu = new test::TestMenu(currentTest);
     currentTest = testMenu;
-    test::TestClearColor test;
 
     testMenu->RegisterTest<test::TestClearColor>("Circle");
     testMenu->RegisterTest<test::TestTexture2D>("Texture2D");
@@ -97,7 +96,7 @@ int main(int, char**) {
     while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0)
     {
         //Manual lock FPS due to vsync not working on every computer with glfwSwapInterval()
-        lastTime = glfwGetTime();
+        //lastTime = glfwGetTime();
         
 
         if(clock()-time > TicksPerFrame)

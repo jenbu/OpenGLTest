@@ -45,20 +45,22 @@ public:
     //Setters
     inline void SetName(std::string name) {m_Name = name; };
     inline void SetColors(std::vector<float> colors) { m_Color = colors; };
-    void SetObjectPosVelAcc(glm::vec3 pos, glm::vec3 vel, glm::vec3 acc) 
+    inline void SetObjectPos(glm::vec3 pos) { m_PosVec = pos; }
+    inline void SetObjectPosVelAcc(glm::vec3 pos, glm::vec3 vel, glm::vec3 acc) 
     { m_PosVec = pos; m_VelVec = vel, m_AccVec = acc; }
     
     //Getters
     inline std::vector<float>     GetColors() { return m_Color; };
     inline std::string            GetName() { return m_Name; }
     virtual ObjectType            GetType() {};
-    virtual void                  GetGeometry() {};
+    virtual glm::vec3             GetGeometry() {};
     inline float                  GetMass() { return m_Mass; }
     inline unsigned int           GetSpringConst() { return m_Spring; }
     std::vector<EBMath::Vertex2D> GetVerticesPos() { return m_VertexPosition; }
     std::vector<float>            GetBaseVertices() { return m_BaseVertices; } //vertices passed to vertexbuf
     std::vector<unsigned int>     GetBaseIndices() { return m_Indices; }
-    unsigned int                  GetIndexOffset() { return m_IndexOffset; }
+    unsigned int                  GetIndicesOffset() { return m_IndexOffset; }
+    unsigned int                  GetIndicesSize() { return m_Indices.size(); }
      
     inline glm::vec3 GetPosition() { return m_PosVec; }
     inline glm::vec3 GetVelocity() { return m_VelVec; }
@@ -89,6 +91,7 @@ private:
     std::vector<float> m_BaseVertices;
     glm::mat4 m_Proj, m_View, m_model;
     std::vector<float> m_Color;
+
 
 
     //Positional properties

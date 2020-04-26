@@ -16,7 +16,7 @@ public:
     ObjectType GetType() override { return Rect; }
     unsigned int GetNumIndices() override { return m_NumIndexes; }
 
-    void GetGeometry() override { std::cout << "hei" << std::endl; }
+    glm::vec3 GetGeometry() override { return glm::vec3(m_Width, m_Width, 0); }
     inline unsigned int GetWidth() { return m_Width; }
     inline unsigned int GetHeight() { return m_Height; }
 

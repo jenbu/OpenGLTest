@@ -25,7 +25,6 @@ namespace test
 
 
         m_Objects = m_ObjectHandler->GetObjectsData();
-        m_ObjsPos = m_ObjectHandler->GetObjectsPos();
         m_ObjsPos.push_back(m_Objects[0]->GetPosition());
         m_ObjsPos.push_back(m_Objects[1]->GetPosition());
         m_VertexData = m_ObjectHandler->GetVertexData();
@@ -93,16 +92,16 @@ namespace test
         
         m_Manipulator->Manipulate(m_Objects);
 
-        
+        /*
         for(int i = 0; i < m_VertexData.ObjectIndexOffset.size(); i++)
         {
             glm::mat4 mvp = glm::mat4(1.0f)* m_Proj* glm::translate(glm::mat4(1.0f), m_Objects[i]->GetPosition());
             m_Shader->Bind();
             m_Shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
             m_Shader->SetUniformMat4f("u_MVP", mvp);
-            m_Renderer.DrawInRange(*m_VAO, *m_IndexBuffer, *m_Shader, m_VertexData.ObjectIndexOffset[i]);
+            m_Renderer.DrawInRange(*m_VAO, *m_IndexBuffer, *m_Shader, m_VertexData.ObjectIndexOffset[i], 6);
 
-        }
+        }*/
 
         
     }

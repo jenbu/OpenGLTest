@@ -33,6 +33,12 @@ if (GLEW_FOUND)
     link_libraries(${GLEW_LIBRARIES})
 endif()
 
+#pkg_search_module(FREETYPE REQUIRED freetype2)
+pkg_search_module(FREETYPE REQUIRED freetype2)
+message(${FREETYPE_INCLUDEDIR})
+
+
+#include(/usr/local/include/freetype2)
 
 include_directories(
 	src/vendor
@@ -47,11 +53,12 @@ include_directories(
 	src
 	test
 	objects
+	${FREETYPE_INCLUDEDIR}
 )
 
 
 add_executable(OpenGLUTube ${SOURCE_FILES} ${HEADER_FILES})
-target_link_libraries(OpenGLUTube ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} -ldl ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(OpenGLUTube ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} -ldl ${CMAKE_THREAD_LIBS_INIT} ${FREETYPE_LIBRARIES})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
