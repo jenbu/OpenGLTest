@@ -19,6 +19,11 @@
 #include "Constants.h"
 #include "InputEventHandler.h"
 
+
+
+
+//UDPClientServer::UDPClient testUDP("localnet", 20001);
+
 using namespace std;
 
 std::vector<double> mousePos = { 0.0, 0.0 };
@@ -30,8 +35,11 @@ void mouseButtonCb(GLFWwindow* window, int button, int action, int mods)
 
 
 
+
 int main(int, char**) {
 
+    //Communication::UDPClass test;
+    //test.UDPInit();
 
     if(!glfwInit())
     {

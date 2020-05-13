@@ -93,6 +93,7 @@ namespace test
         m_Manipulator->Manipulate(m_Objects);
 
         /*
+
         for(int i = 0; i < m_VertexData.ObjectIndexOffset.size(); i++)
         {
             glm::mat4 mvp = glm::mat4(1.0f)* m_Proj* glm::translate(glm::mat4(1.0f), m_Objects[i]->GetPosition());

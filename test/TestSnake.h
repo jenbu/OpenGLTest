@@ -19,6 +19,7 @@
 #include "RectangleObject.h"
 #include "ObjectHandler.h"
 #include "InputEventHandler.h"
+#include "UDPClass.h"
 
 namespace test
 {
@@ -65,6 +66,10 @@ namespace test
         void AddBodySquare();
         CollisionType Collision(int x, int y);
         void SetGridPos(BaseObject* obj, int x, int y);
+
+        void SnakeMsgHandler();
+
+        //void TestFunc();
     private:
         std::vector<GridPos> m_SnakePos;
         GridPos m_FoodPos;
@@ -72,6 +77,7 @@ namespace test
 
         ObjectHandler* m_objectHandler;
         InputEventHandler* m_InputInstance;
+        Communication::UDPClass m_UDP;
         glm::mat4 m_Proj;
 
         //Timer

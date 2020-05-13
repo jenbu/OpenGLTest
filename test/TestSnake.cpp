@@ -2,11 +2,19 @@
 
 namespace test
 {
+    void TestFunc()
+    {
+        std::cout << "TestFunc msg: "  << std::endl;
+    }
+
+
     TestSnake::TestSnake()
     : m_Proj(glm::ortho(0.0f, (float)ResolutionWidth, 0.0f, (float)ResolutionHeight, -1.0f, 1.0f)), 
-      m_GridNum(10), m_Gridx(m_GridNum/2), m_Gridy(m_GridNum/2), m_xPixelOffset(0), m_yPixelOffset(0)
-        {
+      m_GridNum(10), m_Gridx(m_GridNum/2), m_Gridy(m_GridNum/2), m_xPixelOffset(0), m_yPixelOffset(0),
+      m_SnakeDirection(Direction::Up), m_UDP(TestFunc)
+    {
         
+
         int startX;  
         if(ResolutionWidth >= ResolutionHeight)
         {
@@ -41,13 +49,24 @@ namespace test
         m_Shader = std::make_unique<Shader>("res/basic_color.shader"); 
         m_Shader->Bind();
 
+        std::cout << m_UDP.UDPInit() << std::endl;
+        //m_UDP.RegisterMsgHandler(SnakeMsgHandler);
+        char abc[40] = "hei";
+        //m_UDP.MessageHandler(abc);
         m_lastTime = clock();
         m_TickPeriod = CLOCKS_PER_SEC/4;
+        ResetGame();
     }
 
     TestSnake::~TestSnake()
     {
     }
+
+    void TestSnake::SnakeMsgHandler()
+    {
+        std::cout << "SnakeMsgHandler: "  << std::endl;
+    }
+
 
     void TestSnake::OnUpdate(float deltaTime)
     {
@@ -66,7 +85,7 @@ namespace test
         if(clock() - m_lastTime >  m_TickPeriod)
         {
             GameTick();
-            std::cout << "tick" << std::endl; 
+            //std::cout << "tick" << std::endl; 
             m_lastTime = clock();
         }
 
@@ -308,7 +327,7 @@ namespace test
 
         m_objectHandler->Clear();
         m_ObjectsRects.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
-        m_Food = m_objectHandler->AddObject<CircleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)(m_gridPixelSize/3), (unsigned int) 43);
+        m_Food = m_objectHandler->AddObject<CircleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)(m_gridPixelSize/3), (unsigned int) 8);
 
 
         m_Objects = m_objectHandler->GetObjectsData();
