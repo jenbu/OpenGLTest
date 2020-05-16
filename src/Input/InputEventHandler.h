@@ -23,6 +23,7 @@ enum KeyboardEvent
     ArrowLeft = 263,
     ArrowRight = 262,
     KeyE = 69,
+    KeySpacebar = 32,
     NoKeyBtn = -1
 };
 

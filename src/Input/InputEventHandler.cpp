@@ -21,7 +21,6 @@ InputEventHandler* InputEventHandler::GetInstance()
 
 ButtonEvent InputEventHandler::GetBtnState()
 { 
-    
     return (ButtonEvent)m_CurrentPressedBtn;
 }
 

@@ -11,10 +11,10 @@ namespace test
     TestSnake::TestSnake()
     : m_Proj(glm::ortho(0.0f, (float)ResolutionWidth, 0.0f, (float)ResolutionHeight, -1.0f, 1.0f)), 
       m_GridNum(10), m_Gridx(m_GridNum/2), m_Gridy(m_GridNum/2), m_xPixelOffset(0), m_yPixelOffset(0),
-      m_SnakeDirection(Direction::Up), m_UDP(TestFunc)
+      m_SnakeDirection(Direction::Up), m_UDPComm(new Communication::UDPClass), m_GamePaused(true)
     {
         
-
+        
         int startX;  
         if(ResolutionWidth >= ResolutionHeight)
         {
@@ -49,8 +49,7 @@ namespace test
         m_Shader = std::make_unique<Shader>("res/basic_color.shader"); 
         m_Shader->Bind();
 
-        std::cout << m_UDP.UDPInit() << std::endl;
-        //m_UDP.RegisterMsgHandler(SnakeMsgHandler);
+        m_UDPComm->UDPInit(std::bind(&TestSnake::SnakeMsgHandler, this, std::placeholders::_1));
         char abc[40] = "hei";
         //m_UDP.MessageHandler(abc);
         m_lastTime = clock();
@@ -60,11 +59,12 @@ namespace test
 
     TestSnake::~TestSnake()
     {
+        delete m_UDPComm;
     }
 
-    void TestSnake::SnakeMsgHandler()
+    void TestSnake::SnakeMsgHandler(char* msg)
     {
-        std::cout << "SnakeMsgHandler: "  << std::endl;
+        std::cout << "SnakeMsgHandler msg: "  << msg << std::endl;
     }
 
 
@@ -81,12 +81,16 @@ namespace test
 
     void TestSnake::OnImGuiRender()
     {
+
         KeyEvents();
-        if(clock() - m_lastTime >  m_TickPeriod)
+        if(!m_GamePaused)
         {
-            GameTick();
-            //std::cout << "tick" << std::endl; 
-            m_lastTime = clock();
+            if(clock() - m_lastTime >  m_TickPeriod)
+            {
+                GameTick();
+                //std::cout << "tick" << std::endl; 
+                m_lastTime = clock();
+            }
         }
 
 
@@ -241,6 +245,7 @@ namespace test
         {
             case KeyboardEvent::ArrowUp:
             {
+                m_GamePaused = false;
                 m_SnakeDirection = Direction::Up;
                 //++m_Gridy;
                 //SetSnakePos(m_Gridx, m_Gridy);              
@@ -271,6 +276,11 @@ namespace test
             {
                 AddBodySquare();
                 break;
+            }
+            case KeyboardEvent::KeySpacebar:
+            {
+                std::cout << "Pausing game" << std::endl;
+                m_GamePaused = !m_GamePaused;
             }
             default:
                 break;
@@ -316,6 +326,7 @@ namespace test
     void TestSnake::ResetGame()
     {
         std::cout << "***Game Over***" << std::endl;
+        m_GamePaused = true;
         m_Gridx = m_GridNum/2;
         m_Gridy = m_GridNum/2;
         
@@ -353,4 +364,5 @@ namespace test
         
 
     }
+
 }

@@ -4,26 +4,30 @@
 namespace Communication
 {
     
-    UDPClass::UDPClass(std::function<void()> func)
+    UDPClass::UDPClass()
+    : m_Thread(&UDPClass::UDPTask, this), m_Close(false)
+
     {
-        myFunc = func;
-        myFunc();
+        
     }
 
     UDPClass::~UDPClass()
     {
-
+        m_Close = true;
     }
 
-    int UDPClass::UDPInit()
+    int UDPClass::UDPInit(std::function<void(char*)> func)
     {
-        int status = pthread_create(&m_pThread, NULL, (THREADFUNCPTR)&UDPClass::UDPTask, NULL);
-        myFunc();
-        if(status != 0)
-            std::cout << "Some error while creating thread, error code: " << status << std::endl;
+        m_Func = func;
+
+
+        //Med Detach() vil man ikke kunne funne ut når tasken er ferdig med join() lenger, må bruke noen andre mekanismer
+        m_Thread.detach();
         
-        return status;
+        //if(status != 0)
+        //    std::cout << "Some error while creating thread, error code: " << status << std::endl;
         
+        return 0;//status;
     }
 
     void UDPClass::UDPTask()
@@ -31,26 +35,29 @@ namespace Communication
         std::cout << "Starting UDPTask()" << std::endl;
         char msg[60];
         char response[60] = "Response from OpenGlProj";
+        
         UDPServer m_Server("localhost", 20001);
-        myFunc();
-        while(true)
+        
+        while(!m_Close)
         {
-            sleep(2);
+            //TODO timeout for server recv()
+            memset(msg, 0, sizeof(msg));
             m_Server.recv(msg, 60);
-            std::cout << msg << std::endl;
-            myFunc();
+            MessageHandler(msg);
             
-            std::cout << "msg: " << msg    << std::endl
-                      << "Sending message" << std::endl;
-
+            std::cout << "Sending message" << std::endl;
             m_Server.send(response, 60);
         }
+
+        std::cout << "Exiting UDPTask()" << std::endl; 
     }
 
     void UDPClass::MessageHandler(char* msg)
     {
-        char abc[10] = "Heisann";
-        m_Func(msg);
+        if(m_Func)
+            m_Func(msg);
+        else
+            std::cout << "UDPClass::MessageHandler:  m_Func has not been assigned function!" << std::endl;
     }
 
 }

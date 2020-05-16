@@ -67,7 +67,7 @@ namespace test
         CollisionType Collision(int x, int y);
         void SetGridPos(BaseObject* obj, int x, int y);
 
-        void SnakeMsgHandler();
+        void SnakeMsgHandler(char* msg);
 
         //void TestFunc();
     private:
@@ -77,12 +77,13 @@ namespace test
 
         ObjectHandler* m_objectHandler;
         InputEventHandler* m_InputInstance;
-        Communication::UDPClass m_UDP;
+        Communication::UDPClass* m_UDPComm;
         glm::mat4 m_Proj;
 
         //Timer
         clock_t m_lastTime;
         clock_t m_TickPeriod;
+        bool m_GamePaused;
 
         unsigned int m_gridPixelSize;
         const unsigned int m_GridNum; 
