@@ -38,8 +38,8 @@ namespace test {
         m_Shader->Bind();
 
         m_Texture = std::make_unique<Texture>("res/Textures/cherno.png");
-        m_Texture->Bind(0);
-        m_Shader->SetUniform1i("u_Texture", 0);
+        //m_Texture->Bind(0);
+        //m_Shader->SetUniform1i("u_Texture", 0);
         
         m_VAO->UnBind();
         m_Shader->UnBind();

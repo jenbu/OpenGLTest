@@ -13,8 +13,26 @@ namespace test
       m_GridNum(10), m_Gridx(m_GridNum/2), m_Gridy(m_GridNum/2), m_xPixelOffset(0), m_yPixelOffset(0),
       m_SnakeDirection(Direction::Up), m_UDPComm(new Communication::UDPClass), m_GamePaused(true)
     {
+        FT_Library library;
+        FT_Face face;
+        int error = FT_Init_FreeType(&library);
+        if(error)
+            std::cout << "Some error freetype lib" << std::endl;
         
-        
+        error = FT_New_Face(library,
+                            "/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf",
+                            0,
+                            &face);
+        if(error == FT_Err_Unknown_File_Format)
+            std::cout << "loading font error freetype lib" << std::endl;
+        else if(error)
+            std::cout << "Some other error related to FT_New_Face" << std::endl;
+
+        error = FT_Set_Char_Size(face, 0, 16*64, 300, 300);
+        if(error)
+            std::cout << "Some error related to FT_Set_Char_Size()" << std::endl;
+            
+
         int startX;  
         if(ResolutionWidth >= ResolutionHeight)
         {
@@ -30,11 +48,18 @@ namespace test
         m_InputInstance = InputEventHandler::GetInstance();
         
         m_objectHandler = new ObjectHandler();
-        m_ObjectsRects.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
+        m_ObjSnakeBody.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
         m_SnakePos.push_back({m_Gridx, m_Gridy});
         m_Food = m_objectHandler->AddObject<CircleObject>(glm::vec3(100, 100, 0), glm::vec3(0, 0, 0), (float)(m_gridPixelSize/3), (unsigned int) 43);
         m_FoodPos = { 3, 4 };
         SetGridPos(m_Food, m_FoodPos.x, m_FoodPos.y);
+
+
+        //Boundary objects
+        m_ObjBackground.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(m_xPixelOffset/2, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight));
+        m_ObjBackground.push_back(m_objectHandler->AddObject<RectangleObject>(
+            glm::vec3(3*m_xPixelOffset/2 + m_gridPixelSize*m_GridNum, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight));
+        
 
         m_Objects = m_objectHandler->GetObjectsData();
         m_VertexData = m_objectHandler->GetVertexData();
@@ -54,7 +79,9 @@ namespace test
         //m_UDP.MessageHandler(abc);
         m_lastTime = clock();
         m_TickPeriod = CLOCKS_PER_SEC/4;
-        ResetGame();
+        //ResetGame();
+        
+        
     }
 
     TestSnake::~TestSnake()
@@ -118,11 +145,11 @@ namespace test
             std::cout << "m_SnakePos[" << d << "] (x, y): (" << m_SnakePos[d].x << ", " << m_SnakePos[d].y << ")" << std::endl; 
         }
 
-        glm::vec3 newSqrPos = glm::vec3((m_xPixelOffset+m_SnakePos[m_SnakePos.size()-1].x*m_gridPixelSize),
+        glm::vec3 newSqrPos = glm::vec3(((m_xPixelOffset - m_gridPixelSize/2) + m_SnakePos[m_SnakePos.size()-1].x*m_gridPixelSize),
                                          (m_yPixelOffset+m_SnakePos[m_SnakePos.size()-1].y*m_gridPixelSize - m_gridPixelSize/2),
                                          0);
 
-        m_ObjectsRects.push_back(m_objectHandler->AddObject<RectangleObject>(newSqrPos, glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
+        m_ObjSnakeBody.push_back(m_objectHandler->AddObject<RectangleObject>(newSqrPos, glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
         m_Objects = m_objectHandler->GetObjectsData();
         m_VertexData = m_objectHandler->GetVertexData();
         m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
@@ -165,14 +192,14 @@ namespace test
             for(int k = (m_SnakePos.size()-1); k >= 1; k--)
             {
                 m_SnakePos[k] = m_SnakePos[k-1];
-                SetGridPos(m_ObjectsRects[k], m_SnakePos[k].x, m_SnakePos[k].y);
+                SetGridPos(m_ObjSnakeBody[k], m_SnakePos[k].x, m_SnakePos[k].y);
             }
 
         }
         //Set head pos
         m_SnakePos[0].x = x;
         m_SnakePos[0].y = y;
-        SetGridPos(m_ObjectsRects[0], m_SnakePos[0].x, m_SnakePos[0].y);
+        SetGridPos(m_ObjSnakeBody[0], m_SnakePos[0].x, m_SnakePos[0].y);
 
         if(IsEating())
         {
@@ -183,9 +210,9 @@ namespace test
 
     void TestSnake::SetGridPos(BaseObject* obj, int x, int y)
     {
-            glm::vec3 posvec = glm::vec3((m_xPixelOffset + x*m_gridPixelSize),
-                                        ((m_yPixelOffset - m_gridPixelSize/2) + y*m_gridPixelSize),
-                                        0);    
+            glm::vec3 posvec = glm::vec3( ((m_xPixelOffset-m_gridPixelSize/2) + x*m_gridPixelSize),
+                                          ((m_yPixelOffset - m_gridPixelSize/2) + y*m_gridPixelSize),
+                                            0 );    
             obj->SetObjectPos(posvec);
     }
 
@@ -332,21 +359,25 @@ namespace test
         
         m_SnakePos.clear();
         delete m_Food;
-        m_ObjectsRects.clear();
+        m_ObjSnakeBody.clear();
         m_SnakePos.push_back({m_Gridx, m_Gridy});
 
 
+
         m_objectHandler->Clear();
-        m_ObjectsRects.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
+        m_ObjSnakeBody.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
         m_Food = m_objectHandler->AddObject<CircleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)(m_gridPixelSize/3), (unsigned int) 8);
 
+        //Boundary objects
+        m_objectHandler->AddObject<RectangleObject>(glm::vec3(m_xPixelOffset/2, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight);
+        m_objectHandler->AddObject<RectangleObject>(glm::vec3(3*m_xPixelOffset/2 + m_gridPixelSize*m_GridNum, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight);
 
         m_Objects = m_objectHandler->GetObjectsData();
         m_VertexData = m_objectHandler->GetVertexData();
         m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
         m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
 
-        glm::vec3 posvec = glm::vec3((m_xPixelOffset + m_Gridx*m_gridPixelSize),
+        glm::vec3 posvec = glm::vec3((m_xPixelOffset + m_Gridx*m_gridPixelSize/2),
                                     ((m_yPixelOffset - m_gridPixelSize/2) + m_Gridy*m_gridPixelSize),
                                       0);
         m_Objects[0]->SetObjectPosVelAcc(posvec,
@@ -355,13 +386,7 @@ namespace test
 
         m_FoodPos = { 3, 3 };
         SetGridPos(m_Food, m_FoodPos.x, m_FoodPos.y);
-        /*glm::vec3 circleposvec = glm::vec3((m_xPixelOffset + m_Gridx*m_gridPixelSize),
-                                    ((m_yPixelOffset - m_gridPixelSize/2) + m_Gridy*m_gridPixelSize),
-                                      0);
-        m_Objects[1]->SetObjectPosVelAcc(posvec,
-                                         glm::vec3(0,0,0),
-                                         glm::vec3(0,0,0));*/
-        
+      
 
     }
 

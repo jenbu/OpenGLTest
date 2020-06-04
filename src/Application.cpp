@@ -15,6 +15,7 @@
 #include "TestLines.h"
 #include "TestObjectGeneration.h"
 #include "TestSnake.h"
+#include "TestFreetype.h"
 #include "Utility.h"
 #include "Constants.h"
 #include "InputEventHandler.h"
@@ -89,6 +90,7 @@ int main(int, char**) {
     testMenu->RegisterTest<test::TestLines>("Lines");
     testMenu->RegisterTest<test::TestObjectGeneration>("ObjectGeneration");
     testMenu->RegisterTest<test::TestSnake>("Snake");
+    testMenu->RegisterTest<test::TestFreetype>("Freetype");
 
 
     int counterFPS = 0;

@@ -93,7 +93,8 @@ namespace test
 
         std::vector<BaseObject*> m_Objects;
         BaseObject* m_Food;
-        std::vector<RectangleObject*> m_ObjectsRects;
+        std::vector<RectangleObject*> m_ObjSnakeBody;
+        std::vector<RectangleObject*> m_ObjBackground;
         VertexData m_VertexData;
 
         Renderer m_Renderer;

@@ -17,6 +17,7 @@ private:
 
 public:
     Texture(const std::string& path);
+    Texture(unsigned int width, unsigned int height, unsigned char* data);
     ~Texture();
 
     void Bind(unsigned int slot) const;//different texture slots depending on system.

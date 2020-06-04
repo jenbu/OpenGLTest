@@ -78,9 +78,10 @@ ShaderProgramSource Shader::readShader(const std::string& path)
 
     ShaderType shaderType = ShaderType::NONE;
     std::stringstream ss[2];
-    
+
     while(getline(file, line))
-    {
+    {   
+
         if(line.find("#shader") != std::string::npos)
         {
             if(line.find("vertex") != std::string::npos)
@@ -129,6 +130,12 @@ void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
 {
     int location = GetUniformLocation(name); 
     GLCall(glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0])); 
+}
+
+void Shader::SetUniform3f(const std::string& name, float v0, float v1, float v2)
+{
+    int location = GetUniformLocation(name);
+    GLCall(glUniform3f(location, v0, v1, v2));
 }
 
 int Shader::GetUniformLocation(const std::string& name)
