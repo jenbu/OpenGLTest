@@ -20,6 +20,7 @@
 #include "BaseObject.h"
 #include "RectangleObject.h"
 #include "CircleObject.h"
+#include "TextFreetype.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -47,7 +48,7 @@ namespace test {
         void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
 
     private:
-        std::map<char, Character> m_Characters;
+        //std::map<char, Character> m_Characters;
 
 
         glm::mat4 m_ProjMatrix;
@@ -55,11 +56,13 @@ namespace test {
         VertexData m_VertexData;
         Texture* m_TestTexture;
 
-        Renderer m_Renderer;
-        std::unique_ptr<Shader> m_Shader;
-        std::unique_ptr<VertexArray> m_VAO;
-        std::unique_ptr<IndexBuffer> m_IndexBuffer;
-        std::unique_ptr<VertexBuffer> m_VertexBuffer;
+        std::shared_ptr<Renderer> m_Renderer;
+        std::shared_ptr<Shader> m_Shader;
+        std::shared_ptr<VertexArray> m_VAO;
+        std::shared_ptr<IndexBuffer> m_IndexBuffer;
+        std::shared_ptr<VertexBuffer> m_VertexBuffer;
+
+        std::unique_ptr<TextFreetype> m_Text;
 
         FT_Face m_Face;
         FT_Library m_Library;

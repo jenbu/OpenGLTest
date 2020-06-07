@@ -55,6 +55,7 @@ include_directories(
 	src/Input/
 	src/CollisionDetection/
 	src/Communication/
+	src/TextRendering/
 	src
 	test
 	objects

@@ -20,6 +20,8 @@ public:
     Texture(unsigned int width, unsigned int height, unsigned char* data);
     ~Texture();
 
+    inline unsigned int GetTextureID() { return m_RendererID; }
+
     void Bind(unsigned int slot) const;//different texture slots depending on system.
     void UnBind() const;
 
