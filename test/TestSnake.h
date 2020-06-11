@@ -20,6 +20,7 @@
 #include "ObjectHandler.h"
 #include "InputEventHandler.h"
 #include "UDPClass.h"
+#include "TextFreetype.h"
 
 namespace test
 {
@@ -54,6 +55,7 @@ namespace test
         void OnUpdate(float deltaTime) override;
         void OnRender() override;
         void OnImGuiRender() override;
+        void TextDraw();
 
         void SetSnakePos(int& x, int& y);
         bool IsEating();
@@ -90,6 +92,8 @@ namespace test
         int m_Gridx, m_Gridy;
         unsigned int m_xPixelOffset, m_yPixelOffset;
 
+        //Text rendering
+        std::unique_ptr<TextFreetype> m_Text;
 
         std::vector<BaseObject*> m_Objects;
         BaseObject* m_Food;
@@ -97,11 +101,11 @@ namespace test
         std::vector<RectangleObject*> m_ObjBackground;
         VertexData m_VertexData;
 
-        Renderer m_Renderer;
-        std::unique_ptr<Shader> m_Shader;
-        std::unique_ptr<VertexArray> m_VAO;
-        std::unique_ptr<IndexBuffer> m_IndexBuffer;
-        std::unique_ptr<VertexBuffer> m_VertexBuffer;
+        std::shared_ptr<Renderer> m_Renderer;
+        std::shared_ptr<Shader> m_Shader;
+        std::shared_ptr<VertexArray> m_VAO;
+        std::shared_ptr<IndexBuffer> m_IndexBuffer;
+        std::shared_ptr<VertexBuffer> m_VertexBuffer;
     };
 
 

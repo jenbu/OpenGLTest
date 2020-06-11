@@ -77,6 +77,7 @@ namespace test {
             renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
         }
         
+        m_Texture->UnBind();
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationB);
             glm::mat4 mvp = m_Proj * m_View * model;

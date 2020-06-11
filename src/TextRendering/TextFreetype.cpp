@@ -1,20 +1,44 @@
 #include "TextFreetype.h"
 
-TextFreetype::TextFreetype(std::shared_ptr<VertexBuffer> vb, std::shared_ptr<IndexBuffer> ib,
-                           std::shared_ptr<Renderer> renderer, std::shared_ptr<Shader> shader,
-                           std::shared_ptr<VertexArray> vao, glm::mat4 mvp)
-: m_VertexBuffer(vb), m_IndexBuffer(ib), m_Shader(shader), m_Renderer(renderer),
-  m_VAO(vao), m_MVP(mvp)
+//TextFreetype::TextFreetype(std::shared_ptr<VertexBuffer> vb, std::shared_ptr<IndexBuffer> ib,
+//                           std::shared_ptr<Renderer> renderer, std::shared_ptr<Shader> shader,
+//                           std::shared_ptr<VertexArray> vao, glm::mat4 mvp)
+TextFreetype::TextFreetype(unsigned int font_size, glm::mat4 mvp)
+: m_MVP(mvp), m_FontSize(font_size)
 {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     Initialize();
+    m_VertexBuffer = std::make_shared<VertexBuffer>(nullptr, 0);
+    VertexBufferLayout layout;
+    layout.Push<float>(2); //Vertex coordinates
+    layout.Push<float>(2); //Texture coordinates
+
+    m_VAO = std::make_shared<VertexArray>();
+    m_VAO->AddBuffer(*m_VertexBuffer, layout);
+    m_Shader = std::make_shared<Shader>("res/freetype_shader.shader"); 
+    //m_Shader->Bind();
+
+    unsigned int indices[] = {
+        0, 1, 2,
+        0, 2, 3
+    };
+    m_IndexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(indices)/sizeof(unsigned int));
+
+
+
+    
+    m_Renderer = std::make_shared<Renderer>();
 }
 
 TextFreetype::~TextFreetype()
 {
-    //delete texture pointer in Character
-    for(std::map<char, Character>::iterator i; i != m_Characters.end(); i++)
+    //delete texture pointer in m_Characters
+    std::cout << m_Characters.size() << std::endl;
+    for(std::map<char, Character>::iterator it = m_Characters.begin(); it != m_Characters.end(); it++)
     {
-        delete (*i).second.texture;
+        delete (*it).second.texture;
     }
 
 }
@@ -37,7 +61,7 @@ void TextFreetype::Initialize()
     else if(error)
         std::cout << "Some other error related to FT_New_Face" << std::endl;
 
-    error = FT_Set_Pixel_Sizes(face, 0, 80);
+    error = FT_Set_Pixel_Sizes(face, 0, m_FontSize);
     if(error)
         std::cout << "Some error related to FT_Set_Char_Size()" << std::endl;
 
@@ -69,14 +93,12 @@ void TextFreetype::Initialize()
         m_Characters.insert(std::pair<char, Character>(c, character));
     }
     
-
-
     FT_Done_Face(face);
     FT_Done_FreeType(library);
 }
 
 
-void TextFreetype::SetText(std::string text, unsigned int textID, unsigned int x, unsigned int y, glm::vec3 color)
+void TextFreetype::AddText(std::string text, unsigned int textID, unsigned int x, unsigned int y, glm::vec3 color)
 {
     //If not found, create. If found change TextBox.
     if(m_TextBoxes.find(textID) == m_TextBoxes.end())
@@ -85,8 +107,21 @@ void TextFreetype::SetText(std::string text, unsigned int textID, unsigned int x
         m_TextBoxes[textID] = {text, x, y, color};
 }
 
+void TextFreetype::SetText(std::string text, unsigned int textID)
+{
+    //If not found, create. If found change TextBox.
+    if(m_TextBoxes.find(textID) == m_TextBoxes.end())
+    {
+        std::cout << "No existing ID for the textbox" << std::endl;
+        return;
+    }
+    else
+        m_TextBoxes[textID].text = text;
+}
+
 void TextFreetype::RenderText(std::string text, unsigned int x, unsigned int y, glm::vec3 color)
 {
+
     std::string::const_iterator c;
     for(c = text.begin(); c != text.end(); c++)
     {
@@ -103,38 +138,33 @@ void TextFreetype::RenderText(std::string text, unsigned int x, unsigned int y, 
                     << " w: "         << w    << " h: "    << h     
                     << " TextureID: " << character.texture->GetTextureID() << std::endl;*/
 
+        //TODO make it so that vertices and indeces are appended to the list containing object vertices and indeces
+
         float vertices[] = {
             xpos,     ypos + h,   0.0f, 0.0f,            
             xpos,     ypos,       0.0f, 1.0f,
             xpos + w, ypos,       1.0f, 1.0f,
             xpos + w, ypos + h,   1.0f, 0.0f    
         };
-
         x += (character.Advance >> 6);
 
-        m_VertexBuffer->Bind();
+
+        glm::mat4 matr = glm::mat4(1.0f) * glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+
         m_VertexBuffer->SetBufferData(vertices, sizeof(vertices));
-
         character.texture->Bind(0);
-        
-        m_VertexBuffer->Bind();
-
         m_Shader->Bind();
-        m_Shader->SetUniform3f("textColor", color.x, color.y, color.z);
-        m_Shader->SetUniformMat4f("projection", m_MVP);
-
-        m_Renderer->Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
+        m_Shader->SetUniform4f("u_Color", color.x, color.y, color.z, 1.0f);
+        m_Shader->SetUniformMat4f("u_MVP", matr);
+        m_Renderer->Draw(*m_VAO, *m_IndexBuffer, *m_Shader);        
     }
 
-        
 }
 
 void TextFreetype::Render()
 {
-    std::cout << "textBoxes size: " << m_TextBoxes.size() << std::endl; 
     for(std::map<unsigned int, TextBox>::iterator it = m_TextBoxes.begin(); it != m_TextBoxes.end(); it++)
     {
-        std::cout << "textID: " << it->first << " text: " << it->second.text << std::endl;
         RenderText(it->second.text, it->second.x, it->second.y, it->second.color);
     }
 }

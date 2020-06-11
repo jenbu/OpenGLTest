@@ -49,7 +49,7 @@ RectangleObject* ObjectHandler::AddObject<RectangleObject>(glm::vec3 pos, glm::v
                                        (3+ m_VertexCount), (1+m_VertexCount), (0+m_VertexCount) };
 
 
-
+    
     RectangleObject* tempRect = new RectangleObject(pos, vel, {vertices, indices, m_Indices.size()},
                                                     0, width, height, 100);
     m_Objects.push_back(tempRect);

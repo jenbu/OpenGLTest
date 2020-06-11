@@ -4,11 +4,11 @@ layout (location = 0) in vec4 position; //
 layout (location = 1) in vec2 texCoord;
 out vec2 v_TexCoords;
 
-uniform mat4 projection;
+uniform mat4 u_MVP;
 
 void main()
 {
-    gl_Position = projection * position;
+    gl_Position = u_MVP * position;
     v_TexCoords = texCoord;
 }  
 
@@ -18,7 +18,7 @@ in vec2 v_TexCoords;
 out vec4 color;
 
 uniform sampler2D text;
-uniform vec3 textColor;
+uniform vec4 u_Color;
 
 void main()
 {    
@@ -26,5 +26,5 @@ void main()
     float green = texture(text, v_TexCoords).g;
     float blue  = texture(text, v_TexCoords).b;
     vec4 sampled = vec4(1.0, 1.0, 1.0, red);
-    color = vec4(textColor, 1.0) * sampled;
+    color = u_Color * sampled;
 }  

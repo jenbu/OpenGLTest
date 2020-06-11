@@ -13,25 +13,6 @@ namespace test
       m_GridNum(10), m_Gridx(m_GridNum/2), m_Gridy(m_GridNum/2), m_xPixelOffset(0), m_yPixelOffset(0),
       m_SnakeDirection(Direction::Up), m_UDPComm(new Communication::UDPClass), m_GamePaused(true)
     {
-        FT_Library library;
-        FT_Face face;
-        int error = FT_Init_FreeType(&library);
-        if(error)
-            std::cout << "Some error freetype lib" << std::endl;
-        
-        error = FT_New_Face(library,
-                            "/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf",
-                            0,
-                            &face);
-        if(error == FT_Err_Unknown_File_Format)
-            std::cout << "loading font error freetype lib" << std::endl;
-        else if(error)
-            std::cout << "Some other error related to FT_New_Face" << std::endl;
-
-        error = FT_Set_Char_Size(face, 0, 16*64, 300, 300);
-        if(error)
-            std::cout << "Some error related to FT_Set_Char_Size()" << std::endl;
-            
 
         int startX;  
         if(ResolutionWidth >= ResolutionHeight)
@@ -65,16 +46,22 @@ namespace test
         m_VertexData = m_objectHandler->GetVertexData();
 
 
-        m_VAO = std::make_unique<VertexArray>();
-        m_VertexBuffer = std::make_unique<VertexBuffer>(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
+        m_VAO = std::make_shared<VertexArray>();
+        m_VertexBuffer = std::make_shared<VertexBuffer>(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
         VertexBufferLayout layout;
         layout.Push<float>(2);
         m_VAO->AddBuffer(*m_VertexBuffer, layout);
-        m_IndexBuffer = std::make_unique<IndexBuffer>(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
-        m_Shader = std::make_unique<Shader>("res/basic_color.shader"); 
-        m_Shader->Bind();
+        m_IndexBuffer = std::make_shared<IndexBuffer>(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
+        m_Shader = std::make_shared<Shader>("res/basic_color.shader"); 
 
-        m_UDPComm->UDPInit(std::bind(&TestSnake::SnakeMsgHandler, this, std::placeholders::_1));
+        //Må sette vertexbuffer og indexbuffer for tegnekall, hver for objekter og tekst.
+        //m_Text = std::make_unique<TextFreetype>(m_VertexBufferText, m_IndexBufferText, m_Renderer,
+        //                                        m_ShaderText, m_VAOText, glm::mat4(1.0f)* m_Proj);
+        m_Text = std::make_unique<TextFreetype>(40, glm::mat4(1.0f)* m_Proj);
+
+        m_Text->AddText("Score: ", 0, 20, 500, glm::vec3(0.5f, 0.0f, 1.0f));
+
+        //m_UDPComm->UDPInit(std::bind(&TestSnake::SnakeMsgHandler, this, std::placeholders::_1));
         char abc[40] = "hei";
         //m_UDP.MessageHandler(abc);
         m_lastTime = clock();
@@ -86,7 +73,7 @@ namespace test
 
     TestSnake::~TestSnake()
     {
-        delete m_UDPComm;
+        //delete m_UDPComm;
     }
 
     void TestSnake::SnakeMsgHandler(char* msg)
@@ -127,9 +114,10 @@ namespace test
             m_Shader->Bind();
             m_Shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
             m_Shader->SetUniformMat4f("u_MVP", mvp);
-            m_Renderer.DrawInRange(*m_VAO, *m_IndexBuffer, *m_Shader, m_Objects[i]->GetIndicesOffset(), m_Objects[i]->GetIndicesSize());
-
+            m_Renderer->DrawInRange(*m_VAO, *m_IndexBuffer, *m_Shader, m_Objects[i]->GetIndicesOffset(), m_Objects[i]->GetIndicesSize());
         }
+
+        m_Text->Render();
     }
 
     void TestSnake::AddBodySquare()
@@ -390,4 +378,14 @@ namespace test
 
     }
 
+    void TestSnake::TextDraw()
+    {
+
+        //m_Text->Render();
+        //m_Objects = m_objectHandler->GetObjectsData();
+        //m_VertexData = m_objectHandler->GetVertexData();
+        //m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
+        //m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
+
+    }
 }

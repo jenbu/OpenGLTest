@@ -55,11 +55,12 @@ namespace test {
 
         VertexData m_VertexData;
         Texture* m_TestTexture;
+        std::unique_ptr<ObjectHandler> m_ObjHandler;
 
         std::shared_ptr<Renderer> m_Renderer;
         std::shared_ptr<Shader> m_Shader;
         std::shared_ptr<VertexArray> m_VAO;
-        std::shared_ptr<IndexBuffer> m_IndexBuffer;
+        std::shared_ptr<IndexBuffer> m_IndexBufferTest;
         std::shared_ptr<VertexBuffer> m_VertexBuffer;
 
         std::unique_ptr<TextFreetype> m_Text;
