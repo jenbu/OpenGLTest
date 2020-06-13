@@ -32,6 +32,12 @@ void ObjectHandler::Clear()
 
     m_Indices.clear();
     m_VertexCoords.clear();
+
+    for(std::vector<BaseObject *>::iterator it = m_Objects.begin(); it != m_Objects.end(); it++)
+    {
+        //delete *it;
+    }
+    
     m_Objects.clear();
 }
 

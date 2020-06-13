@@ -1,5 +1,4 @@
-#ifndef VERTEXARRAY_H
-#define VERTEXARRAY_H
+#pragma once
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "Utility.h"
@@ -18,5 +17,3 @@ public:
     void Bind() const;
     void UnBind() const;
 };
-
-#endif

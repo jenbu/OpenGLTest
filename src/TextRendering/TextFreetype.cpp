@@ -68,10 +68,6 @@ void TextFreetype::Initialize()
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    if(FT_Load_Char(face, 200, FT_LOAD_RENDER))
-    {
-        std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
-    }
 
     for(int c = 32; c < 128; c++)
     {
@@ -125,7 +121,6 @@ void TextFreetype::RenderText(std::string text, unsigned int x, unsigned int y, 
     std::string::const_iterator c;
     for(c = text.begin(); c != text.end(); c++)
     {
-        //std::cout << "charType: " << *c << std::endl;
         Character character = m_Characters[*c];
 
         float xpos = x + character.Position.x * 1.0;
@@ -137,8 +132,6 @@ void TextFreetype::RenderText(std::string text, unsigned int x, unsigned int y, 
         /*std::cout << "xpos: "       << xpos << " ypos: " << ypos
                     << " w: "         << w    << " h: "    << h     
                     << " TextureID: " << character.texture->GetTextureID() << std::endl;*/
-
-        //TODO make it so that vertices and indeces are appended to the list containing object vertices and indeces
 
         float vertices[] = {
             xpos,     ypos + h,   0.0f, 0.0f,            
@@ -152,11 +145,11 @@ void TextFreetype::RenderText(std::string text, unsigned int x, unsigned int y, 
         glm::mat4 matr = glm::mat4(1.0f) * glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 
         m_VertexBuffer->SetBufferData(vertices, sizeof(vertices));
-        character.texture->Bind(0);
         m_Shader->Bind();
         m_Shader->SetUniform4f("u_Color", color.x, color.y, color.z, 1.0f);
         m_Shader->SetUniformMat4f("u_MVP", matr);
-        m_Renderer->Draw(*m_VAO, *m_IndexBuffer, *m_Shader);        
+        character.texture->Bind(0);
+        m_Renderer->Draw(*m_VAO, *m_IndexBuffer, *m_Shader);       
     }
 
 }

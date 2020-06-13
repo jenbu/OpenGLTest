@@ -47,6 +47,8 @@ namespace test {
         int InitializeFT();
         void RenderText(std::string text, float x, float y, float scale, glm::vec3 color);
 
+        void Reset();
+
     private:
         //std::map<char, Character> m_Characters;
 

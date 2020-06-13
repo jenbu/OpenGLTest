@@ -1,8 +1,10 @@
 #include "IndexBuffer.h"
 
 
-IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int count) : m_Count(count)
+IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int count, std::shared_ptr<VertexArray> vao)
+: m_Count(count), m_Va(vao)
 {
+    
     GLCall(glGenBuffers(1, &m_RendererID));
     std::cout << "IndexBuffer currently bound: " << m_RendererID << std::endl;
 
@@ -20,9 +22,14 @@ void IndexBuffer::SetIndexBuffer(const unsigned int* data, unsigned int count)
 {
     std::cout << "SetIndexBuffer" << std::endl;
     m_Count = count;
-    Bind();
+    
+    //The belonging vertex array has to be bound if multiple vertex arrays
+    if(m_Va != nullptr)
+        m_Va->Bind();
+
+    //Bind();
     GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Count * sizeof(unsigned int), data, GL_STATIC_DRAW))
-    UnBind();
+    //UnBind();
 }
 
 void IndexBuffer::Bind() const

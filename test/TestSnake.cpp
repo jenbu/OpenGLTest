@@ -11,7 +11,8 @@ namespace test
     TestSnake::TestSnake()
     : m_Proj(glm::ortho(0.0f, (float)ResolutionWidth, 0.0f, (float)ResolutionHeight, -1.0f, 1.0f)), 
       m_GridNum(10), m_Gridx(m_GridNum/2), m_Gridy(m_GridNum/2), m_xPixelOffset(0), m_yPixelOffset(0),
-      m_SnakeDirection(Direction::Up), m_UDPComm(new Communication::UDPClass), m_GamePaused(true)
+      m_SnakeDirection(Direction::Up), m_UDPComm(new Communication::UDPClass), m_GamePaused(true),
+      m_Score(0)
     {
 
         int startX;  
@@ -51,7 +52,7 @@ namespace test
         VertexBufferLayout layout;
         layout.Push<float>(2);
         m_VAO->AddBuffer(*m_VertexBuffer, layout);
-        m_IndexBuffer = std::make_shared<IndexBuffer>(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
+        m_IndexBuffer = std::make_shared<IndexBuffer>(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size(), m_VAO);
         m_Shader = std::make_shared<Shader>("res/basic_color.shader"); 
 
         //Må sette vertexbuffer og indexbuffer for tegnekall, hver for objekter og tekst.
@@ -59,14 +60,14 @@ namespace test
         //                                        m_ShaderText, m_VAOText, glm::mat4(1.0f)* m_Proj);
         m_Text = std::make_unique<TextFreetype>(40, glm::mat4(1.0f)* m_Proj);
 
-        m_Text->AddText("Score: ", 0, 20, 500, glm::vec3(0.5f, 0.0f, 1.0f));
+        m_Text->AddText("Score:0", 0, 10, 500, glm::vec3(0.5f, 0.0f, 1.0f));
 
         //m_UDPComm->UDPInit(std::bind(&TestSnake::SnakeMsgHandler, this, std::placeholders::_1));
         char abc[40] = "hei";
         //m_UDP.MessageHandler(abc);
         m_lastTime = clock();
         m_TickPeriod = CLOCKS_PER_SEC/4;
-        //ResetGame();
+        ResetGame();
         
         
     }
@@ -141,6 +142,7 @@ namespace test
         m_Objects = m_objectHandler->GetObjectsData();
         m_VertexData = m_objectHandler->GetVertexData();
         m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
+        //m_VAO->Bind();
         m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
 
         std::cout << "m_Objects size: " << m_Objects.size() << std::endl;
@@ -231,6 +233,11 @@ namespace test
     void TestSnake::EatingConsequence()
     {
         AddBodySquare();
+        m_Score++;
+        std::stringstream ss;
+        ss << "Score:" << m_Score;
+        m_Text->SetText(ss.str(), 0);
+
         unsigned int randX, randY;
         //Check to prevent food to spawn in snake
         bool inSnake;
@@ -350,6 +357,7 @@ namespace test
         m_ObjSnakeBody.clear();
         m_SnakePos.push_back({m_Gridx, m_Gridy});
 
+        m_Text->SetText("Score:0", 0);
 
 
         m_objectHandler->Clear();
@@ -362,6 +370,7 @@ namespace test
 
         m_Objects = m_objectHandler->GetObjectsData();
         m_VertexData = m_objectHandler->GetVertexData();
+
         m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
         m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
 

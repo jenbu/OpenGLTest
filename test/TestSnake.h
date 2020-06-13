@@ -73,6 +73,7 @@ namespace test
 
         //void TestFunc();
     private:
+        unsigned int m_Score;
         std::vector<GridPos> m_SnakePos;
         GridPos m_FoodPos;
         Direction m_SnakeDirection;
