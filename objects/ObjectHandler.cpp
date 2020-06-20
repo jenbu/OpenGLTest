@@ -67,7 +67,7 @@ RectangleObject* ObjectHandler::AddObject<RectangleObject>(glm::vec3 pos, glm::v
 }
 
 template<>
-BaseObject* ObjectHandler::AddObject<CircleObject>(glm::vec3 pos, glm::vec3 vel, float radius, unsigned int resolution)
+CircleObject* ObjectHandler::AddObject<CircleObject>(glm::vec3 pos, glm::vec3 vel, float radius, unsigned int resolution)
 {
     ++m_ObjectCount;
     

@@ -24,46 +24,48 @@ namespace test
         else
             m_gridPixelSize = ResolutionWidth/m_GridNum;
     
-        std::cout << "Grid size: " << m_GridNum << " Grid pixel size: " << m_gridPixelSize << std::endl;
+        //std::cout << "Grid size: " << m_GridNum << " Grid pixel size: " << m_gridPixelSize << std::endl;
 
 
         m_InputInstance = InputEventHandler::GetInstance();
         
-        m_objectHandler = new ObjectHandler();
-        m_ObjSnakeBody.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
+        m_GLinterface = std::make_unique<GLAbstractionInterface>(ResolutionWidth, ResolutionHeight);
+        //m_objectHandler = new ObjectHandler();
+        //m_ObjSnakeBody.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
+        m_ObjSnakeBody.push_back(m_GLinterface->AddObject<RectangleObject>(glm::vec3(0, 0, 0), m_gridPixelSize, m_gridPixelSize));
         m_SnakePos.push_back({m_Gridx, m_Gridy});
-        m_Food = m_objectHandler->AddObject<CircleObject>(glm::vec3(100, 100, 0), glm::vec3(0, 0, 0), (float)(m_gridPixelSize/3), (unsigned int) 43);
+        m_Food = m_GLinterface->AddObject<CircleObject>(glm::vec3(100, 100, 0), m_gridPixelSize/3);
+        // m_objectHandler->AddObject<CircleObject>(glm::vec3(100, 100, 0), glm::vec3(0, 0, 0), (float)(m_gridPixelSize/3), (unsigned int) 43);
         m_FoodPos = { 3, 4 };
         SetGridPos(m_Food, m_FoodPos.x, m_FoodPos.y);
 
 
         //Boundary objects
-        m_ObjBackground.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(m_xPixelOffset/2, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight));
-        m_ObjBackground.push_back(m_objectHandler->AddObject<RectangleObject>(
-            glm::vec3(3*m_xPixelOffset/2 + m_gridPixelSize*m_GridNum, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight));
+        m_GLinterface->AddObject<RectangleObject>(glm::vec3(m_xPixelOffset/2, (float)ResolutionHeight/2, 0), m_xPixelOffset, ResolutionHeight);
+        //m_ObjBackground.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(m_xPixelOffset/2, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight));
+        //m_ObjBackground.push_back(m_objectHandler->AddObject<RectangleObject>(
+        //    glm::vec3(3*m_xPixelOffset/2 + m_gridPixelSize*m_GridNum, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight));
         
 
-        m_Objects = m_objectHandler->GetObjectsData();
-        m_VertexData = m_objectHandler->GetVertexData();
+        //m_Objects = m_objectHandler->GetObjectsData();
+        //m_VertexData = m_objectHandler->GetVertexData();
 
 
-        m_VAO = std::make_shared<VertexArray>();
+        /*m_VAO = std::make_shared<VertexArray>();
         m_VertexBuffer = std::make_shared<VertexBuffer>(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
         VertexBufferLayout layout;
         layout.Push<float>(2);
         m_VAO->AddBuffer(*m_VertexBuffer, layout);
         m_IndexBuffer = std::make_shared<IndexBuffer>(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size(), m_VAO);
         m_Shader = std::make_shared<Shader>("res/basic_color.shader"); 
+        */
 
-        //Må sette vertexbuffer og indexbuffer for tegnekall, hver for objekter og tekst.
-        //m_Text = std::make_unique<TextFreetype>(m_VertexBufferText, m_IndexBufferText, m_Renderer,
-        //                                        m_ShaderText, m_VAOText, glm::mat4(1.0f)* m_Proj);
         m_Text = std::make_unique<TextFreetype>(40, glm::mat4(1.0f)* m_Proj);
 
         m_Text->AddText("Score:0", 0, 10, 500, glm::vec3(0.5f, 0.0f, 1.0f));
 
         //m_UDPComm->UDPInit(std::bind(&TestSnake::SnakeMsgHandler, this, std::placeholders::_1));
-        char abc[40] = "hei";
+        //char abc[40] = "hei";
         //m_UDP.MessageHandler(abc);
         m_lastTime = clock();
         m_TickPeriod = CLOCKS_PER_SEC/4;
@@ -80,6 +82,13 @@ namespace test
     void TestSnake::SnakeMsgHandler(char* msg)
     {
         std::cout << "SnakeMsgHandler msg: "  << msg << std::endl;
+        if(!strcmp(msg, "x"))
+        {
+            std::cout << "Got Exit from client!" << std::endl;
+            m_UDPComm->SendMsg("Exit confirmed");
+        }
+        else if(!strcmp(msg, "p"))
+            m_GamePaused = false;
     }
 
 
@@ -96,7 +105,6 @@ namespace test
 
     void TestSnake::OnImGuiRender()
     {
-
         KeyEvents();
         if(!m_GamePaused)
         {
@@ -109,6 +117,7 @@ namespace test
         }
 
 
+        /*
         for(int i = 0; i < m_objectHandler->GetObjectCount(); i++)
         {
             glm::mat4 mvp = glm::mat4(1.0f)* m_Proj* glm::translate(glm::mat4(1.0f), m_Objects[i]->GetPosition());
@@ -117,7 +126,8 @@ namespace test
             m_Shader->SetUniformMat4f("u_MVP", mvp);
             m_Renderer->DrawInRange(*m_VAO, *m_IndexBuffer, *m_Shader, m_Objects[i]->GetIndicesOffset(), m_Objects[i]->GetIndicesSize());
         }
-
+        */
+        m_GLinterface->Render();
         m_Text->Render();
     }
 
@@ -138,12 +148,13 @@ namespace test
                                          (m_yPixelOffset+m_SnakePos[m_SnakePos.size()-1].y*m_gridPixelSize - m_gridPixelSize/2),
                                          0);
 
-        m_ObjSnakeBody.push_back(m_objectHandler->AddObject<RectangleObject>(newSqrPos, glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
-        m_Objects = m_objectHandler->GetObjectsData();
-        m_VertexData = m_objectHandler->GetVertexData();
-        m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
+        //m_ObjSnakeBody.push_back(m_objectHandler->AddObject<RectangleObject>(newSqrPos, glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
+        m_ObjSnakeBody.push_back(m_GLinterface->AddObject<RectangleObject>(newSqrPos, m_gridPixelSize, m_gridPixelSize));
+        //m_Objects = m_objectHandler->GetObjectsData();
+        //m_VertexData = m_objectHandler->GetVertexData();
+        //m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
         //m_VAO->Bind();
-        m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
+        //m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
 
         std::cout << "m_Objects size: " << m_Objects.size() << std::endl;
     }
@@ -351,50 +362,41 @@ namespace test
         m_GamePaused = true;
         m_Gridx = m_GridNum/2;
         m_Gridy = m_GridNum/2;
-        
         m_SnakePos.clear();
-        delete m_Food;
-        m_ObjSnakeBody.clear();
         m_SnakePos.push_back({m_Gridx, m_Gridy});
+        m_ObjSnakeBody.clear();
+        
 
+        m_Score = 0;
         m_Text->SetText("Score:0", 0);
 
+        //m_objectHandler->Clear();
+        m_GLinterface->Clear();
 
-        m_objectHandler->Clear();
-        m_ObjSnakeBody.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
-        m_Food = m_objectHandler->AddObject<CircleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)(m_gridPixelSize/3), (unsigned int) 8);
-
-        //Boundary objects
-        m_objectHandler->AddObject<RectangleObject>(glm::vec3(m_xPixelOffset/2, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight);
-        m_objectHandler->AddObject<RectangleObject>(glm::vec3(3*m_xPixelOffset/2 + m_gridPixelSize*m_GridNum, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight);
-
-        m_Objects = m_objectHandler->GetObjectsData();
-        m_VertexData = m_objectHandler->GetVertexData();
-
-        m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
-        m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
-
-        glm::vec3 posvec = glm::vec3((m_xPixelOffset + m_Gridx*m_gridPixelSize/2),
-                                    ((m_yPixelOffset - m_gridPixelSize/2) + m_Gridy*m_gridPixelSize),
-                                      0);
-        m_Objects[0]->SetObjectPosVelAcc(posvec,
-                                         glm::vec3(0,0,0),
-                                         glm::vec3(0,0,0));
-
+        //Reset snake body
+        //m_ObjSnakeBody.push_back(m_objectHandler->AddObject<RectangleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)m_gridPixelSize, (float)m_gridPixelSize));
+        m_ObjSnakeBody.push_back(m_GLinterface->AddObject<RectangleObject>(glm::vec3(0, 0, 0), m_gridPixelSize, m_gridPixelSize));
+        SetGridPos(m_ObjSnakeBody[0], m_Gridx, m_Gridy);
+        
+        delete m_Food;
+        m_Food = m_GLinterface->AddObject<CircleObject>(glm::vec3(0, 0, 0), m_gridPixelSize/3);//m_objectHandler->AddObject<CircleObject>(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), (float)(m_gridPixelSize/3), (unsigned int) 8);
         m_FoodPos = { 3, 3 };
         SetGridPos(m_Food, m_FoodPos.x, m_FoodPos.y);
-      
 
-    }
+        //Boundary objects
+        m_GLinterface->AddObject<RectangleObject>(glm::vec3(m_xPixelOffset/2, (float)ResolutionHeight/2, 0), m_xPixelOffset, ResolutionHeight);
+        m_GLinterface->AddObject<RectangleObject>(glm::vec3(3*m_xPixelOffset/2 + m_gridPixelSize*m_GridNum, (float)ResolutionHeight/2, 0), m_xPixelOffset, ResolutionHeight);
+        //m_objectHandler->AddObject<RectangleObject>(glm::vec3(m_xPixelOffset/2, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight);
+        //m_objectHandler->AddObject<RectangleObject>(glm::vec3(3*m_xPixelOffset/2 + m_gridPixelSize*m_GridNum, (float)ResolutionHeight/2, 0), glm::vec3(0, 0, 0), (float)m_xPixelOffset, (float)ResolutionHeight);
 
-    void TestSnake::TextDraw()
-    {
-
-        //m_Text->Render();
+        //Get new vertex/index data
         //m_Objects = m_objectHandler->GetObjectsData();
         //m_VertexData = m_objectHandler->GetVertexData();
         //m_VertexBuffer->SetBufferData(&m_VertexData.VertexPosition[0], m_VertexData.VertexPosition.size()*sizeof(float));
         //m_IndexBuffer->SetIndexBuffer(&m_VertexData.VertexIndices[0], m_VertexData.VertexIndices.size());
 
+      
+
     }
+
 }

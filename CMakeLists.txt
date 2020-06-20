@@ -61,7 +61,7 @@ include_directories(
 	objects
 	${FREETYPE_INCLUDEDIR}
 )
-
+message(${SOURCE_FILES})
 
 add_executable(OpenGLUTube ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(OpenGLUTube ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} -ldl ${CMAKE_THREAD_LIBS_INIT} ${FREETYPE_LIBRARIES} ${UDPCOMM_LIBRARIES})

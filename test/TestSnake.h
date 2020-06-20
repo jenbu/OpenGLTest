@@ -22,6 +22,8 @@
 #include "UDPClass.h"
 #include "TextFreetype.h"
 
+#include "GLAbstractionInterface.h"
+
 namespace test
 {
     struct GridPos
@@ -55,7 +57,6 @@ namespace test
         void OnUpdate(float deltaTime) override;
         void OnRender() override;
         void OnImGuiRender() override;
-        void TextDraw();
 
         void SetSnakePos(int& x, int& y);
         bool IsEating();
@@ -73,6 +74,8 @@ namespace test
 
         //void TestFunc();
     private:
+        std::unique_ptr<GLAbstractionInterface> m_GLinterface;
+
         unsigned int m_Score;
         std::vector<GridPos> m_SnakePos;
         GridPos m_FoodPos;

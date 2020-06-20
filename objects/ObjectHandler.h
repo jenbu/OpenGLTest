@@ -36,7 +36,7 @@ class ObjectHandler
         }
 
         template<typename T>
-        BaseObject* AddObject(glm::vec3 pos, glm::vec3 vel, float radius, unsigned int resolution)
+        CircleObject* AddObject(glm::vec3 pos, glm::vec3 vel, float radius, unsigned int resolution)
         {
             
         }

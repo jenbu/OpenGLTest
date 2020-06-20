@@ -78,8 +78,6 @@ void TextFreetype::Initialize()
         
         Texture* tempTexture = new Texture(face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.buffer);
 
-        std::cout << "textureid " << tempTexture->GetTextureID() << std::endl;
-
         Character character = {
             tempTexture,
             glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),

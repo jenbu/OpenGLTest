@@ -5,7 +5,14 @@ namespace test
     TestFreetype::TestFreetype()
     : m_ProjMatrix(glm::ortho(0.0f, 800.0f, 0.0f, 600.0f))
     {
+        m_GLApi = new GLAbstractionInterface(ResolutionWidth, ResolutionHeight);
+        //GLAbstractionInterface testInterface;
 
+        RectangleObject* testRect = m_GLApi->AddObject<RectangleObject>(glm::vec3(100.0f, 100.0f, 0.0f), 150, 150);
+        testRect->SetObjectPos(glm::vec3(200.0f, 200.0f, 0.0f));
+        m_GLApi->AddObject<CircleObject>(glm::vec3(300.0f, 100.0f, 0.0f), 40);
+        unsigned int texthandle = m_GLApi->AddText("heisann", 100, 500);
+        m_GLApi->SetText(texthandle, "paa deisann");
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -87,6 +94,7 @@ namespace test
 
     void TestFreetype::OnImGuiRender()
     {
+        /*
         static int inc = 0;
 
         //std::cout << ++inc << std::endl;
@@ -121,7 +129,9 @@ namespace test
 
         std::cout << inc << std::endl;
 
-        
+        */
+
+       m_GLApi->Render();
 
 
         //m_Shader->UnBind();

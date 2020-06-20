@@ -22,6 +22,8 @@
 #include "CircleObject.h"
 #include "TextFreetype.h"
 
+#include "GLAbstractionInterface.h"
+
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
@@ -51,7 +53,8 @@ namespace test {
 
     private:
         //std::map<char, Character> m_Characters;
-
+        GLAbstractionInterface* m_GLApi;
+        
 
         glm::mat4 m_ProjMatrix;
 
