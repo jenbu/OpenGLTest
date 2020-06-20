@@ -53,7 +53,7 @@ void GLAbstractionInterface::UpdateBuffers()
 
 int GLAbstractionInterface::AddText(std::string text, unsigned int x, unsigned int y)
 {
-    m_Text->AddText(text, m_TextCount, x, y, glm::vec3(1.0f, 1.0f, 1.0f));
+    m_Text->AddText(text, m_TextCount, x, y, glm::vec3(0.0f, 0.0f, 1.0f));
     return m_TextCount;
 }
 

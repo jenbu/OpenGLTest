@@ -72,19 +72,16 @@ namespace test
 
         void SnakeMsgHandler(char* msg);
 
-        //void TestFunc();
     private:
         std::unique_ptr<GLAbstractionInterface> m_GLinterface;
-
+        unsigned int m_TextScoreID;
         unsigned int m_Score;
         std::vector<GridPos> m_SnakePos;
         GridPos m_FoodPos;
         Direction m_SnakeDirection;
 
-        ObjectHandler* m_objectHandler;
         InputEventHandler* m_InputInstance;
         Communication::UDPClass* m_UDPComm;
-        glm::mat4 m_Proj;
 
         //Timer
         clock_t m_lastTime;
@@ -96,20 +93,8 @@ namespace test
         int m_Gridx, m_Gridy;
         unsigned int m_xPixelOffset, m_yPixelOffset;
 
-        //Text rendering
-        std::unique_ptr<TextFreetype> m_Text;
-
-        std::vector<BaseObject*> m_Objects;
         BaseObject* m_Food;
         std::vector<RectangleObject*> m_ObjSnakeBody;
-        std::vector<RectangleObject*> m_ObjBackground;
-        VertexData m_VertexData;
-
-        std::shared_ptr<Renderer> m_Renderer;
-        std::shared_ptr<Shader> m_Shader;
-        std::shared_ptr<VertexArray> m_VAO;
-        std::shared_ptr<IndexBuffer> m_IndexBuffer;
-        std::shared_ptr<VertexBuffer> m_VertexBuffer;
     };
 
 
