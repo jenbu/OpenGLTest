@@ -4,24 +4,12 @@
 #include <memory>
 #include <time.h>
 
-#include "ft2build.h"
-#include FT_FREETYPE_H
-
-#include "Renderer.h"
-#include "Shader.h"
-#include "VertexArray.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-
 #include "Test.h"
 #include "Utility.h"
 #include "Constants.h"
-#include "RectangleObject.h"
-#include "ObjectHandler.h"
+
 #include "InputEventHandler.h"
 #include "UDPClass.h"
-#include "TextFreetype.h"
-
 #include "GLAbstractionInterface.h"
 
 namespace test
@@ -71,6 +59,7 @@ namespace test
         void SetGridPos(BaseObject* obj, int x, int y);
 
         void SnakeMsgHandler(char* msg);
+        std::vector<bool> GetState();
 
     private:
         std::unique_ptr<GLAbstractionInterface> m_GLinterface;
@@ -79,6 +68,7 @@ namespace test
         std::vector<GridPos> m_SnakePos;
         GridPos m_FoodPos;
         Direction m_SnakeDirection;
+        std::vector<bool> m_States;
 
         InputEventHandler* m_InputInstance;
         Communication::UDPClass* m_UDPComm;

@@ -4,7 +4,7 @@ namespace test
 {
 
     TestSnake::TestSnake()
-    : m_GridNum(10), m_Gridx(m_GridNum/2), m_Gridy(m_GridNum/2), m_xPixelOffset(0), m_yPixelOffset(0),
+    : m_GridNum(15), m_Gridx(m_GridNum/2), m_Gridy(m_GridNum/2), m_xPixelOffset(0), m_yPixelOffset(0),
       m_SnakeDirection(Direction::Up), m_UDPComm(new Communication::UDPClass), m_GamePaused(true),
       m_Score(0), m_Food(nullptr)
     {
@@ -26,7 +26,7 @@ namespace test
         m_UDPComm->UDPInit(std::bind(&TestSnake::SnakeMsgHandler, this, std::placeholders::_1));
         
         m_lastTime = clock();
-        m_TickPeriod = CLOCKS_PER_SEC/4;
+        m_TickPeriod = CLOCKS_PER_SEC/8;
         ResetGame();
         
         
@@ -218,22 +218,55 @@ namespace test
             case KeyboardEvent::ArrowUp:
             {
                 m_GamePaused = false;
-                m_SnakeDirection = Direction::Up;        
+                if(m_SnakePos.size() > 1)
+                {
+                    if(m_SnakeDirection != Direction::Down)
+                        m_SnakeDirection = Direction::Up;        
+                }
+                else
+                {
+                    m_SnakeDirection = Direction::Up;        
+                }
                 break;
             }
             case KeyboardEvent::ArrowDown:
             {   
-                m_SnakeDirection = Direction::Down;
+                if(m_SnakePos.size() > 1)
+                {
+                    if(m_SnakeDirection != Direction::Up)
+                        m_SnakeDirection = Direction::Down;        
+                }
+                else
+                {
+                    m_SnakeDirection = Direction::Down;        
+                }
                 break;
             }
             case KeyboardEvent::ArrowLeft:
             {
-                m_SnakeDirection = Direction::Left;
+                if(m_SnakePos.size() > 1)
+                {
+                    if(m_SnakeDirection != Direction::Right)
+                        m_SnakeDirection = Direction::Left;        
+                }
+                else
+                {
+                    m_SnakeDirection = Direction::Left;        
+                }
                 break;
+
             }
             case KeyboardEvent::ArrowRight:
             {
-                m_SnakeDirection = Direction::Right;
+                if(m_SnakePos.size() > 1)
+                {
+                    if(m_SnakeDirection != Direction::Left)
+                        m_SnakeDirection = Direction::Right;        
+                }
+                else
+                {
+                    m_SnakeDirection = Direction::Right;        
+                }
                 break;
             }
             case KeyboardEvent::KeyE:
@@ -285,6 +318,8 @@ namespace test
                 break;
             }
         }
+
+        m_States = GetState();
     }
 
     void TestSnake::ResetGame()
@@ -315,6 +350,96 @@ namespace test
         //Boundary objects
         m_GLinterface->AddObject<RectangleObject>(glm::vec3(m_xPixelOffset/2, (float)ResolutionHeight/2, 0), m_xPixelOffset, ResolutionHeight);
         m_GLinterface->AddObject<RectangleObject>(glm::vec3(3*m_xPixelOffset/2 + m_gridPixelSize*m_GridNum, (float)ResolutionHeight/2, 0), m_xPixelOffset, ResolutionHeight);
+    }
+
+    std::vector<bool> TestSnake::GetState()
+    {
+        std::vector<bool> states;
+
+        
+
+        //Danger straight
+        if( (m_SnakeDirection == Direction::Up    && Collision(m_SnakePos[0].x  , m_SnakePos[0].y+1) != CollisionType::NoCollision)
+        ||  (m_SnakeDirection == Direction::Down  && Collision(m_SnakePos[0].x  , m_SnakePos[0].y-1) != CollisionType::NoCollision)
+        ||  (m_SnakeDirection == Direction::Left  && Collision(m_SnakePos[0].x-1, m_SnakePos[0].y)   != CollisionType::NoCollision) 
+        ||  (m_SnakeDirection == Direction::Right && Collision(m_SnakePos[0].x+1, m_SnakePos[0].y)   != CollisionType::NoCollision) )
+        {
+            states.push_back(true);
+            std::cout << "danger ahead" << std::endl;
+        }
+        else
+        {
+            states.push_back(false);
+        }
+
+        //Danger right
+        if( (m_SnakeDirection == Direction::Up    && Collision(m_SnakePos[0].x+1, m_SnakePos[0].y)   != CollisionType::NoCollision)
+        ||  (m_SnakeDirection == Direction::Down  && Collision(m_SnakePos[0].x-1, m_SnakePos[0].y)   != CollisionType::NoCollision)
+        ||  (m_SnakeDirection == Direction::Left  && Collision(m_SnakePos[0].x  , m_SnakePos[0].y+1) != CollisionType::NoCollision) 
+        ||  (m_SnakeDirection == Direction::Right && Collision(m_SnakePos[0].x  , m_SnakePos[0].y-1) != CollisionType::NoCollision) )
+        {
+            states.push_back(true);
+            std::cout << "danger right" << std::endl;
+        }
+        else
+        {
+            states.push_back(false);
+        }
+
+        //Danger left
+        if( (m_SnakeDirection == Direction::Up    && Collision(m_SnakePos[0].x-1, m_SnakePos[0].y)   != CollisionType::NoCollision)
+        ||  (m_SnakeDirection == Direction::Down  && Collision(m_SnakePos[0].x+1, m_SnakePos[0].y)   != CollisionType::NoCollision)
+        ||  (m_SnakeDirection == Direction::Left  && Collision(m_SnakePos[0].x  , m_SnakePos[0].y-1) != CollisionType::NoCollision) 
+        ||  (m_SnakeDirection == Direction::Right && Collision(m_SnakePos[0].x  , m_SnakePos[0].y+1) != CollisionType::NoCollision) )
+        {
+            states.push_back(true);
+            std::cout << "danger left" << std::endl;
+        }
+        else
+        {
+            states.push_back(false);
+        }
+        
+        if(m_SnakeDirection == Direction::Left) states.push_back(true);
+        else states.push_back(false);
+        
+        if(m_SnakeDirection == Direction::Right) states.push_back(true);
+        else states.push_back(false);
+
+        if(m_SnakeDirection == Direction::Up) states.push_back(true);
+        else states.push_back(false);
+
+        if(m_SnakeDirection == Direction::Down) states.push_back(true);
+        else states.push_back(false);
+
+
+        if(m_SnakePos[0].x > m_FoodPos.x) 
+        {
+            std::cout << "food left" << std::endl;
+            states.push_back(true);
+        }
+        else
+        {
+            states.push_back(false);
+        } 
+        
+        if(m_SnakePos[0].x < m_FoodPos.x) states.push_back(true);
+        else states.push_back(false);
+
+        if(m_SnakePos[0].y < m_FoodPos.y)
+        {
+            std::cout << "food up" << std::endl;
+            states.push_back(true);
+        }
+        else
+        {
+            states.push_back(false);
+        } 
+
+        if(m_SnakePos[0].y > m_FoodPos.y) states.push_back(true);
+        else states.push_back(false);
+
+        return states;
     }
 
 }
