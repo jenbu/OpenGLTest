@@ -1,5 +1,5 @@
 #include "UDPClass.h"
-
+#include <stdlib.h>
 
 namespace Communication
 {
@@ -36,11 +36,16 @@ namespace Communication
     {
         std::cout << "Starting UDPTask()" << std::endl;
         char msg[60];
-        char response[60] = "Response from OpenGlProj";
+        char response[60] = "Response from opengl";
         
         //UDPServer m_Server("localhost", 20001);
         //m_Server = new UDPServer("localhost", 20001);
         //m_Server = std::make_unique<UDPClientServer::UDPServer>("localhost", 20001);
+        std::vector<int> intVec;
+        intVec.push_back(1);
+        intVec.push_back(4);
+        intVec.push_back(22);
+        intVec.push_back(32);
 
         while(!m_Close)
         {
@@ -49,8 +54,13 @@ namespace Communication
             m_Server->recv(msg, 60);
             MessageHandler(msg);
             
-            std::cout << "Sending message" << std::endl;
-            m_Server->send(response, 60);
+            //std::cout << "Sending message" << std::endl;
+            //SendMsg(response);
+            //SendMsg(intVec);
+            //if(m_Server->send(response, 60) == -1)
+            //{
+            //    std::cout << "Sending failed" << std::endl;
+            //}
         }
 
         std::cout << "Exiting UDPTask()" << std::endl; 
@@ -66,7 +76,55 @@ namespace Communication
 
     void UDPClass::SendMsg(char* msg)
     {
-        m_Server->send(msg, 60);
+        if(-1 == m_Server->sendTemp<int>(msg, 60))
+            std::cout << "sending with sendTemp() failed" << std::endl;
+        //m_Server->send(msg, 60);
+    }
+
+    void UDPClass::SendMsg(std::vector<int> vec)
+    {
+        std::string tempString;
+        tempString.append(std::to_string(UDPMsgType::IntArray));
+        tempString.append(":");
+        
+        for(int i = 0; i < vec.size(); i++)
+        {
+
+            std::cout << std::to_string(vec[i]) << std::endl;
+            tempString.append(std::to_string(vec[i]));
+            tempString.append(",");
+        }
+
+        std::cout << tempString << std::endl;
+        char msg[60];
+        memset(msg, 0, sizeof(msg));
+        sprintf(msg, tempString.c_str());
+
+        if(-1 == m_Server->send(msg, 20))
+            std::cout << "sending with sendTemp() failed" << std::endl;
+        //m_Server->send(msg, 60);
+    }
+
+    void UDPClass::SendMsg(std::vector<bool> vec)
+    {
+        std::string tempString;
+        tempString.append(std::to_string(UDPMsgType::IntArray));
+        tempString.append(":");
+        
+        for(int i = 0; i < vec.size(); i++)
+        {
+            tempString.append(std::to_string(vec[i]));
+            tempString.append(",");
+        }
+
+        std::cout << tempString << std::endl;
+        char msg[60];
+        memset(msg, 0, sizeof(msg));
+        sprintf(msg, tempString.c_str());
+
+        if(-1 == m_Server->send(msg, 20))
+            std::cout << "sending with sendTemp() failed" << std::endl;
+        //m_Server->send(msg, 60);
     }
 
 }

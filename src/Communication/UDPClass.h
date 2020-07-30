@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <functional>
 #include <memory>
+#include <vector>
 
 #include "UDPComm.h"
 using namespace UDPClientServer;
@@ -26,6 +27,8 @@ namespace Communication
         void MessageHandler(char* msg);
         
         void SendMsg(char* msg);
+        void SendMsg(std::vector<int> vec);
+        void SendMsg(std::vector<bool> vec);
         //bool RegisterMsgHandler(std::function<void(char*)> func) { m_Func = func; }
 
     private:

@@ -46,7 +46,32 @@ namespace test
             m_UDPComm->SendMsg("Exit confirmed");
         }
         else if(!strcmp(msg, "p"))
+        {
             m_GamePaused = false;
+            std::cout << "Got toggle pause from client!" << std::endl;
+            m_UDPComm->SendMsg("toggle confirmed");
+        }
+        else if(!strcmp(msg, "a"))
+        {
+            m_SnakeDirection = Direction::Left;   
+            std::cout << "Got left!" << std::endl;
+            //m_UDPComm->SendMsg("toggle confirmed");
+        }
+        else if(!strcmp(msg, "d"))
+        {
+            m_SnakeDirection = Direction::Right;   
+            std::cout << "Got right!" << std::endl;
+        }
+        else if(!strcmp(msg, "w"))
+        {
+            m_SnakeDirection = Direction::Up;   
+            std::cout << "Got up!" << std::endl;
+        }
+        else if(!strcmp(msg, "s"))
+        {
+            m_SnakeDirection = Direction::Down;               
+            std::cout << "Got Down!" << std::endl;
+        }
     }
 
 
@@ -320,6 +345,8 @@ namespace test
         }
 
         m_States = GetState();
+        std::cout << "Sending states" << std::endl;
+        m_UDPComm->SendMsg(m_States);
     }
 
     void TestSnake::ResetGame()
@@ -365,7 +392,7 @@ namespace test
         ||  (m_SnakeDirection == Direction::Right && Collision(m_SnakePos[0].x+1, m_SnakePos[0].y)   != CollisionType::NoCollision) )
         {
             states.push_back(true);
-            std::cout << "danger ahead" << std::endl;
+            //std::cout << "danger ahead" << std::endl;
         }
         else
         {
@@ -379,7 +406,7 @@ namespace test
         ||  (m_SnakeDirection == Direction::Right && Collision(m_SnakePos[0].x  , m_SnakePos[0].y-1) != CollisionType::NoCollision) )
         {
             states.push_back(true);
-            std::cout << "danger right" << std::endl;
+            //std::cout << "danger right" << std::endl;
         }
         else
         {
@@ -393,7 +420,7 @@ namespace test
         ||  (m_SnakeDirection == Direction::Right && Collision(m_SnakePos[0].x  , m_SnakePos[0].y+1) != CollisionType::NoCollision) )
         {
             states.push_back(true);
-            std::cout << "danger left" << std::endl;
+            //std::cout << "danger left" << std::endl;
         }
         else
         {
@@ -415,7 +442,7 @@ namespace test
 
         if(m_SnakePos[0].x > m_FoodPos.x) 
         {
-            std::cout << "food left" << std::endl;
+            //std::cout << "food left" << std::endl;
             states.push_back(true);
         }
         else
@@ -428,7 +455,7 @@ namespace test
 
         if(m_SnakePos[0].y < m_FoodPos.y)
         {
-            std::cout << "food up" << std::endl;
+            //std::cout << "food up" << std::endl;
             states.push_back(true);
         }
         else
